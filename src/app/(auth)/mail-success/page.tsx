@@ -9,9 +9,9 @@ export default function MailSuccessPage() {
       <div className="text-center">
         <div className="text-34-34 font-bold">Successfully Registered</div>
         <div className="text-black-6 mt-5 mb-6 text-16-24 font-visby px-[120px]">
-          Thank you for registering! We've sent an activation link to the email
-          address you provided. Please check your inbox and follow the
-          instructions to activate your account.If you don't receive the email
+          Thank you for registering! We have sent an activation link to the
+          email address you provided. Please check your inbox and follow the
+          instructions to activate your account.If you do not receive the email
           within a few minutes, please check your spam folder. If you encounter
           any issues, feel free to contact our support team for assistance.
         </div>

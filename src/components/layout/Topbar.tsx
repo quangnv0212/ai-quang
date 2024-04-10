@@ -29,7 +29,7 @@ export default function TopBar() {
             <div className="w-20 rounded-full">
               <div className="avatar">
                 <div className="mask mask-hexagon">
-                  <img
+                  <Image
                     alt="Tailwind CSS Navbar component"
                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlnTWioCNB7npofuyc926l2c2L0hRPi6YsjQpMcJj-EA&s"
                   />
