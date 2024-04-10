@@ -1,9 +1,3 @@
-import { IconSearch } from "@/components/icons";
-import Sidebar from "@/components/layout/Sidebar";
-import { SettingOutlined, UserOutlined } from "@ant-design/icons";
-import { AntdRegistry } from "@ant-design/nextjs-registry";
-import IcLogout from "@/assets/images/ic_logout.svg";
-
 export default function Footer() {
   return (
     <footer className="footer p-10 bg-slate-100 text-base-content">

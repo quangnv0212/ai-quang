@@ -1,8 +1,6 @@
-import { IconSearch } from "@/components/icons";
-import Sidebar from "@/components/layout/Sidebar";
-import { SettingOutlined, UserOutlined } from "@ant-design/icons";
-import { AntdRegistry } from "@ant-design/nextjs-registry";
 import IcLogout from "@/assets/images/ic_logout.svg";
+import { IconSearch } from "@/components/icons";
+import { SettingOutlined, UserOutlined } from "@ant-design/icons";
 import Image from "next/image";
 
 export default function TopBar() {
@@ -30,8 +28,10 @@ export default function TopBar() {
               <div className="avatar">
                 <div className="mask mask-hexagon">
                   <Image
+                    width={160}
+                    height={160}
                     alt="Tailwind CSS Navbar component"
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlnTWioCNB7npofuyc926l2c2L0hRPi6YsjQpMcJj-EA&s"
+                    src="https://vcdn-giaitri.vnecdn.net/2013/12/07/John-Lennon-7519-1386386749.jpg"
                   />
                 </div>
               </div>
@@ -58,7 +58,13 @@ export default function TopBar() {
                 href="/login"
                 className="flex items-center text-16-20 hover:text-primary p-3"
               >
-                <Image className="w-4 h-4" src={IcLogout.src} alt="" />
+                <Image
+                  className="w-4 h-4"
+                  src={IcLogout.src}
+                  alt=""
+                  width={200}
+                  height={200}
+                />
                 Log out
               </a>
             </li>

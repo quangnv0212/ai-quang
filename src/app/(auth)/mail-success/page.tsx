@@ -5,7 +5,13 @@ import Image from "next/image";
 export default function MailSuccessPage() {
   return (
     <div className="flex flex-col items-center h-screen">
-      <Image src={IcMailSuccess.src} className="w-1/2" alt="" />
+      <Image
+        src={IcMailSuccess.src}
+        className="w-1/2"
+        alt=""
+        width={160}
+        height={160}
+      />
       <div className="text-center">
         <div className="text-34-34 font-bold">Successfully Registered</div>
         <div className="text-black-6 mt-5 mb-6 text-16-24 font-visby px-[120px]">
