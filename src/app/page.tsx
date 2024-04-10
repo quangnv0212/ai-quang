@@ -1,6 +1,7 @@
 "use client";
 import { IconSearch } from "@/components/icons";
 import { FilterOutlined } from "@ant-design/icons";
+import Image from "next/image";
 import { useRef } from "react";
 export default function Home() {
   const ref = useRef<any>(null);
@@ -65,7 +66,7 @@ export default function Home() {
               <div className="flex items-center gap-3">
                 <div className="avatar">
                   <div className="mask mask-squircle w-12 h-12">
-                    <img
+                    <Image
                       src="https://vcdn-giaitri.vnecdn.net/2013/12/07/John-Lennon-7519-1386386749.jpg"
                       alt="Avatar Tailwind CSS Component"
                     />
@@ -117,7 +118,7 @@ export default function Home() {
               <div className="flex items-center gap-3">
                 <div className="avatar">
                   <div className="mask mask-squircle w-12 h-12">
-                    <img
+                    <Image
                       src="https://kelvinokaforart.com/wp-content/uploads/2023/01/Bob-Dylan.jpg"
                       alt="Avatar Tailwind CSS Component"
                     />
@@ -167,7 +168,7 @@ export default function Home() {
               <div className="flex items-center gap-3">
                 <div className="avatar">
                   <div className="mask mask-squircle w-12 h-12">
-                    <img
+                    <Image
                       src="https://ca-times.brightspotcdn.com/dims4/default/4a29742/2147483647/strip/true/crop/2048x1383+0+0/resize/1200x810!/quality/75/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2F7a%2Fe9%2F9c323f0d724364d7f3ed5dc43e31%2Fla-et-ms-kurt-cobain-19940409-001"
                       alt="Avatar Tailwind CSS Component"
                     />
@@ -202,7 +203,7 @@ export default function Home() {
               <div className="flex items-center gap-3">
                 <div className="avatar">
                   <div className="mask mask-squircle w-12 h-12">
-                    <img
+                    <Image
                       src="https://vcdn-giaitri.vnecdn.net/2013/12/07/John-Lennon-7519-1386386749.jpg"
                       alt="Avatar Tailwind CSS Component"
                     />

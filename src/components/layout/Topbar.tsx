@@ -3,6 +3,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import { SettingOutlined, UserOutlined } from "@ant-design/icons";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import IcLogout from "@/assets/images/ic_logout.svg";
+import Image from "next/image";
 
 export default function TopBar() {
   return (
@@ -57,7 +58,7 @@ export default function TopBar() {
                 href="/login"
                 className="flex items-center text-16-20 hover:text-primary p-3"
               >
-                <img className="w-4 h-4" src={IcLogout.src} alt="" />
+                <Image className="w-4 h-4" src={IcLogout.src} alt="" />
                 Log out
               </a>
             </li>

@@ -1,9 +1,10 @@
 import IcNotFound from "@/assets/images/ic_notfound.svg";
+import Image from "next/image";
 import Link from "next/link";
 export default function NotFoundPage() {
   return (
     <div className="flex flex-col items-center h-screen">
-      <img src={IcNotFound.src} className="w-1/3" alt="" />
+      <Image src={IcNotFound.src} className="w-1/3" alt="" />
       <div className="text-center">
         <div className="text-34-34 font-bold my-3">
           Sorry, the page can’t be found
