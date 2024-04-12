@@ -11,13 +11,15 @@
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.0",
     "@headlessui/react": "^1.7.18",
+    "@hookform/devtools": "^4.3.1",
     "@hookform/resolvers": "^3.3.4",
     "antd": "^5.16.1",
-    "next": "14.1.4",
+    "next": "^14.2.1-canary.0",
     "react": "^18",
     "react-dom": "^18",
     "react-highlight-words": "^0.20.0",
     "react-hook-form": "^7.51.3",
+    "react-hook-form-antd": "^1.1.0",
     "styled-components": "^6.1.8",
     "tailwind-merge": "^2.2.2",
     "zod": "^3.22.4"

@@ -12,7 +12,7 @@ export const RegisterBody = z
     if (confirmPassword !== password) {
       ctx.addIssue({
         code: "custom",
-        message: "Mật khẩu không khớp",
+        message: "Passwords do not match",
         path: ["confirmPassword"],
       });
     }

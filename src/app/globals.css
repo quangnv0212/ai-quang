@@ -32,3 +32,7 @@
 body {
   font-family: 'Visby';
 }
+
+.ant-form-item{
+  margin: 0 !important;
+}
