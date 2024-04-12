@@ -11,7 +11,7 @@ import { Button, Input, Space, Tag } from "antd";
 import type { FilterDropdownProps } from "antd/es/table/interface";
 import React, { useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
-import { TableCommon } from "./table-common";
+import { TableCommon } from "./common/table-common";
 
 interface DataType {
   key: string;

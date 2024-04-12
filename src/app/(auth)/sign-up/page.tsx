@@ -1,7 +1,6 @@
-import { InputTextCommon } from "@/components/input-text";
+import { InputPassword } from "@/components/common/input-password";
+import { InputTextCommon } from "@/components/common/input-text";
 import Link from "next/link";
-import { KeyOutlined, UserOutlined } from "@ant-design/icons";
-import { InputPassword } from "@/components/input-password";
 
 export default function SignUpPage() {
   return (

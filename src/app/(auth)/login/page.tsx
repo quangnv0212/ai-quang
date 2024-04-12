@@ -1,9 +1,22 @@
 "use client";
-import { InputPassword } from "@/components/input-password";
-import { InputTextCommon } from "@/components/input-text";
+import { InputPassword } from "@/components/common/input-password";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { InputTextCommon } from "@/components/common/input-text";
 import { KeyOutlined, UserOutlined } from "@ant-design/icons";
+import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 export default function Login() {
+  const form = useForm<LoginBodyType>({
+    resolver: zodResolver(LoginBody),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+  const onSubmit = (value: LoginBodyType) => {
+    console.log(value);
+  };
   return (
     <div className="flex justify-center items-center h-screen ">
       <div
@@ -25,37 +38,45 @@ export default function Login() {
         >
           Welcome back! Please enter your details
         </div>
-        <div className={"w-full flex flex-col gap-2"}>
-          <InputTextCommon
-            label="Email"
-            name="email"
-            placeholder="Enter your email"
-            prefix={<UserOutlined />}
-          />
-          <InputPassword
-            label="Password"
-            name="password"
-            placeholder="Enter your password"
-            prefix={<KeyOutlined />}
-          />
-          <Link
-            className="text-end text-14-16 font-semibold text-gray-500 hover:text-blue-400"
-            href={""}
-          >
-            Forgot Password?
-          </Link>
-          <div className={" font-visby"}>
-            <button className="btn w-full hover:bg-primary-hover bg-primary text-white border-none">
-              Sign in
-            </button>
-          </div>
-          <div className={"flex justify-center py-4 font-visby"}>
-            Not registered?
-            <Link href={"/register"} className="mx-1 hover:text-blue-300 link">
-              Create account
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className={"w-full flex flex-col gap-2"}>
+            <InputTextCommon
+              label="Email"
+              name="email"
+              placeholder="Enter your email"
+              prefix={<UserOutlined />}
+            />
+            <InputPassword
+              label="Password"
+              name="password"
+              placeholder="Enter your password"
+              prefix={<KeyOutlined />}
+            />
+            <Link
+              className="text-end text-14-16 font-semibold text-gray-500 hover:text-blue-400"
+              href={""}
+            >
+              Forgot Password?
             </Link>
+            <div className={" font-visby"}>
+              <button
+                type="submit"
+                className="btn w-full hover:bg-primary-hover bg-primary text-white border-none"
+              >
+                Sign in
+              </button>
+            </div>
+            <div className={"flex justify-center py-4 font-visby"}>
+              Not registered?
+              <Link
+                href={"/register"}
+                className="mx-1 hover:text-blue-300 link"
+              >
+                Create account
+              </Link>
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
