@@ -1,15 +1,17 @@
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  PlusOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
 import type { InputRef, TableColumnType, TableColumnsType } from "antd";
-import { Button, Input, Space, Table, Tag } from "antd";
+import { Button, Input, Space, Tag } from "antd";
 import type { FilterDropdownProps } from "antd/es/table/interface";
 import React, { useRef, useState } from "react";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import styled from "styled-components";
+import { TableCommon } from "./table-common";
 
 interface DataType {
   key: string;
@@ -21,142 +23,7 @@ interface DataType {
 }
 
 type DataIndex = keyof DataType;
-export const TableCommon = styled(Table)`
-  & .ant-table .ant-table-selection-column {
-    width: 60px;
-    max-width: 80px;
-  }
-  & .ant-table {
-    background-color: #f5f5f5;
-    border-top: 1px solid white;
-    border-radius: 20px;
-    font-family: "Visby";
-  }
-  & .ant-table .ant-table-container .ant-table-content table .ant-table-row {
-    background-color: white;
-  }
 
-  &
-    .ant-table
-    .ant-table-container
-    .ant-table-content
-    table
-    thead.ant-table-thead
-    .ant-table-cell {
-    font-weight: bold;
-  }
-  & .ant-table .ant-table-container {
-    border-radius: 20px;
-  }
-
-  & .ant-table .ant-table-container .ant-table-content {
-    border-radius: 20px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-  }
-
-  &
-    .ant-table
-    .ant-table-container
-    .ant-table-content
-    table
-    thead.ant-table-thead
-    .ant-table-cell {
-    background-color: white;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-  }
-
-  &
-    .ant-table
-    .ant-table-container
-    .ant-table-content
-    table
-    tbody.ant-table-tbody
-    tr:last-child
-    td {
-    border-radius: 0px;
-  }
-
-  &
-    .ant-table
-    .ant-table-container
-    .ant-table-content
-    table
-    .ant-table-row.ant-table-row-level-0:last-child
-    td:first-child {
-    border-bottom-left-radius: 20px;
-  }
-
-  &
-    .ant-table
-    .ant-table-container
-    .ant-table-content
-    table
-    .ant-table-row.ant-table-row-level-0:last-child
-    td:last-child {
-    border-bottom-right-radius: 20px;
-  }
-
-  &
-    .ant-table-thead
-    > tr
-    > th:not(:last-child):not(.ant-table-selection-column):not(
-      .ant-table-row-expand-icon-cell
-    ):not([colspan])::before {
-    content: none;
-  }
-  & .ant-table-footer {
-    padding: 0;
-    background-color: #f5f5f5;
-    padding-top: 8px;
-  }
-  & .ant-table-pagination-right {
-    display: flex;
-    justify-content: center;
-  }
-  & .ant-space.ant-space-vertical {
-    width: 100%;
-  }
-
-  &
-    .ant-table
-    .ant-table-container
-    .ant-table-content
-    table
-    thead.ant-table-thead
-    .ant-table-cell {
-    background-color: white;
-    border-radius: 0px;
-  }
-
-  &
-    .ant-table
-    .ant-table-container
-    .ant-table-content
-    table
-    thead.ant-table-thead
-    .ant-table-cell:first-child {
-    border-top-left-radius: 20px;
-  }
-  &
-    .ant-table
-    .ant-table-container
-    .ant-table-content
-    table
-    thead.ant-table-thead
-    .ant-table-cell:last-child {
-    border-top-right-radius: 20px;
-  }
-  & .ant-table-pagination.ant-pagination {
-    margin-top: 8px;
-  }
-  & .ant-space .ant-space-vertical {
-    width: 100% !important;
-  }
-  .ant-table-container {
-    overflow: auto;
-  }
-`;
 const data: DataType[] = [
   {
     key: "1",
@@ -237,11 +104,10 @@ const data: DataType[] = [
   },
 ];
 
-const TableAnt: React.FC = () => {
+const TableCompany: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
-
   const handleSearch = (
     selectedKeys: string[],
     confirm: FilterDropdownProps["confirm"],
@@ -379,7 +245,8 @@ const TableAnt: React.FC = () => {
             color="success"
             style={{
               fontFamily: "Visby",
-              fontWeight: 600,
+              fontWeight: 500,
+              borderRadius: 20,
             }}
           >
             Active
@@ -388,7 +255,8 @@ const TableAnt: React.FC = () => {
           <Tag
             style={{
               fontFamily: "Visby",
-              fontWeight: 600,
+              fontWeight: 500,
+              borderRadius: 20,
             }}
             icon={<CloseCircleOutlined />}
             color="error"
@@ -419,18 +287,31 @@ const TableAnt: React.FC = () => {
   ];
 
   return (
-    <TableCommon
-      className="font-visby"
-      pagination={{
-        pageSize: 10,
-        current: 1,
-        total: 100,
-        showQuickJumper: true,
-      }}
-      columns={columns as any}
-      dataSource={data}
-    />
+    <div className="flex flex-col gap-5">
+      <p className="text-34-34 font-semibold">Manage Company</p>
+      <TableCommon
+        className="font-visby"
+        pagination={{
+          pageSize: 5,
+          current: 1,
+          total: 100,
+          showQuickJumper: true,
+        }}
+        columns={columns as any}
+        dataSource={data}
+        footer={() => (
+          <div className="justify-center my-2 ">
+            <button className="btn w-full bg-primary border-none hover:bg-primary-hover">
+              <PlusOutlined style={{ fontSize: "18px", color: "white" }} />
+              <span className="font-bold uppercase text-white ">
+                Create a new company
+              </span>
+            </button>
+          </div>
+        )}
+      />
+    </div>
   );
 };
 
-export default TableAnt;
+export default TableCompany;

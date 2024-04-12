@@ -1,9 +1,9 @@
 "use client";
-import TableAnt from "@/components/table-ant";
+import TableCompany from "@/components/table-company";
 export default function Home() {
   return (
     <div className="overflow-x-auto">
-      <TableAnt />
+      <TableCompany />
     </div>
   );
 }

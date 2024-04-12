@@ -20,7 +20,7 @@ export default function NotFoundPage() {
           does not exist.
         </div>
         <Link
-          className="btn bg-primary text-white hover:bg-black"
+          className="btn bg-primary text-white hover:bg-primary-hover"
           href="/login"
         >
           Back to login

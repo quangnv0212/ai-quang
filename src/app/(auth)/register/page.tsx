@@ -8,7 +8,7 @@ import { useState } from "react";
 export default function RegisterPage() {
   const [check, setCheck] = useState(false);
   return (
-    <div className="">
+    <div className="flex flex-col gap-3">
       <div className={"text-center text-34-34 font-bold"}>Register</div>
       <div
         className={
@@ -17,7 +17,7 @@ export default function RegisterPage() {
       >
         Join Us Today
       </div>
-      <div className={"w-full px-24"}>
+      <div>
         <div className="">
           <div className="grid grid-cols-2 gap-5">
             <InputTextCommon
@@ -79,7 +79,7 @@ export default function RegisterPage() {
           </label>
           <div className="flex">
             <Link href="mail-success">
-              <button className="btn mt-2 hover:bg-black rounded-3xl bg-primary text-white px-10">
+              <button className="btn mt-2 hover:bg-primary-hover rounded-3xl bg-primary text-white px-10">
                 Register
               </button>
             </Link>

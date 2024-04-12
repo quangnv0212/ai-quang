@@ -17,13 +17,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AntdRegistry>
-        <body className="font-visby">
+        <body className="font-visby bg-[#f5f5f5]">
           <TopBar />
           <div className="grid grid-cols-[250px_minmax(0,1fr)] min-h-screen">
             <Sidebar />
             <div className="px-6 py-7">{children}</div>
           </div>
-          <Footer />
         </body>
       </AntdRegistry>
     </html>

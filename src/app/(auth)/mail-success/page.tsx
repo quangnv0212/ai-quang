@@ -22,7 +22,7 @@ export default function MailSuccessPage() {
           any issues, feel free to contact our support team for assistance.
         </div>
         <Link
-          className="btn bg-primary text-white hover:bg-black"
+          className="btn bg-primary text-white hover:bg-primary-hover"
           href="/login"
         >
           Back to login

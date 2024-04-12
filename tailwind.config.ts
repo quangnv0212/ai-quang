@@ -92,6 +92,7 @@ const config: Config = {
         grayf7: "#F7F7F7",
         grayfc: "#FCFCFC",
         graye4: "#e4e4e4",
+        "primary-hover": "#2d509b",
       },
     },
   },
@@ -101,6 +102,7 @@ const config: Config = {
       {
         dark: {
           primary: "#2d669b",
+          "primary-hover": "#2d509b",
           grayf4: "#F4F4F4",
           grayf7: "#F7F7F7",
           grayfc: "#FCFCFC",
@@ -111,6 +113,7 @@ const config: Config = {
         },
         light: {
           primary: "#2d669b",
+          "primary-hover": "#2d509b",
           grayf4: "#F4F4F4",
           grayf7: "#F7F7F7",
           grayfc: "#FCFCFC",

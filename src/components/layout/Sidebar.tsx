@@ -8,7 +8,7 @@ import { usePathname, useRouter } from "next/navigation";
 const Sidebar = () => {
   const pathname = usePathname();
   return (
-    <div className="px-4 py-6 bg-grayfc">
+    <div className="px-4 py-6 bg-grayfc ">
       {sidebarLinks.map((link) => (
         <SidebarLink
           isActive={pathname === link.path}
