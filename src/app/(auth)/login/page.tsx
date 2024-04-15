@@ -1,5 +1,6 @@
 "use client";
 import authApiRequest from "@/apiRequests/auth";
+import { useAppContext } from "@/app-provider";
 import { InputCheckCommon } from "@/components/common/input-check";
 import { InputPassword } from "@/components/common/input-password";
 import { InputTextCommon } from "@/components/common/input-text";
@@ -17,8 +18,6 @@ export default function Login() {
     resolver: zodResolver(LoginBody),
   });
   const [loading, setLoading] = useState(false);
-
-  // 2. Define a submit handler.
   async function onSubmit(values: LoginBodyType) {
     if (loading) return;
     setLoading(true);
@@ -33,25 +32,11 @@ export default function Login() {
         encryptedAccessToken,
         expireInSeconds,
       });
-      // await authApiRequest.auth({
-      //   sessionToken: result.payload.data.token,
-      //   expiresAt: result.payload.data.expiresAt
-      // })
-      // toast({
-      //   description: result.payload.message
-      // })
-      // router.push('/')
-      // router.refresh()
     } catch (error: any) {
-      // handleErrorApi({
-      //   error,
-      //   setError: form.setError
-      // })
     } finally {
       setLoading(false);
     }
   }
-
   return (
     <div className="flex justify-center items-center h-screen ">
       <div
@@ -61,10 +46,11 @@ export default function Login() {
       >
         <div
           className={
-            "text-black-1 text-center text-34-34 font-bold tracking-[-0.68px] pb-3 font-visby"
+            "text-black-1 text-center text-34-34 font-bold pb-3 flex flex-col gap-2"
           }
         >
-          Welcome back
+          <p className="text-primary">AiBase </p>
+          <p>Welcome back</p>
         </div>
         <div
           className={
@@ -75,7 +61,7 @@ export default function Login() {
         </div>
         <Form
           onFinish={handleSubmit(onSubmit)}
-          className="flex flex-col gap-4 w-[300px]"
+          className="flex flex-col gap-3 w-[300px]"
         >
           <InputTextCommon
             label="Email"

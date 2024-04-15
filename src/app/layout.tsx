@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 import AppProvider from "@/app-provider";
+import { DefaultLayout } from "@/components/layout/default-layout";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,7 +23,7 @@ export default function RootLayout({
   let user: any = null;
   if (accessToken) {
     // const data = await accountApiRequest.me(sessionToken.value)
-    // user = data.payload.data
+    user = true;
   }
   return (
     <html lang="en">
@@ -30,11 +31,7 @@ export default function RootLayout({
         <AntdRegistry>
           <AppProvider user={user} inititalSessionToken={accessToken?.value}>
             <ToastContainer />
-            <TopBar />
-            <div className="grid grid-cols-[250px_minmax(0,1fr)] min-h-screen">
-              <Sidebar />
-              <div className="px-6 py-7">{children}</div>
-            </div>
+            <DefaultLayout user={user}>{children}</DefaultLayout>
           </AppProvider>
         </AntdRegistry>
       </body>

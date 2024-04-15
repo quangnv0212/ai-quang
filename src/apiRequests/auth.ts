@@ -1,3 +1,4 @@
+import http from "@/lib/http";
 import {
   LoginBodyType,
   LoginResType,
@@ -7,7 +8,7 @@ import axios, { AxiosResponse } from "axios";
 
 const authApiRequest = {
   login: (body: LoginBodyType) =>
-    axios.post(
+    http.post(
       "https://Nobisofht.aibase.nobisoft.vn/api/TokenAuth/Authenticate",
       body
     ),
@@ -17,7 +18,7 @@ const authApiRequest = {
     encryptedAccessToken: string;
   }) => axios.post("/api/auth", body),
   register: (body: RegisterBodyType) =>
-    axios.post(
+    http.post(
       "https://Nobisofht.aibase.nobisoft.vn/api/TokenAuth/Register",
       body
     ),

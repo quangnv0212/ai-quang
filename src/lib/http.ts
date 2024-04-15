@@ -1,13 +1,6 @@
 import axios, { Axios, AxiosInstance } from "axios";
+import { normalizePath } from "./utils";
 
-export class Http {
-  instance: AxiosInstance;
-  constructor() {
-    this.instance = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT,
-    });
-  }
-}
 class SessionToken {
   private token = "";
   private _expiresAt = new Date().toISOString();
@@ -32,4 +25,34 @@ class SessionToken {
     this._expiresAt = expiresAt;
   }
 }
+
 export const clientSessionToken = new SessionToken();
+
+export class Http {
+  instance: AxiosInstance;
+  constructor() {
+    this.instance = axios.create({
+      baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT,
+      timeout: 10000,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    this.instance.interceptors.request.use(
+      (config) => {
+        if (clientSessionToken.value) {
+          config.headers.authorization = clientSessionToken.value;
+          config;
+          return config;
+        }
+        console.log(config.url);
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
+  }
+}
+const http = new Http().instance;
+export default http;
