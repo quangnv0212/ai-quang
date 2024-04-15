@@ -42,7 +42,7 @@ export const RegisterBody = z
 
 export type RegisterBodyType = z.TypeOf<typeof RegisterBody>;
 
-export const RegisterRes = z.object({
+export const LoginRes = z.object({
   data: z.object({
     results: z.object({
       accessToken: z.string(),
@@ -58,7 +58,7 @@ export const RegisterRes = z.object({
   }),
 });
 
-export type RegisterResType = z.TypeOf<typeof RegisterRes>;
+export type RegisterResType = z.TypeOf<typeof LoginRes>;
 
 export const LoginBody = z
   .object({
@@ -70,12 +70,10 @@ export const LoginBody = z
 
 export type LoginBodyType = z.TypeOf<typeof LoginBody>;
 
-export const LoginRes = RegisterRes;
-
 export type LoginResType = z.TypeOf<typeof LoginRes>;
 export const SlideSessionBody = z.object({}).strict();
 
 export type SlideSessionBodyType = z.TypeOf<typeof SlideSessionBody>;
-export const SlideSessionRes = RegisterRes;
+export const SlideSessionRes = LoginRes;
 
 export type SlideSessionResType = z.TypeOf<typeof SlideSessionRes>;

@@ -23,8 +23,16 @@ export default function Login() {
     if (loading) return;
     setLoading(true);
     try {
-      const result = await authApiRequest.login(values);
-
+      const res = await authApiRequest.login(values);
+      const accessToken = res.data.result.accessToken || "";
+      const encryptedAccessToken = res.data.result.encryptedAccessToken || "";
+      const expireInSeconds = res.data.result.expireInSeconds || "";
+      const userId = res.data.result.userId || "";
+      await authApiRequest.auth({
+        accessToken,
+        encryptedAccessToken,
+        expireInSeconds,
+      });
       // await authApiRequest.auth({
       //   sessionToken: result.payload.data.token,
       //   expiresAt: result.payload.data.expiresAt

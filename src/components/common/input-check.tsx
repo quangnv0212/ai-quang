@@ -11,25 +11,24 @@ export interface IInputCheckCommonProps {
 export function InputCheckCommon(props: IInputCheckCommonProps) {
   const { label, name, control } = props;
   return (
-    <div className={"flex gap-2"}>
-      <FormItem
-        control={control}
-        name={name}
-        label={label}
+    <FormItem
+      className="flex justify-between w-full items-center"
+      control={control}
+      name={name}
+      label={label}
+      style={{
+        fontFamily: "Visby",
+      }}
+    >
+      <Input
         style={{
           fontFamily: "Visby",
         }}
-      >
-        <Input
-          style={{
-            fontFamily: "Visby",
-          }}
-          className="checkbox checkbox-primary"
-          name={name}
-          size="large"
-          type="checkbox"
-        />
-      </FormItem>
-    </div>
+        className="checkbox checkbox-primary"
+        name={name}
+        size="large"
+        type="checkbox"
+      />
+    </FormItem>
   );
 }
