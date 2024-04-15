@@ -7,7 +7,6 @@ export const metadata: Metadata = {
 export default function Me() {
   const cookieStore = cookies();
   const accessToken = cookieStore.get("accessToken");
-  console.log(accessToken);
   return (
     <div>
       <h1>Me</h1>

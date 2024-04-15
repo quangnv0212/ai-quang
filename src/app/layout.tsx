@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
+import AppProvider from "@/app-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,10 +18,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = cookies();
-  const sessionToken = cookieStore.get("sessionToken");
-  // let user: AccountResType['data'] | null = null
+  const accessToken = cookieStore.get("accessToken");
   let user: any = null;
-  if (sessionToken) {
+  if (accessToken) {
     // const data = await accountApiRequest.me(sessionToken.value)
     // user = data.payload.data
   }
@@ -28,12 +28,14 @@ export default function RootLayout({
     <html lang="en">
       <body suppressHydrationWarning={true} className="font-visby bg-[#f5f5f5]">
         <AntdRegistry>
-          <ToastContainer />
-          <TopBar />
-          <div className="grid grid-cols-[250px_minmax(0,1fr)] min-h-screen">
-            <Sidebar />
-            <div className="px-6 py-7">{children}</div>
-          </div>
+          <AppProvider user={user} inititalSessionToken={accessToken?.value}>
+            <ToastContainer />
+            <TopBar />
+            <div className="grid grid-cols-[250px_minmax(0,1fr)] min-h-screen">
+              <Sidebar />
+              <div className="px-6 py-7">{children}</div>
+            </div>
+          </AppProvider>
         </AntdRegistry>
       </body>
     </html>
