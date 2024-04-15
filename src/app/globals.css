@@ -39,3 +39,7 @@ body {
 .ant-input{
   font-family: "Visby" !important;
 }
+.ant-col label {
+  font-family: 'Visby' !important;
+  font-weight: 500 !important;
+}
