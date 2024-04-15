@@ -36,3 +36,6 @@ body {
 .ant-form-item{
   margin: 0 !important;
 }
+.ant-input{
+  font-family: "Visby" !important;
+}

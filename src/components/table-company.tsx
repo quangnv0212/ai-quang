@@ -12,6 +12,7 @@ import type { FilterDropdownProps } from "antd/es/table/interface";
 import React, { useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { TableCommon } from "./common/table-common";
+import { ModalCommon } from "./common/modal-common";
 
 interface DataType {
   key: string;
@@ -107,6 +108,11 @@ const data: DataType[] = [
 const TableCompany: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    detailInfo: undefined,
+    type: "create",
+  });
   const searchInput = useRef<InputRef>(null);
   const handleSearch = (
     selectedKeys: string[],
@@ -285,32 +291,53 @@ const TableCompany: React.FC = () => {
       },
     },
   ];
-
+  const handleCancel = () => {
+    setModalState({ ...modalState, isOpen: false });
+  };
   return (
-    <div className="flex flex-col gap-5">
-      <p className="text-34-34 font-semibold">Manage Company</p>
-      <TableCommon
-        className="font-visby"
-        pagination={{
-          pageSize: 5,
-          current: 1,
-          total: 100,
-          showQuickJumper: true,
-        }}
-        columns={columns as any}
-        dataSource={data}
-        footer={() => (
-          <div className="justify-center my-2 ">
-            <button className="btn w-full bg-primary border-none hover:bg-primary-hover">
-              <PlusOutlined style={{ fontSize: "18px", color: "white" }} />
-              <span className="font-bold uppercase text-white ">
-                Create a new company
-              </span>
-            </button>
-          </div>
-        )}
-      />
-    </div>
+    <>
+      {modalState.isOpen && (
+        <ModalCommon
+          open={modalState.isOpen}
+          centered
+          padding={0}
+          footer={null}
+          onCancel={handleCancel}
+          style={{ borderRadius: 8 }}
+          width={648}
+          closable={false}
+        >
+          2
+        </ModalCommon>
+      )}
+      <div className="flex flex-col gap-5">
+        <p className="text-34-34 font-semibold">Manage Company</p>
+        <TableCommon
+          className="font-visby"
+          pagination={{
+            pageSize: 5,
+            current: 1,
+            total: 100,
+            showQuickJumper: true,
+          }}
+          columns={columns as any}
+          dataSource={data}
+          footer={() => (
+            <div className="justify-center my-2 ">
+              <button
+                onClick={() => setModalState({ ...modalState, isOpen: true })}
+                className="btn w-full bg-primary border-none hover:bg-primary-hover"
+              >
+                <PlusOutlined style={{ fontSize: "18px", color: "white" }} />
+                <span className="font-bold uppercase text-white ">
+                  Create a new company
+                </span>
+              </button>
+            </div>
+          )}
+        />
+      </div>
+    </>
   );
 };
 

@@ -20,21 +20,32 @@ export default function RegisterPage() {
   };
   return (
     <div className="flex flex-col gap-3">
-      <div className={"text-center text-34-34 font-bold"}>Register</div>
       <div
         className={
-          "text-black-6 mt-5 mb-6 text-center font-medium text-16-16 font-visby"
+          "text-primary text-center text-34-34 font-bold tracking-[-0.68px] pb-2 font-visby"
+        }
+      >
+        <span>AiBase</span>
+        <span className={"text-center text-34-34 font-bold text-black"}>
+          {" "}
+          Register
+        </span>
+      </div>
+
+      <div
+        className={
+          "text-black-6 mb-6 text-center font-medium text-16-16 font-visby"
         }
       >
         Join Us Today
       </div>
-      <div>
-        <div className="">
-          <div className="grid grid-cols-2 gap-5">
-            <Form
-              onFinish={handleSubmit(onSubmit)}
-              className="flex flex-col gap-4 w-[300px]"
-            >
+      <div className="w-full">
+        <div className="flex justify-center items-center w-full px-60">
+          <Form
+            onFinish={handleSubmit(onSubmit)}
+            className="w-full flex flex-col gap-4"
+          >
+            <div className="grid grid-cols-2 gap-4 w-full">
               <InputTextCommon
                 label="First Name"
                 name="firstName"
@@ -95,6 +106,8 @@ export default function RegisterPage() {
                 placeholder=""
                 control={control}
               />
+            </div>
+            <div className="flex flex-col gap-4">
               <InputTextCommon
                 label="First Address"
                 name="firstAddress"
@@ -113,18 +126,14 @@ export default function RegisterPage() {
                 placeholder=""
                 control={control}
               />
-              <div className={"mt-6 font-visby"}>
-                <div className="flex">
-                  <button
-                    type="submit"
-                    className="btn mt-2 hover:bg-primary-hover rounded-3xl bg-primary text-white px-10"
-                  >
-                    Register
-                  </button>
-                </div>
-              </div>
-            </Form>
-          </div>
+            </div>
+            <button
+              type="submit"
+              className="btn mt-2 hover:bg-primary-hover rounded-3xl bg-primary text-white px-10"
+            >
+              Register
+            </button>
+          </Form>
         </div>
 
         <div className={"flex justify-center py-4 font-visby "}>
