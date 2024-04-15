@@ -3,6 +3,8 @@ import TopBar from "@/components/layout/Topbar";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -26,6 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <body suppressHydrationWarning={true} className="font-visby bg-[#f5f5f5]">
         <AntdRegistry>
+          <ToastContainer />
           <TopBar />
           <div className="grid grid-cols-[250px_minmax(0,1fr)] min-h-screen">
             <Sidebar />
