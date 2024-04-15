@@ -7,7 +7,7 @@ export interface IInputPasswordProps {
   name: string;
   placeholder?: string;
   prefix?: React.ReactNode;
-  control?: any;
+  control: any;
 }
 
 export function InputPassword(props: IInputPasswordProps) {

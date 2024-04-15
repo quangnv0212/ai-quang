@@ -1,17 +1,48 @@
 "use client";
+import authApiRequest from "@/apiRequests/auth";
+import { InputCheckCommon } from "@/components/common/input-check";
 import { InputPassword } from "@/components/common/input-password";
 import { InputTextCommon } from "@/components/common/input-text";
 import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { KeyOutlined, UserOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "antd";
+import axios from "axios";
 import Link from "next/link";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function Login() {
   const { control, handleSubmit } = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
   });
+  const [loading, setLoading] = useState(false);
+
+  // 2. Define a submit handler.
+  async function onSubmit(values: LoginBodyType) {
+    if (loading) return;
+    setLoading(true);
+    try {
+      const result = await authApiRequest.login(values);
+
+      // await authApiRequest.auth({
+      //   sessionToken: result.payload.data.token,
+      //   expiresAt: result.payload.data.expiresAt
+      // })
+      // toast({
+      //   description: result.payload.message
+      // })
+      // router.push('/')
+      // router.refresh()
+    } catch (error: any) {
+      // handleErrorApi({
+      //   error,
+      //   setError: form.setError
+      // })
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="flex justify-center items-center h-screen ">
@@ -35,14 +66,12 @@ export default function Login() {
           Welcome back! Please enter your details
         </div>
         <Form
-          onFinish={handleSubmit((data) => {
-            console.log(data);
-          })}
+          onFinish={handleSubmit(onSubmit)}
           className="flex flex-col gap-4 w-[300px]"
         >
           <InputTextCommon
             label="Email"
-            name="email"
+            name="userNameOrEmailAddress"
             placeholder="Enter your email"
             prefix={<UserOutlined />}
             control={control}
@@ -52,6 +81,11 @@ export default function Login() {
             name="password"
             placeholder="Enter your password"
             prefix={<KeyOutlined />}
+            control={control}
+          />
+          <InputCheckCommon
+            label="Remember me"
+            name="rememberClient"
             control={control}
           />
           <div className="flex justify-end mb-2">

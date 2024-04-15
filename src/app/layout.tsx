@@ -1,8 +1,8 @@
 import Sidebar from "@/components/layout/Sidebar";
-import { AntdRegistry } from "@ant-design/nextjs-registry";
 import TopBar from "@/components/layout/Topbar";
-import Footer from "@/components/layout/footer";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,6 +14,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = cookies();
+  const sessionToken = cookieStore.get("sessionToken");
+  // let user: AccountResType['data'] | null = null
+  let user: any = null;
+  if (sessionToken) {
+    // const data = await accountApiRequest.me(sessionToken.value)
+    // user = data.payload.data
+  }
   return (
     <html lang="en">
       <body suppressHydrationWarning={true} className="font-visby bg-[#f5f5f5]">

@@ -1,10 +1,32 @@
 import z from "zod";
-
+const x = {
+  lastName: "Vu2",
+  firstName: "Quan2g",
+  emailAddress: "user1@example.com",
+  password: "123123",
+  companyName: "Nobisofht",
+  country: "Vietnam",
+  state: "hanoi",
+  postCode: "post",
+  suburb: "string1",
+  firstAddress: "strging",
+  secondAddress: "strigng",
+  captchaResponse: "strging",
+};
 export const RegisterBody = z
   .object({
-    name: z.string().trim().min(2).max(256),
-    email: z.string().email(),
+    lastName: z.string().min(1).max(50),
+    firstName: z.string().min(1).max(50),
+    emailAddress: z.string().email(),
     password: z.string().min(6).max(100),
+    companyName: z.string().min(1).max(100),
+    country: z.string().min(1).max(100),
+    state: z.string().min(1).max(100),
+    postCode: z.any(),
+    suburb: z.string(),
+    firstAddress: z.string(),
+    secondAddress: z.string(),
+    captchaResponse: z.string(),
     confirmPassword: z.string().min(6).max(100),
   })
   .strict()
@@ -22,23 +44,27 @@ export type RegisterBodyType = z.TypeOf<typeof RegisterBody>;
 
 export const RegisterRes = z.object({
   data: z.object({
-    token: z.string(),
-    expiresAt: z.string(),
-    account: z.object({
-      id: z.number(),
-      name: z.string(),
-      email: z.string(),
+    results: z.object({
+      accessToken: z.string(),
+      encryptedAccessToken: z.string(),
+      expireInSeconds: z.number(),
+      userId: z.number(),
     }),
+    targetUrl: z.any(),
+    success: z.boolean(),
+    error: z.any(),
+    unAuthorizedRequest: z.boolean(),
+    __abp: z.boolean(),
   }),
-  message: z.string(),
 });
 
 export type RegisterResType = z.TypeOf<typeof RegisterRes>;
 
 export const LoginBody = z
   .object({
-    email: z.string().email(),
+    userNameOrEmailAddress: z.string().email(),
     password: z.string().min(6).max(100),
+    rememberClient: z.boolean(),
   })
   .strict();
 

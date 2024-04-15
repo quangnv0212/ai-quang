@@ -1,28 +1,23 @@
 "use client";
-import { InputPassword } from "@/components/common/input-password";
 import { InputTextCommon } from "@/components/common/input-text";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
-
-import { useState } from "react";
-import { z } from "zod";
 import {
   RegisterBody,
   RegisterBodyType,
 } from "@/schemaValidations/auth.schema";
+import { useForm } from "react-hook-form";
+import { Form } from "antd";
+import { InputPassword } from "@/components/common/input-password";
+import authApiRequest from "@/apiRequests/auth";
 
 export default function RegisterPage() {
-  const [check, setCheck] = useState(false);
-  const form = useForm<RegisterBodyType>({
+  const { control, handleSubmit } = useForm<RegisterBodyType>({
     resolver: zodResolver(RegisterBody),
-    defaultValues: {
-      email: "",
-      name: "",
-      password: "",
-      confirmPassword: "",
-    },
   });
+  const onSubmit = async (values: RegisterBodyType) => {
+    const x = await authApiRequest.register(values);
+  };
   return (
     <div className="flex flex-col gap-3">
       <div className={"text-center text-34-34 font-bold"}>Register</div>
@@ -34,74 +29,103 @@ export default function RegisterPage() {
         Join Us Today
       </div>
       <div>
-        <form>
-          <div className="">
-            <div className="grid grid-cols-2 gap-5">
+        <div className="">
+          <div className="grid grid-cols-2 gap-5">
+            <Form
+              onFinish={handleSubmit(onSubmit)}
+              className="flex flex-col gap-4 w-[300px]"
+            >
               <InputTextCommon
                 label="First Name"
                 name="firstName"
-                placeholder="Vu"
+                placeholder=""
+                control={control}
               />
               <InputTextCommon
                 label="Last Name"
                 name="lastName"
                 placeholder="Quang"
-              />
-              <InputTextCommon
-                label="Company"
-                name="company"
-                placeholder="Nobisoft"
-              />
-              <InputTextCommon
-                label="Phone number"
-                name="phoneNumber"
-                placeholder="094-236-1202"
-              />
-              <InputTextCommon
-                label="Company"
-                name="company"
-                placeholder="Nobisoft"
-              />
-              <InputTextCommon
-                label="Phone number"
-                name="phoneNumber"
-                placeholder="094-236-1202"
-              />
-            </div>
-            <div className="flex flex-col gap-5 mt-5">
-              <InputTextCommon
-                label="Email address"
-                name="email"
-                placeholder="Enter your email"
+                control={control}
               />
               <InputPassword
                 label="Password"
                 name="password"
-                placeholder="Enter your password"
+                placeholder="Choose a strong password"
+                control={control}
               />
-            </div>
-          </div>
-          <div className={"mt-6 font-visby"}>
-            <label className=" mb-2 flex items-center gap-2">
-              <input
-                checked={check}
-                onChange={(e) => setCheck(e.target.checked)}
-                type="checkbox"
-                className="checkbox checkbox-primary"
+              <InputPassword
+                label="Confirm Password"
+                name="confirmPassword"
+                placeholder="Confirm your password"
+                control={control}
               />
-              <span className="label-text">
-                I agree with the terms and conditions.
-              </span>
-            </label>
-            <div className="flex">
-              <Link href="mail-success">
-                <button className="btn mt-2 hover:bg-primary-hover rounded-3xl bg-primary text-white px-10">
-                  Register
-                </button>
-              </Link>
-            </div>
+              <InputTextCommon
+                label="Email Address"
+                name="emailAddress"
+                placeholder="Enter your email"
+                control={control}
+              />
+              <InputTextCommon
+                label="Company Name"
+                name="companyName"
+                placeholder=""
+                control={control}
+              />
+              <InputTextCommon
+                label="Country"
+                name="country"
+                placeholder=""
+                control={control}
+              />
+              <InputTextCommon
+                label="State"
+                name="state"
+                placeholder=""
+                control={control}
+              />
+              <InputTextCommon
+                label="Post Code"
+                name="postCode"
+                placeholder=""
+                control={control}
+              />
+              <InputTextCommon
+                label="Suburb"
+                name="suburb"
+                placeholder=""
+                control={control}
+              />
+              <InputTextCommon
+                label="First Address"
+                name="firstAddress"
+                placeholder=""
+                control={control}
+              />
+              <InputTextCommon
+                label="Second Address"
+                name="secondAddress"
+                placeholder=""
+                control={control}
+              />
+              <InputTextCommon
+                label="Captcha Response"
+                name="captchaResponse"
+                placeholder=""
+                control={control}
+              />
+              <div className={"mt-6 font-visby"}>
+                <div className="flex">
+                  <button
+                    type="submit"
+                    className="btn mt-2 hover:bg-primary-hover rounded-3xl bg-primary text-white px-10"
+                  >
+                    Register
+                  </button>
+                </div>
+              </div>
+            </Form>
           </div>
-        </form>
+        </div>
 
         <div className={"flex justify-center py-4 font-visby "}>
           Already have an account?

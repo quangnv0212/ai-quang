@@ -1,3 +1,4 @@
+"use client";
 import { Input } from "antd";
 import { FormItem } from "react-hook-form-antd";
 

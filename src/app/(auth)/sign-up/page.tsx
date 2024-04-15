@@ -1,8 +1,19 @@
+"use client";
 import { InputPassword } from "@/components/common/input-password";
 import { InputTextCommon } from "@/components/common/input-text";
+import {
+  RegisterBody,
+  RegisterBodyType,
+} from "@/schemaValidations/auth.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form } from "antd";
 import Link from "next/link";
-
+import { useForm } from "react-hook-form";
 export default function SignUpPage() {
+  const { control, handleSubmit } = useForm<RegisterBodyType>({
+    resolver: zodResolver(RegisterBody),
+  });
+
   return (
     <div className="flex justify-center items-center sm:my-8 my-5">
       <div
@@ -25,49 +36,68 @@ export default function SignUpPage() {
           Join us today
         </div>
         <div className={"w-full flex flex-col gap-2"}>
-          <div className="sm:grid sm:grid-cols-2 sm:gap-3 flex flex-col gap-2">
-            <InputTextCommon
+          <Form
+            onFinish={handleSubmit((data) => {
+              console.log(data);
+            })}
+            className="flex flex-col gap-4 w-[300px]"
+          >
+            {/* <InputTextCommon
               label="First name"
               name="firstName"
               placeholder="Enter your first name"
+              control={control}
             />
+
             <InputTextCommon
               label="Last name"
               name="lastName"
               placeholder="Enter your last name"
+              control={control}
             />
             <InputTextCommon
               label="Company name"
               name="firstName"
               placeholder="Enter your first name"
+              control={control}
             />
             <InputTextCommon
               label="Country"
               name="lastName"
               placeholder="Enter your last name"
+              control={control}
             />
-          </div>
-
-          <InputTextCommon
-            label="Address 1"
-            name="lastName"
-            placeholder="Enter your last name"
-          />
-          <InputTextCommon
-            label="Address 2"
-            name="lastName"
-            placeholder="Enter your last name"
-          />
-          <InputTextCommon
-            label="Email"
-            name="email"
-            placeholder="Enter your email"
-          />
-          <InputPassword
-            label="Password"
-            name="password"
-            placeholder="Enter your password"
-          />
+            <InputTextCommon
+              label="Address 1"
+              name="lastName"
+              placeholder="Enter your last name"
+              control={control}
+            />
+            <InputTextCommon
+              label="Address 2"
+              name="lastName"
+              placeholder="Enter your last name"
+              control={control}
+            /> */}
+            <InputTextCommon
+              label="Email"
+              name="email"
+              placeholder="Enter your email"
+              control={control}
+            />
+            <InputPassword
+              label="Password"
+              name="password"
+              placeholder="Enter your password"
+              control={control}
+            />
+            <InputPassword
+              label="Confirm Password"
+              name="confirmPassword"
+              placeholder="Confirm your password"
+              control={control}
+            />
+          </Form>
           <Link
             className="text-end text-14-16 font-semibold text-gray-500 hover:text-blue-400"
             href={""}
