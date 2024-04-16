@@ -6,12 +6,16 @@ import {
 import axios from "axios";
 
 const authApiRequest = {
-  login: (body: LoginBodyType) =>
-    http.post(
-      "https://nobisofht.aibase.nobisoft.vn/api/TokenAuth/Authenticate",
+  // login: (body: LoginBodyType, tenant: string) =>
+  //   axios.post(
+  //     `https://${tenant}.aibase.nobisoft.vn/api/TokenAuth/Authenticate`,
+  //     body
+  //   ),
+  login: (body: LoginBodyType, tenant: string) =>
+    axios.post(
+      `https://nobisofht.aibase.nobisoft.vn/api/TokenAuth/Authenticate`,
       body
     ),
-
   auth: (body: {
     accessToken: string;
     expireInSeconds: string;

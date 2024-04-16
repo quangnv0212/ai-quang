@@ -1,9 +1,7 @@
 "use client";
 import { createContext, useContext, useState } from "react";
 import { clientSessionToken } from "./lib/http";
-type User = {
-  id: number;
-};
+import { User } from "./app/layout";
 
 const AppContext = createContext<{
   user: User | null;

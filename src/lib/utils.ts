@@ -16,3 +16,18 @@ export const normalizePath = (path: string) => {
 export const decodeJWT = <Payload = any>(token: string) => {
   return jwt.decode(token) as Payload;
 };
+
+export const getTenant = () => {
+  let tenant;
+  if (typeof window !== "undefined") {
+    tenant = window.location.href;
+    let newFullPath = tenant.substring(7);
+    let parts = newFullPath.split(".");
+    if (parts[0].includes("localhost")) {
+      tenant = undefined;
+    } else {
+      tenant = parts[0];
+    }
+  }
+  return tenant;
+};

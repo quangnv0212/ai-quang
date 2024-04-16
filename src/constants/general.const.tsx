@@ -11,8 +11,19 @@ import {
   TPropertyTypeData,
   TSidebarLink,
 } from "@/types/general.types";
-
-export const sidebarLinks: TSidebarLink[] = [
+export const sidebarLinksAdmin: TSidebarLink[] = [
+  {
+    title: "Dashboard",
+    icon: <IconDashboard />,
+    path: "/",
+  },
+  {
+    title: "Property",
+    icon: <IconBuilding />,
+    path: "/properties",
+  },
+];
+export const sidebarLinksTenant: TSidebarLink[] = [
   {
     title: "Dashboard",
     icon: <IconDashboard />,
@@ -28,20 +39,22 @@ export const sidebarLinks: TSidebarLink[] = [
     icon: <IconPerson />,
     path: "/agent",
   },
+];
+export const sidebarLinksUser: TSidebarLink[] = [
   {
-    title: "Review",
-    icon: <IconStar />,
-    path: "/review",
+    title: "Dashboard",
+    icon: <IconDashboard />,
+    path: "/",
   },
   {
-    title: "Message",
-    icon: <IconMessage />,
-    path: "/message",
+    title: "Property",
+    icon: <IconBuilding />,
+    path: "/properties",
   },
   {
-    title: "My Profile",
-    icon: <IconProfile />,
-    path: "/my-profile",
+    title: "Agent",
+    icon: <IconPerson />,
+    path: "/agent",
   },
 ];
 export const propertyStatusData: TPropertyStatusData[] = [

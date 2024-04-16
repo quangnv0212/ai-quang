@@ -1,11 +1,9 @@
 "use client";
-import Link from "next/link";
-import React from "react";
-import { sidebarLinks } from "@/constants/general.const";
 import { TSidebarLink } from "@/types/general.types";
-import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-const Sidebar = () => {
+const Sidebar = ({ sidebarLinks }: { sidebarLinks: TSidebarLink[] }) => {
   const pathname = usePathname();
   return (
     <div className="px-4 py-6 bg-grayfc ">

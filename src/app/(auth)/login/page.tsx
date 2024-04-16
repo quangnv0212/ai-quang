@@ -3,27 +3,34 @@ import authApiRequest from "@/apiRequests/auth";
 import { InputCheckCommon } from "@/components/common/input-check";
 import { InputPassword } from "@/components/common/input-password";
 import { InputTextCommon } from "@/components/common/input-text";
+import { getTenant } from "@/lib/utils";
 import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { KeyOutlined, UserOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "antd";
 import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function Login() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   const { control, handleSubmit } = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
   });
+  // get domain
   const router = useRouter();
-
+  const tenant = getTenant() || "default";
   const [loading, setLoading] = useState(false);
   async function onSubmit(values: LoginBodyType) {
     if (loading) return;
     setLoading(true);
     try {
-      const res = await authApiRequest.login(values);
+      const res = await authApiRequest.login(values, tenant);
       const accessToken = res.data.result.accessToken || "";
       const encryptedAccessToken = res.data.result.encryptedAccessToken || "";
       const expireInSeconds = res.data.result.expireInSeconds || "";
@@ -57,11 +64,19 @@ export default function Login() {
         </div>
         <div
           className={
-            "text-black-6 text-center font-medium text-16-16 pb-8 font-visby"
+            "text-black-6 text-center font-medium text-16-16 pb-2 font-visby"
           }
         >
           Welcome back! Please enter your details
         </div>
+        {isClient ? (
+          <p>
+            <span>Tenant: {tenant}</span>
+          </p>
+        ) : (
+          <></>
+        )}
+
         <Form
           onFinish={handleSubmit(onSubmit)}
           className="flex flex-col gap-3 w-[300px]"
