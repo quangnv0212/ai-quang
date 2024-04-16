@@ -1,18 +1,5 @@
 import z from "zod";
-const x = {
-  lastName: "Vu2",
-  firstName: "Quan2g",
-  emailAddress: "user1@example.com",
-  password: "123123",
-  companyName: "Nobisofht",
-  country: "Vietnam",
-  state: "hanoi",
-  postCode: "post",
-  suburb: "string1",
-  firstAddress: "strging",
-  secondAddress: "strigng",
-  captchaResponse: "strging",
-};
+
 export const RegisterBody = z
   .object({
     lastName: z.string().min(1).max(50),

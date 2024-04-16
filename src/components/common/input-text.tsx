@@ -21,7 +21,6 @@ export function InputTextCommon(props: IInputTextCommonProps) {
             fontFamily: "Visby",
           }}
           name={name}
-          size="large"
           placeholder={placeholder}
           prefix={prefix}
         />

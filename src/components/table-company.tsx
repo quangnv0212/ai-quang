@@ -13,6 +13,7 @@ import React, { useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { TableCommon } from "./common/table-common";
 import { ModalCommon } from "./common/modal-common";
+import { ModalCompany } from "./modal-company";
 
 interface DataType {
   key: string;
@@ -279,10 +280,16 @@ const TableCompany: React.FC = () => {
         return (
           <div className="flex gap-3">
             <EditOutlined
+              onClick={() =>
+                setModalState({ ...modalState, isOpen: true, type: "update" })
+              }
               style={{ fontSize: 16 }}
               className="hover:text-primary cursor-pointer"
             />
             <DeleteOutlined
+              onClick={() =>
+                setModalState({ ...modalState, isOpen: true, type: "delete" })
+              }
               className="hover:text-primary cursor-pointer"
               style={{ fontSize: 16 }}
             />
@@ -291,24 +298,11 @@ const TableCompany: React.FC = () => {
       },
     },
   ];
-  const handleCancel = () => {
-    setModalState({ ...modalState, isOpen: false });
-  };
+
   return (
     <>
       {modalState.isOpen && (
-        <ModalCommon
-          open={modalState.isOpen}
-          centered
-          padding={0}
-          footer={null}
-          onCancel={handleCancel}
-          style={{ borderRadius: 8 }}
-          width={648}
-          closable={false}
-        >
-          2
-        </ModalCommon>
+        <ModalCompany modalState={modalState} setModalState={setModalState} />
       )}
       <div className="flex flex-col gap-5">
         <p className="text-34-34 font-semibold">Manage Company</p>
@@ -325,7 +319,9 @@ const TableCompany: React.FC = () => {
           footer={() => (
             <div className="justify-center my-2 ">
               <button
-                onClick={() => setModalState({ ...modalState, isOpen: true })}
+                onClick={() =>
+                  setModalState({ ...modalState, isOpen: true, type: "create" })
+                }
                 className="btn w-full bg-primary border-none hover:bg-primary-hover"
               >
                 <PlusOutlined style={{ fontSize: "18px", color: "white" }} />
