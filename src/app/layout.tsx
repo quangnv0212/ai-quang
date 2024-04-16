@@ -37,7 +37,6 @@ export default function RootLayout({
     user = null;
   } else {
     user = decodeJWT(accessToken.value);
-    console.log(user);
   }
   return (
     <html lang="en">
