@@ -1,10 +1,7 @@
-import AppProvider from "@/app-provider";
 import { DefaultLayout } from "@/components/layout/default-layout";
 import { decodeJWT } from "@/lib/utils";
-import { AntdRegistry } from "@ant-design/nextjs-registry";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
@@ -34,21 +31,11 @@ export default function RootLayout({
 }>) {
   const cookieStore = cookies();
   const accessToken = cookieStore.get("accessToken");
-  let user: CurrentUser | null = null;
-  if (!accessToken) {
-    user = null;
-  } else {
-    user = decodeJWT(accessToken.value);
-  }
+
   return (
     <html lang="en">
       <body suppressHydrationWarning={true} className="font-visby bg-[#f5f5f5]">
-        <AntdRegistry>
-          <AppProvider user={user} inititalSessionToken={accessToken?.value}>
-            <ToastContainer />
-            <DefaultLayout user={user}>{children}</DefaultLayout>
-          </AppProvider>
-        </AntdRegistry>
+        <DefaultLayout accessToken={accessToken}>{children}</DefaultLayout>
       </body>
     </html>
   );

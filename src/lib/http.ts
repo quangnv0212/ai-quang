@@ -1,8 +1,11 @@
 import axios, { AxiosInstance } from "axios";
+import { cookies } from "next/headers";
+import { toast } from "react-toastify";
 
 class SessionToken {
   private token = "";
   private _expiresAt = new Date().toISOString();
+
   get value() {
     return this.token;
   }
@@ -29,9 +32,13 @@ export const clientSessionToken = new SessionToken();
 
 export class Http {
   instance: AxiosInstance;
+  clientSessionToken: SessionToken;
   constructor() {
+    this.clientSessionToken = new SessionToken();
     this.instance = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT,
+      baseURL:
+        process.env.NEXT_PUBLIC_API_ENDPOINT ||
+        "https://nobisofht.aibase.nobisoft.vn/api",
       timeout: 10000,
       headers: {
         "Content-Type": "application/json",
@@ -40,7 +47,7 @@ export class Http {
     this.instance.interceptors.request.use(
       (config) => {
         if (clientSessionToken.value) {
-          config.headers.authorization = clientSessionToken.value;
+          config.headers.authorization = `Bearer ${clientSessionToken.value}`;
           config;
           return config;
         }
@@ -48,6 +55,14 @@ export class Http {
       },
       (error) => {
         return Promise.reject(error);
+      }
+    );
+    this.instance.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      (error) => {
+        toast.error(error?.response?.data?.error?.message || "Error");
       }
     );
   }

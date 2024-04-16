@@ -3,6 +3,7 @@ import authApiRequest from "@/apiRequests/auth";
 import { InputCheckCommon } from "@/components/common/input-check";
 import { InputPassword } from "@/components/common/input-password";
 import { InputTextCommon } from "@/components/common/input-text";
+import { clientSessionToken } from "@/lib/http";
 import { getTenant } from "@/lib/utils";
 import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { KeyOutlined, UserOutlined } from "@ant-design/icons";
@@ -34,7 +35,7 @@ export default function Login() {
       const accessToken = res.data.result.accessToken || "";
       const encryptedAccessToken = res.data.result.encryptedAccessToken || "";
       const expireInSeconds = res.data.result.expireInSeconds || "";
-      const userId = res.data.result.userId || "";
+      clientSessionToken.value = accessToken;
       await authApiRequest.auth({
         accessToken,
         encryptedAccessToken,

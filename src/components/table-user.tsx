@@ -13,7 +13,9 @@ import React, { useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { TableCommon } from "./common/table-common";
 import { ModalCommon } from "./common/modal-common";
-import { ModalCompany } from "./modal-company";
+import { ModalUser } from "./modal-user";
+import { useQuery } from "react-query";
+import userApiRequest from "@/apiRequests/user";
 
 interface DataType {
   key: string;
@@ -26,92 +28,11 @@ interface DataType {
 
 type DataIndex = keyof DataType;
 
-const data: DataType[] = [
-  {
-    key: "1",
-    userName: "John Brown",
-    fullName: "John Brown",
-    isActive: true,
-    email: "quangnv.0212@gmail.com",
-  },
-  {
-    key: "2",
-    userName: "John Brown",
-    fullName: "John Brown",
-    isActive: false,
-    email: "quangnv.0212@gmail.com",
-  },
-  {
-    key: "3",
-    userName: "Alice Smith",
-    fullName: "Alice Smith",
-    isActive: true,
-    email: "alice.smith@example.com",
-  },
-  {
-    key: "4",
-    userName: "Bob Johnson",
-    fullName: "Bob Johnson",
-    isActive: true,
-    email: "bob.johnson@example.com",
-  },
-  {
-    key: "5",
-    userName: "Emily Davis",
-    fullName: "Emily Davis",
-    isActive: false,
-    email: "emily.davis@example.com",
-  },
-  {
-    key: "6",
-    userName: "Michael Wilson",
-    fullName: "Michael Wilson",
-    isActive: true,
-    email: "michael.wilson@example.com",
-  },
-  {
-    key: "7",
-    userName: "Jessica Lee",
-    fullName: "Jessica Lee",
-    isActive: false,
-    email: "jessica.lee@example.com",
-  },
-  {
-    key: "8",
-    userName: "David Martinez",
-    fullName: "David Martinez",
-    isActive: true,
-    email: "david.martinez@example.com",
-  },
-  {
-    key: "9",
-    userName: "Sophia Garcia",
-    fullName: "Sophia Garcia",
-    isActive: true,
-    email: "sophia.garcia@example.com",
-  },
-  {
-    key: "10",
-    userName: "Matthew Lopez",
-    fullName: "Matthew Lopez",
-    isActive: false,
-    email: "matthew.lopez@example.com",
-  },
-  {
-    key: "11",
-    userName: "Olivia Wilson",
-    fullName: "Olivia Wilson",
-    isActive: true,
-    email: "olivia.wilson@example.com",
-  },
-];
-
-const TableCompany: React.FC = () => {
+const TableUser: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
-  const [modalState, setModalState] = useState({
+  const [modalState, setModalState] = useState<any>({
     isOpen: false,
-    detailInfo: undefined,
     type: "create",
   });
   const searchInput = useRef<InputRef>(null);
@@ -124,7 +45,21 @@ const TableCompany: React.FC = () => {
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
-
+  const [total, setTotal] = useState(0);
+  const { data: dataUser, isLoading } = useQuery({
+    queryKey: ["getListUser"],
+    queryFn: () =>
+      userApiRequest
+        .getListUser({
+          isActive: true,
+          SkipCount: 0,
+          MaxResultCount: 10,
+        })
+        .then((res) => {
+          setTotal(res.data.result.totalCount);
+          return res?.data?.result?.items;
+        }),
+  });
   const handleReset = (clearFilters: () => void) => {
     clearFilters();
     setSearchText("");
@@ -237,9 +172,17 @@ const TableCompany: React.FC = () => {
     },
     {
       title: "Email",
-      dataIndex: "email",
+      dataIndex: "emailAddress",
       key: "email",
       ...getColumnSearchProps("email"),
+    },
+    {
+      title: "Created At",
+      dataIndex: "creationTime",
+      key: "creationTime",
+      render: (creationTime) => (
+        <span>{new Date(creationTime).toLocaleString()}</span>
+      ),
     },
     {
       title: "Status",
@@ -276,19 +219,29 @@ const TableCompany: React.FC = () => {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      render: () => {
+      render: (_, record, index) => {
         return (
           <div className="flex gap-3">
             <EditOutlined
               onClick={() =>
-                setModalState({ ...modalState, isOpen: true, type: "update" })
+                setModalState({
+                  ...modalState,
+                  isOpen: true,
+                  type: "update",
+                  detailInfo: record,
+                })
               }
               style={{ fontSize: 16 }}
               className="hover:text-primary cursor-pointer"
             />
             <DeleteOutlined
               onClick={() =>
-                setModalState({ ...modalState, isOpen: true, type: "delete" })
+                setModalState({
+                  ...modalState,
+                  isOpen: true,
+                  type: "delete",
+                  detailInfo: record,
+                })
               }
               className="hover:text-primary cursor-pointer"
               style={{ fontSize: 16 }}
@@ -302,7 +255,7 @@ const TableCompany: React.FC = () => {
   return (
     <>
       {modalState.isOpen && (
-        <ModalCompany modalState={modalState} setModalState={setModalState} />
+        <ModalUser modalState={modalState} setModalState={setModalState} />
       )}
       <div className="flex flex-col gap-5">
         <p className="text-34-34 font-semibold">Manage Company</p>
@@ -314,8 +267,9 @@ const TableCompany: React.FC = () => {
             total: 100,
             showQuickJumper: true,
           }}
+          loading={isLoading}
           columns={columns as any}
-          dataSource={data}
+          dataSource={dataUser}
           footer={() => (
             <div className="justify-center my-2 ">
               <button
@@ -326,7 +280,7 @@ const TableCompany: React.FC = () => {
               >
                 <PlusOutlined style={{ fontSize: "18px", color: "white" }} />
                 <span className="font-bold uppercase text-white ">
-                  Create a new company
+                  Create a new user
                 </span>
               </button>
             </div>
@@ -337,4 +291,4 @@ const TableCompany: React.FC = () => {
   );
 };
 
-export default TableCompany;
+export default TableUser;

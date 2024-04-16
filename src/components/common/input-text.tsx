@@ -8,10 +8,11 @@ export interface IInputTextCommonProps {
   placeholder?: string;
   prefix?: React.ReactNode;
   control?: any;
+  size?: "large" | "middle" | "small";
 }
 
 export function InputTextCommon(props: IInputTextCommonProps) {
-  const { label, name, placeholder, prefix, control } = props;
+  const { label, name, placeholder, prefix, control, size = "middle" } = props;
   return (
     <div className={"flex flex-col gap-2"}>
       <p className="font-medium">{label}</p>
@@ -23,6 +24,7 @@ export function InputTextCommon(props: IInputTextCommonProps) {
           name={name}
           placeholder={placeholder}
           prefix={prefix}
+          size={size}
         />
       </FormItem>
     </div>

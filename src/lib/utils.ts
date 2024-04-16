@@ -32,13 +32,3 @@ export const getTenant = () => {
   }
   return tenant;
 };
-
-export const getRole = () => {
-  const x = cookies();
-  const accessToken = x.get("accessToken");
-  let user: any = null;
-  if (accessToken) {
-    user = decodeJWT(accessToken.value);
-  }
-  return user?.["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-};

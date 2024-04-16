@@ -1,34 +1,77 @@
-import { useForm } from "react-hook-form";
-import { ModalCommon } from "./common/modal-common";
-import { Form } from "antd";
-import { InputTextCommon } from "./common/input-text";
-import Link from "next/link";
-import { zodResolver } from "@hookform/resolvers/zod";
+import userApiRequest from "@/apiRequests/user";
 import { UserBody, UserBodyType } from "@/schemaValidations/user.schema";
-import { ToogleCommon } from "./common/toogle-common";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form } from "antd";
+import { useForm } from "react-hook-form";
+import { useMutation } from "react-query";
 import { InputPassword } from "./common/input-password";
+import { InputTextCommon } from "./common/input-text";
+import { ModalCommon } from "./common/modal-common";
+import { ToogleCommon } from "./common/toogle-common";
+import { ButtonCommon } from "./common/button-common";
+import { useMemo } from "react";
 
 export interface IModalCompanyProps {
   modalState: {
     isOpen: boolean;
-    detailInfo: undefined;
+    detailInfo: any;
     type: string;
   };
   setModalState: (value: any) => void;
 }
 
-export function ModalCompany(props: IModalCompanyProps) {
+export function ModalUser(props: IModalCompanyProps) {
   const { modalState, setModalState } = props;
   const handleCancel = () => {
     setModalState({ ...modalState, isOpen: false });
   };
   const { control, handleSubmit } = useForm<UserBodyType>({
     resolver: zodResolver(UserBody),
+    defaultValues: modalState.detailInfo || {},
   });
-  const onSubmit = (values: any) => {
-    console.log(values);
-  };
   const isConfirm = modalState.type === "delete";
+
+  //CRUD user
+  const createUserMutate = useMutation({
+    mutationFn: (values: UserBodyType) => {
+      return userApiRequest.createUser(values);
+    },
+    onSuccess: () => {
+      setModalState({ ...modalState, isOpen: false });
+    },
+  });
+
+  const updateUserMutate = useMutation({
+    mutationFn: (values: UserBodyType) => {
+      return userApiRequest.updateUser(values);
+    },
+    onSuccess: () => {
+      setModalState({ ...modalState, isOpen: false });
+    },
+  });
+
+  const deleteUserMutate = useMutation({
+    mutationFn: (id: string) => {
+      return userApiRequest.deleteUser(id);
+    },
+    onSuccess: () => {
+      setModalState({ ...modalState, isOpen: false });
+    },
+  });
+
+  const onSubmit = (values: UserBodyType) => {
+    if (modalState.type === "create") {
+      createUserMutate.mutate(values);
+    }
+    if (modalState.type === "update") {
+      updateUserMutate.mutate(values);
+    }
+  };
+
+  const handleDelete = () => {
+    deleteUserMutate.mutate(modalState.detailInfo?.id);
+  };
+
   return (
     <ModalCommon
       open={modalState.isOpen}
@@ -37,7 +80,7 @@ export function ModalCompany(props: IModalCompanyProps) {
       footer={null}
       onCancel={handleCancel}
       style={{ borderRadius: 8 }}
-      width={500}
+      width={450}
       closable={false}
     >
       {isConfirm ? (
@@ -49,16 +92,22 @@ export function ModalCompany(props: IModalCompanyProps) {
             This action cannot be undone. This will permanently delete the user
           </p>
           <div className="flex justify-end gap-2">
-            <button className="btn btn-sm">No</button>
-            <button className="btn btn-sm bg-primary text-white hover:bg-primary">
+            <ButtonCommon onClick={handleCancel} className="btn btn-sm">
+              No
+            </ButtonCommon>
+            <ButtonCommon
+              loading={deleteUserMutate.isLoading}
+              onClick={handleDelete}
+              className="btn btn-sm bg-primary text-white hover:bg-primary"
+            >
               Yes
-            </button>
+            </ButtonCommon>
           </div>
         </div>
       ) : (
-        <div className="px-10 flex flex-col gap-4">
+        <div className="px-6 flex flex-col gap-4">
           <p className="font-bold text-24-28 capitalize text-center font-visby">
-            Create a new user
+            {modalState.type === "update" ? "Update user" : "Create a new user"}
           </p>
           <Form
             onFinish={handleSubmit(onSubmit)}
@@ -95,13 +144,16 @@ export function ModalCompany(props: IModalCompanyProps) {
               placeholder="Enter your password"
             />
             <ToogleCommon label="Active" control={control} name="isActive" />
-            <div className="flex flex-col gap-3">
-              <button
+            <div className="flex flex-col gap-3 mt-3">
+              <ButtonCommon
+                loading={
+                  createUserMutate.isLoading || updateUserMutate.isLoading
+                }
                 type="submit"
                 className="btn btn-sm w-full hover:bg-primary-hover bg-primary text-white border-none"
               >
                 Create account
-              </button>
+              </ButtonCommon>
               <button
                 onClick={handleCancel}
                 className="btn py-2 w-full btn-sm bg-slate-400 text-white border-none hover:bg-slate-500"
