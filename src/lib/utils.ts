@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -30,4 +31,14 @@ export const getTenant = () => {
     }
   }
   return tenant;
+};
+
+export const getRole = () => {
+  const x = cookies();
+  const accessToken = x.get("accessToken");
+  let user: any = null;
+  if (accessToken) {
+    user = decodeJWT(accessToken.value);
+  }
+  return user?.["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
 };

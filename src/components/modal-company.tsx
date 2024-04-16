@@ -6,6 +6,7 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserBody, UserBodyType } from "@/schemaValidations/user.schema";
 import { ToogleCommon } from "./common/toogle-common";
+import { InputPassword } from "./common/input-password";
 
 export interface IModalCompanyProps {
   modalState: {
@@ -48,8 +49,8 @@ export function ModalCompany(props: IModalCompanyProps) {
             This action cannot be undone. This will permanently delete the user
           </p>
           <div className="flex justify-end gap-2">
-            <button className="btn btn-xs">No</button>
-            <button className="btn btn-xs bg-primary text-white hover:bg-primary">
+            <button className="btn btn-sm">No</button>
+            <button className="btn btn-sm bg-primary text-white hover:bg-primary">
               Yes
             </button>
           </div>
@@ -86,6 +87,12 @@ export function ModalCompany(props: IModalCompanyProps) {
               name="emailAddress"
               placeholder="Enter your email address"
               control={control}
+            />
+            <InputPassword
+              control={control}
+              label="Password"
+              name="password"
+              placeholder="Enter your password"
             />
             <ToogleCommon label="Active" control={control} name="isActive" />
             <div className="flex flex-col gap-3">

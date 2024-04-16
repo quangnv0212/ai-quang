@@ -8,11 +8,13 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
-export type User = {
-  name: string;
-  email: string;
-  role: string;
-  tenant: string;
+export type CurrentUser = {
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": string;
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name": string;
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress": string;
+  "AspNet.Identity.SecurityStamp": string;
+  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": string;
+  "http://www.aspnetboilerplate.com/identity/claims/tenantId": string;
   sub: string;
   jti: string;
   iat: number;
@@ -32,7 +34,7 @@ export default function RootLayout({
 }>) {
   const cookieStore = cookies();
   const accessToken = cookieStore.get("accessToken");
-  let user: User | null = null;
+  let user: CurrentUser | null = null;
   if (!accessToken) {
     user = null;
   } else {

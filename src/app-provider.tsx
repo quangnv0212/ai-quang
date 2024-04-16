@@ -1,11 +1,11 @@
 "use client";
 import { createContext, useContext, useState } from "react";
 import { clientSessionToken } from "./lib/http";
-import { User } from "./app/layout";
+import { CurrentUser } from "./app/layout";
 
 const AppContext = createContext<{
-  user: User | null;
-  setUser: (user: User | null) => void;
+  user: CurrentUser | null;
+  setUser: (user: CurrentUser | null) => void;
 }>({
   user: null,
   setUser: () => {},
@@ -21,9 +21,9 @@ export default function AppProvider({
 }: {
   children: React.ReactNode;
   inititalSessionToken?: string;
-  user: User | null;
+  user: CurrentUser | null;
 }) {
-  const [user, setUser] = useState<User | null>(userProp);
+  const [user, setUser] = useState<CurrentUser | null>(userProp);
 
   useState(() => {
     if (typeof window !== "undefined") {

@@ -7,7 +7,7 @@ export const UserBody = z.object({
   emailAddress: z.string().email(),
   isActive: z.boolean(),
   roleNames: z.array(z.string()).optional(),
-  password: z.string().optional(),
+  password: z.string(),
 });
 
 export type UserBodyType = z.TypeOf<typeof UserBody>;

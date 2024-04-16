@@ -18,7 +18,7 @@ export const sidebarLinksAdmin: TSidebarLink[] = [
     path: "/",
   },
   {
-    title: "Property",
+    title: "Property admin",
     icon: <IconBuilding />,
     path: "/properties",
   },
