@@ -64,7 +64,7 @@ export const LoginBody = z
   .object({
     userNameOrEmailAddress: z.string().email(),
     password: z.string().min(6).max(100),
-    rememberClient: z.boolean(),
+    rememberClient: z.boolean().optional(),
   })
   .strict();
 

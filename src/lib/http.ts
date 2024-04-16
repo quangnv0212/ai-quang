@@ -1,5 +1,4 @@
-import axios, { Axios, AxiosInstance } from "axios";
-import { normalizePath } from "./utils";
+import axios, { AxiosInstance } from "axios";
 
 class SessionToken {
   private token = "";
@@ -45,7 +44,6 @@ export class Http {
           config;
           return config;
         }
-        console.log(config.url);
         return config;
       },
       (error) => {

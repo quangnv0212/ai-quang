@@ -12,13 +12,13 @@ export function InputCheckCommon(props: IInputCheckCommonProps) {
   const { label, name, control } = props;
   return (
     <FormItem
-      className="flex justify-between w-full items-center"
       control={control}
       name={name}
       label={label}
       style={{
         fontFamily: "Visby",
       }}
+      className="flex items-center"
     >
       <Input
         style={{
