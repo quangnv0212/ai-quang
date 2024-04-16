@@ -8,6 +8,7 @@ import { KeyOutlined, UserOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "antd";
 import Link from "next/link";
+import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -15,6 +16,8 @@ export default function Login() {
   const { control, handleSubmit } = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
   });
+  const router = useRouter();
+
   const [loading, setLoading] = useState(false);
   async function onSubmit(values: LoginBodyType) {
     if (loading) return;
@@ -30,6 +33,8 @@ export default function Login() {
         encryptedAccessToken,
         expireInSeconds,
       });
+      router.push("/");
+      router.refresh();
     } catch (error: any) {
     } finally {
       setLoading(false);

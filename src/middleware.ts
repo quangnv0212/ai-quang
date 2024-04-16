@@ -17,7 +17,7 @@ export function middleware(request: NextRequest) {
   }
   // If user is logged in, redirect to me page
   if (authPaths.some((path) => pathname.startsWith(path)) && accessToken) {
-    return NextResponse.redirect(new URL("/me", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
   return NextResponse.next();
 }

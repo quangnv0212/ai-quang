@@ -1,9 +1,18 @@
+"use client";
+import authApiRequest from "@/apiRequests/auth";
 import IcLogout from "@/assets/images/ic_logout.svg";
 import { IconSearch } from "@/components/icons";
 import { SettingOutlined, UserOutlined } from "@ant-design/icons";
 import Image from "next/image";
+import { redirect, useRouter } from "next/navigation";
 
 export default function TopBar() {
+  const router = useRouter();
+  const logout = async () => {
+    await authApiRequest.logoutFromNextClientToNextServer();
+    router.push("/");
+    router.refresh();
+  };
   return (
     <div className="navbar bg-primary ">
       <div className="flex-1">
@@ -54,8 +63,8 @@ export default function TopBar() {
               </a>
             </li>
             <li>
-              <a
-                href="/login"
+              <button
+                onClick={logout}
                 className="flex items-center text-16-20 hover:text-primary p-3"
               >
                 <Image
@@ -66,7 +75,7 @@ export default function TopBar() {
                   height={200}
                 />
                 Log out
-              </a>
+              </button>
             </li>
           </ul>
         </div>
