@@ -12,6 +12,9 @@ export function middleware(request: NextRequest) {
   if (privatePaths.some((path) => pathname.startsWith(path)) && !accessToken) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
+  if (pathname === "/" && !accessToken) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
   // If user is logged in, redirect to me page
   if (authPaths.some((path) => pathname.startsWith(path)) && accessToken) {
     return NextResponse.redirect(new URL("/me", request.url));
@@ -21,5 +24,5 @@ export function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/me", "/login", "/register"],
+  matcher: ["/", "/me", "/login", "/register"],
 };
