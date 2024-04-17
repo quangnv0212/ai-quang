@@ -47,16 +47,6 @@ export default function ForgetPasswordPage() {
             prefix={<UserOutlined />}
             control={control}
           />
-
-          <div className="flex justify-end mb-2">
-            <Link
-              className="text-14-16 font-semibold text-gray-500 hover:text-blue-400"
-              href={"/forgot-password"}
-            >
-              Forgot Password?
-            </Link>
-          </div>
-
           <ButtonCommon
             // loading={loading}
             type="submit"

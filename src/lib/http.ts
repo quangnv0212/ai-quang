@@ -61,7 +61,7 @@ export class Http {
       (response) => {
         if (response.config.url === "/services/app/Account/Register") {
           toast.success("Register success");
-          window.location.href = "/login";
+          window.location.href = "/mail-success";
         }
         return response;
       },
