@@ -1,5 +1,6 @@
 "use client";
 import authApiRequest from "@/apiRequests/auth";
+import { ButtonCommon } from "@/components/common/button-common";
 import { InputCheckCommon } from "@/components/common/input-check";
 import { InputPassword } from "@/components/common/input-password";
 import { InputTextCommon } from "@/components/common/input-text";
@@ -110,12 +111,13 @@ export default function Login() {
             </Link>
           </div>
 
-          <button
+          <ButtonCommon
+            loading={loading}
             type="submit"
             className="btn w-full hover:bg-primary-hover bg-primary text-white border-none"
           >
             Sign in
-          </button>
+          </ButtonCommon>
         </Form>
         <div className={"flex justify-center py-4 font-visby"}>
           Not registered?

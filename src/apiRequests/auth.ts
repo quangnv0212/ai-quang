@@ -18,7 +18,7 @@ const authApiRequest = {
   }) => axios.post("/api/auth", body),
   register: (body: RegisterBodyType) =>
     http.post("https://aibase.nobisoft.vn/api/TokenAuth/Register", body),
-  logoutFromNextClientToNextServer: () => http.post("/api/auth/logout"),
+  logoutFromNextClientToNextServer: () => axios.post("/api/auth/logout"),
 };
 
 export default authApiRequest;

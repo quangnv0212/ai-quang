@@ -164,7 +164,7 @@ export function ModalUser(props: IModalCompanyProps) {
                 type="submit"
                 className="btn btn-sm w-full hover:bg-primary-hover bg-primary text-white border-none"
               >
-                Create account
+                {modalState.type === "update" ? "Update user" : "Create user"}
               </ButtonCommon>
               <button
                 onClick={handleCancel}
