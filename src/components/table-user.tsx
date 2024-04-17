@@ -10,20 +10,13 @@ import {
 import type { TableColumnsType } from "antd";
 import { Tag } from "antd";
 import type { TablePaginationConfig } from "antd/es/table/interface";
-import Link from "next/link";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
-import { useDebouncedCallback } from "use-debounce";
 import { TableCommon } from "./common/table-common";
-import { ModalUser } from "./modal-user";
 import { IconSearch } from "./icons";
-
+import { ModalUser } from "./modal-user";
+let timeout: any;
 interface DataType {
   key: string;
   userName: string;
@@ -50,7 +43,13 @@ const TableUser: React.FC = () => {
     type: "create",
   });
 
+  //state
   const [total, setTotal] = useState(0);
+  const [keyword, setKeyword] = useState<string | undefined>(
+    searchParams.get("Keyword")?.toString()
+  );
+
+  //react query
   const { data: dataUser, isLoading } = useQuery({
     queryKey: ["getListUser", querySearch],
     queryFn: () =>
@@ -60,6 +59,7 @@ const TableUser: React.FC = () => {
       }),
   });
 
+  //table
   const columns: TableColumnsType<DataType> = [
     {
       title: "User Name",
@@ -151,37 +151,53 @@ const TableUser: React.FC = () => {
       },
     },
   ];
+
   const buttons = [
     {
       title: "All",
       isActveString: undefined,
+      onclick: () => {
+        const params = new URLSearchParams(searchParams);
+        params.delete("isActive");
+        replace(`${pathname}?${params.toString()}`);
+      },
     },
     {
       title: "Active",
       isActveString: "true",
+      onclick: () => {
+        const params = new URLSearchParams(searchParams);
+        params.set("isActive", "true");
+        replace(`${pathname}?${params.toString()}`);
+      },
     },
     {
       title: "Deactive",
       isActveString: "false",
+      onclick: () => {
+        const params = new URLSearchParams(searchParams);
+        params.set("isActive", "false");
+        replace(`${pathname}?${params.toString()}`);
+      },
     },
   ];
 
-  const handleSearch = useDebouncedCallback((term) => {
-    const params = new URLSearchParams(searchParams);
-    if (term) {
-      params.set("Keyword", term);
-    } else {
-      params.delete("Keyword");
-    }
-    replace(`${pathname}?${params.toString()}`);
-  }, 300);
+  const handleSearch = (term: string) => {
+    setKeyword(term);
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      const params = new URLSearchParams(searchParams);
+      if (term) {
+        params.set("Keyword", term);
+        params.set("skipCount", "0");
+      } else {
+        params.delete("Keyword");
+        params.set("skipCount", "0");
+      }
+      replace(`${pathname}?${params.toString()}`);
+    }, 500);
+  };
 
-  let skipCount = Number(searchParams.get("skipCount")) || 1;
-  let maxResultCount = Number(searchParams.get("maxResultCount")) || 10;
-  let current = Math.ceil(skipCount / maxResultCount);
-  if (skipCount % maxResultCount === 0) {
-    current += 1;
-  }
   const handleTableChange = (pagination: TablePaginationConfig) => {
     const params = new URLSearchParams(searchParams);
     params.set(
@@ -191,6 +207,13 @@ const TableUser: React.FC = () => {
     params.set("maxResultCount", maxResultCount.toString());
     replace(`${pathname}?${params.toString()}`);
   };
+
+  let skipCount = Number(searchParams.get("skipCount")) || 1;
+  let maxResultCount = Number(searchParams.get("maxResultCount")) || 10;
+  let current = Math.ceil(skipCount / maxResultCount);
+  if (skipCount % maxResultCount === 0) {
+    current += 1;
+  }
 
   return (
     <>
@@ -210,17 +233,11 @@ const TableUser: React.FC = () => {
                 onChange={(e) => {
                   handleSearch(e.target.value);
                 }}
-                defaultValue={searchParams.get("Keyword")?.toString()}
+                value={keyword}
               />
             </div>
             <div className="flex gap-2">
               {buttons.map((button, index) => {
-                let query: any = {};
-                if (button.title === "Active") {
-                  query.isActive = true;
-                } else if (button.title === "Deactive") {
-                  query.isActive = false;
-                }
                 let className: string = "";
                 const isActiveSearchParam = searchParams.get("isActive");
                 if (isActiveSearchParam === null && button.title === "All") {
@@ -230,16 +247,13 @@ const TableUser: React.FC = () => {
                   className = "btn-primary btn-active";
                 }
                 return (
-                  <Link
-                    href={{
-                      pathname: "/user-management",
-                      query,
-                    }}
+                  <button
                     key={index}
                     className={`btn btn-sm ${className}`}
+                    onClick={button.onclick}
                   >
                     {button.title}
-                  </Link>
+                  </button>
                 );
               })}
             </div>

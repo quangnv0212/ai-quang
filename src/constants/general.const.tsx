@@ -18,14 +18,14 @@ export const sidebarLinksAdmin: TSidebarLink[] = [
     path: "/",
   },
   {
-    title: "User",
+    title: "Account",
     icon: <IconProfile />,
-    path: "/user-management",
+    path: "/account-management",
   },
   {
     title: "Model",
     icon: <IconProfile />,
-    path: "/user-management",
+    path: "/model-management",
   },
 ];
 export const sidebarLinksTenant: TSidebarLink[] = [
