@@ -3,13 +3,12 @@ import { UserBody, UserBodyType } from "@/schemaValidations/user.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "antd";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
+import { ButtonCommon } from "./common/button-common";
 import { InputPassword } from "./common/input-password";
 import { InputTextCommon } from "./common/input-text";
 import { ModalCommon } from "./common/modal-common";
 import { ToogleCommon } from "./common/toogle-common";
-import { ButtonCommon } from "./common/button-common";
-import { useMemo } from "react";
 
 export interface IModalCompanyProps {
   modalState: {
@@ -22,12 +21,16 @@ export interface IModalCompanyProps {
 
 export function ModalUser(props: IModalCompanyProps) {
   const { modalState, setModalState } = props;
+  const queryClient = useQueryClient();
+
   const handleCancel = () => {
     setModalState({ ...modalState, isOpen: false });
   };
   const { control, handleSubmit } = useForm<UserBodyType>({
     resolver: zodResolver(UserBody),
-    defaultValues: modalState.detailInfo || {},
+    defaultValues: modalState.detailInfo || {
+      isActive: false,
+    },
   });
   const isConfirm = modalState.type === "delete";
 
@@ -38,6 +41,9 @@ export function ModalUser(props: IModalCompanyProps) {
     },
     onSuccess: () => {
       setModalState({ ...modalState, isOpen: false });
+      queryClient.invalidateQueries({
+        queryKey: ["getListUser"],
+      });
     },
   });
 
@@ -47,6 +53,9 @@ export function ModalUser(props: IModalCompanyProps) {
     },
     onSuccess: () => {
       setModalState({ ...modalState, isOpen: false });
+      queryClient.invalidateQueries({
+        queryKey: ["getListUser"],
+      });
     },
   });
 
@@ -56,6 +65,9 @@ export function ModalUser(props: IModalCompanyProps) {
     },
     onSuccess: () => {
       setModalState({ ...modalState, isOpen: false });
+      queryClient.invalidateQueries({
+        queryKey: ["getListUser"],
+      });
     },
   });
 

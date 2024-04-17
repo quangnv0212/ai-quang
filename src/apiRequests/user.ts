@@ -7,6 +7,7 @@ const userApiRequest = {
     return http.post(`/services/app/User/Create`, {
       ...body,
       roleNames: [],
+      isActive: body.isActive === true ? true : false,
     });
   },
   getListUser: (params: {

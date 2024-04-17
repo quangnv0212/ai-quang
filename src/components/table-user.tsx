@@ -1,21 +1,26 @@
+import userApiRequest from "@/apiRequests/user";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   DeleteOutlined,
   EditOutlined,
   PlusOutlined,
-  SearchOutlined,
 } from "@ant-design/icons";
-import type { InputRef, TableColumnType, TableColumnsType } from "antd";
-import { Button, Input, Space, Tag } from "antd";
-import type { FilterDropdownProps } from "antd/es/table/interface";
-import React, { useRef, useState } from "react";
-import Highlighter from "react-highlight-words";
-import { TableCommon } from "./common/table-common";
-import { ModalCommon } from "./common/modal-common";
-import { ModalUser } from "./modal-user";
+import type { TableColumnsType } from "antd";
+import { Tag } from "antd";
+import type { TablePaginationConfig } from "antd/es/table/interface";
+import Link from "next/link";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
-import userApiRequest from "@/apiRequests/user";
+import { useDebouncedCallback } from "use-debounce";
+import { TableCommon } from "./common/table-common";
+import { ModalUser } from "./modal-user";
 
 interface DataType {
   key: string;
@@ -26,134 +31,31 @@ interface DataType {
   action?: any;
 }
 
-type DataIndex = keyof DataType;
-
 const TableUser: React.FC = () => {
-  const [searchText, setSearchText] = useState("");
-  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+  //get all query params
+  let querySearch: any;
+  searchParams.forEach((value, key) => {
+    querySearch = {
+      ...querySearch,
+      [key]: value,
+    };
+  });
   const [modalState, setModalState] = useState<any>({
     isOpen: false,
     type: "create",
   });
-  const searchInput = useRef<InputRef>(null);
-  const handleSearch = (
-    selectedKeys: string[],
-    confirm: FilterDropdownProps["confirm"],
-    dataIndex: DataIndex
-  ) => {
-    confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
-  };
+
   const [total, setTotal] = useState(0);
   const { data: dataUser, isLoading } = useQuery({
-    queryKey: ["getListUser"],
+    queryKey: ["getListUser", querySearch],
     queryFn: () =>
-      userApiRequest
-        .getListUser({
-          isActive: true,
-          SkipCount: 0,
-          MaxResultCount: 10,
-        })
-        .then((res) => {
-          setTotal(res.data.result.totalCount);
-          return res?.data?.result?.items;
-        }),
-  });
-  const handleReset = (clearFilters: () => void) => {
-    clearFilters();
-    setSearchText("");
-  };
-
-  const getColumnSearchProps = (
-    dataIndex: DataIndex
-  ): TableColumnType<DataType> => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-      close,
-    }) => (
-      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
-        <Input
-          ref={searchInput}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() =>
-            handleSearch(selectedKeys as string[], confirm, dataIndex)
-          }
-          style={{ marginBottom: 8, display: "block" }}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() =>
-              handleSearch(selectedKeys as string[], confirm, dataIndex)
-            }
-            icon={<SearchOutlined />}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Search
-          </Button>
-          <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Reset
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({ closeDropdown: false });
-              setSearchText((selectedKeys as string[])[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            Filter
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              close();
-            }}
-          >
-            close
-          </Button>
-        </Space>
-      </div>
-    ),
-    filterIcon: (filtered: boolean) => (
-      <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes((value as string).toLowerCase()),
-    onFilterDropdownOpenChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100);
-      }
-    },
-    render: (text) =>
-      searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-          searchWords={[searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ""}
-        />
-      ) : (
-        text
-      ),
+      userApiRequest.getListUser(querySearch).then((res) => {
+        setTotal(res.data.result.totalCount);
+        return res?.data?.result?.items;
+      }),
   });
 
   const columns: TableColumnsType<DataType> = [
@@ -161,20 +63,16 @@ const TableUser: React.FC = () => {
       title: "User Name",
       dataIndex: "userName",
       key: "userName",
-      sorter: true,
-      ...getColumnSearchProps("userName"),
     },
     {
       title: "Full Name",
       dataIndex: "fullName",
       key: "fullName",
-      ...getColumnSearchProps("fullName"),
     },
     {
       title: "Email",
       dataIndex: "emailAddress",
       key: "email",
-      ...getColumnSearchProps("email"),
     },
     {
       title: "Created At",
@@ -251,6 +149,46 @@ const TableUser: React.FC = () => {
       },
     },
   ];
+  const buttons = [
+    {
+      title: "All",
+      isActveString: undefined,
+    },
+    {
+      title: "Active",
+      isActveString: "true",
+    },
+    {
+      title: "Deactive",
+      isActveString: "false",
+    },
+  ];
+
+  const handleSearch = useDebouncedCallback((term) => {
+    const params = new URLSearchParams(searchParams);
+    if (term) {
+      params.set("Keyword", term);
+    } else {
+      params.delete("Keyword");
+    }
+    replace(`${pathname}?${params.toString()}`);
+  }, 300);
+
+  let skipCount = Number(searchParams.get("skipCount")) || 1;
+  let maxResultCount = Number(searchParams.get("maxResultCount")) || 10;
+  let current = Math.ceil(skipCount / maxResultCount);
+  if (skipCount % maxResultCount === 0) {
+    current += 1;
+  }
+  const handleTableChange = (pagination: TablePaginationConfig) => {
+    const params = new URLSearchParams(searchParams);
+    params.set(
+      "skipCount",
+      `${((pagination.current || 1) - 1) * maxResultCount}`
+    );
+    params.set("maxResultCount", maxResultCount.toString());
+    replace(`${pathname}?${params.toString()}`);
+  };
 
   return (
     <>
@@ -259,22 +197,69 @@ const TableUser: React.FC = () => {
       )}
       <div className="flex flex-col gap-5">
         <p className="text-34-34 font-semibold">Manage Company</p>
+        <div className="">
+          <div className="flex justify-end gap-2">
+            {buttons.map((button, index) => {
+              let query: any = {};
+              if (button.title === "Active") {
+                query.isActive = true;
+              } else if (button.title === "Deactive") {
+                query.isActive = false;
+              }
+              let className: string = "";
+              const isActiveSearchParam = searchParams.get("isActive");
+              if (isActiveSearchParam === null && button.title === "All") {
+                className = "btn-primary btn-active";
+              }
+              if (isActiveSearchParam === button.isActveString) {
+                className = "btn-primary btn-active";
+              }
+              return (
+                <Link
+                  href={{
+                    pathname: "/",
+                    query,
+                  }}
+                  key={index}
+                  className={`btn btn-sm ${className}`}
+                >
+                  {button.title}
+                </Link>
+              );
+            })}
+          </div>
+          <div className="">
+            <input
+              className="grow"
+              onChange={(e) => {
+                handleSearch(e.target.value);
+              }}
+              defaultValue={searchParams.get("Keyword")?.toString()}
+            />
+          </div>
+        </div>
         <TableCommon
           className="font-visby"
           pagination={{
-            pageSize: 5,
-            current: 1,
-            total: 100,
+            pageSize: Number(searchParams.get("maxResultCount")) || 10,
+            current,
+            total,
             showQuickJumper: true,
           }}
           loading={isLoading}
+          onChange={handleTableChange}
           columns={columns as any}
           dataSource={dataUser}
           footer={() => (
             <div className="justify-center my-2 ">
               <button
                 onClick={() =>
-                  setModalState({ ...modalState, isOpen: true, type: "create" })
+                  setModalState({
+                    ...modalState,
+                    isOpen: true,
+                    type: "create",
+                    detailInfo: undefined,
+                  })
                 }
                 className="btn w-full bg-primary border-none hover:bg-primary-hover"
               >
