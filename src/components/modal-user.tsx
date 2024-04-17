@@ -1,5 +1,4 @@
 import userApiRequest from "@/apiRequests/user";
-import { UserBody, UserBodyType } from "@/schemaValidations/user.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "antd";
 import { useForm } from "react-hook-form";
@@ -9,6 +8,10 @@ import { InputPassword } from "./common/input-password";
 import { InputTextCommon } from "./common/input-text";
 import { ModalCommon } from "./common/modal-common";
 import { ToogleCommon } from "./common/toogle-common";
+import {
+  AccountBody,
+  AccountBodyType,
+} from "@/schemaValidations/account.schema";
 
 export interface IModalCompanyProps {
   modalState: {
@@ -26,8 +29,8 @@ export function ModalUser(props: IModalCompanyProps) {
   const handleCancel = () => {
     setModalState({ ...modalState, isOpen: false });
   };
-  const { control, handleSubmit } = useForm<UserBodyType>({
-    resolver: zodResolver(UserBody),
+  const { control, handleSubmit } = useForm<AccountBodyType>({
+    resolver: zodResolver(AccountBody),
     defaultValues: modalState.detailInfo || {
       isActive: false,
     },
@@ -36,7 +39,7 @@ export function ModalUser(props: IModalCompanyProps) {
 
   //CRUD user
   const createUserMutate = useMutation({
-    mutationFn: (values: UserBodyType) => {
+    mutationFn: (values: AccountBodyType) => {
       return userApiRequest.createUser(values);
     },
     onSuccess: () => {
@@ -48,7 +51,7 @@ export function ModalUser(props: IModalCompanyProps) {
   });
 
   const updateUserMutate = useMutation({
-    mutationFn: (values: UserBodyType) => {
+    mutationFn: (values: AccountBodyType) => {
       return userApiRequest.updateUser(values);
     },
     onSuccess: () => {
@@ -71,7 +74,7 @@ export function ModalUser(props: IModalCompanyProps) {
     },
   });
 
-  const onSubmit = (values: UserBodyType) => {
+  const onSubmit = (values: AccountBodyType) => {
     if (modalState.type === "create") {
       createUserMutate.mutate(values);
     }

@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const UserBody = z.object({
+export const AccountBody = z.object({
   id: z.any().optional(),
   userName: z.string(),
   name: z.string(),
@@ -14,4 +14,4 @@ export const UserBody = z.object({
   creationTime: z.any().optional(),
 });
 
-export type UserBodyType = z.TypeOf<typeof UserBody>;
+export type AccountBodyType = z.TypeOf<typeof AccountBody>;

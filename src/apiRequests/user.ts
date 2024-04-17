@@ -1,9 +1,9 @@
 import http from "@/lib/http";
-import { UserBodyType } from "@/schemaValidations/user.schema";
+import { AccountBodyType } from "@/schemaValidations/account.schema";
 import axios from "axios";
 
 const userApiRequest = {
-  createUser: (body: UserBodyType) => {
+  createUser: (body: AccountBodyType) => {
     return http.post(`/services/app/User/Create`, {
       ...body,
       roleNames: [],
@@ -16,7 +16,7 @@ const userApiRequest = {
     SkipCount: number;
     MaxResultCount: number;
   }) => http.get(`/services/app/User/GetAll`, { params }),
-  updateUser: (body: UserBodyType) =>
+  updateUser: (body: AccountBodyType) =>
     http.put(`/services/app/User/Update`, body),
   deleteUser: (id: string) =>
     http.delete(`/services/app/User/Delete`, { params: { id } }),

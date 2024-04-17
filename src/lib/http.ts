@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { toast } from "react-toastify";
 
 class SessionToken {
@@ -38,7 +38,7 @@ export class Http {
     this.instance = axios.create({
       baseURL:
         process.env.NEXT_PUBLIC_API_ENDPOINT ||
-        "https://nobisofht.aibase.nobisoft.vn/api",
+        "https://aibase.nobisoft.vn/api",
       timeout: 10000,
       headers: {
         "Content-Type": "application/json",
@@ -59,6 +59,10 @@ export class Http {
     );
     this.instance.interceptors.response.use(
       (response) => {
+        if (response.config.url === "/services/app/Account/Register") {
+          toast.success("Register success");
+          window.location.href = "/login";
+        }
         return response;
       },
       (error) => {

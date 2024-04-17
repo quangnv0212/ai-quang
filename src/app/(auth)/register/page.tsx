@@ -1,22 +1,32 @@
 "use client";
+import authApiRequest from "@/apiRequests/auth";
+import { ButtonCommon } from "@/components/common/button-common";
+import { InputPassword } from "@/components/common/input-password";
 import { InputTextCommon } from "@/components/common/input-text";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
 import {
   RegisterBody,
   RegisterBodyType,
 } from "@/schemaValidations/auth.schema";
-import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "antd";
-import { InputPassword } from "@/components/common/input-password";
-import authApiRequest from "@/apiRequests/auth";
+import { redirect } from "next/dist/server/api-utils";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const { control, handleSubmit } = useForm<RegisterBodyType>({
     resolver: zodResolver(RegisterBody),
   });
+  const [loading, setLoading] = useState(false);
   const onSubmit = async (values: RegisterBodyType) => {
-    const x = await authApiRequest.register(values);
+    if (loading) return;
+    setLoading(true);
+    await authApiRequest.register(values);
+    setLoading(false);
   };
   return (
     <div className="flex flex-col gap-3 justify-center items-center py-16 ">
@@ -124,12 +134,13 @@ export default function RegisterPage() {
                   control={control}
                 />
               </div>
-              <button
+              <ButtonCommon
                 type="submit"
+                loading={loading}
                 className="btn mt-2 hover:bg-primary-hover rounded-3xl bg-primary text-white px-10"
               >
                 Register
-              </button>
+              </ButtonCommon>
             </Form>
           </div>
 

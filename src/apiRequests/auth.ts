@@ -7,17 +7,16 @@ import axios from "axios";
 
 const authApiRequest = {
   login: (body: LoginBodyType, tenant: string) =>
-    axios.post(
-      `https://nobisofht.aibase.nobisoft.vn/api/TokenAuth/Authenticate`,
-      body
-    ),
+    http.post(`/TokenAuth/Authenticate`, body),
   auth: (body: {
     accessToken: string;
     expireInSeconds: string;
     encryptedAccessToken: string;
   }) => axios.post("/api/auth", body),
   register: (body: RegisterBodyType) =>
-    http.post("https://aibase.nobisoft.vn/api/TokenAuth/Register", body),
+    http.post("/services/app/Account/Register", body),
+  activateByEmail: (body: { email: string; token: string }) =>
+    http.post("/services/app/Account/ActivateByEmail", body),
   logoutFromNextClientToNextServer: () => axios.post("/api/auth/logout"),
 };
 
