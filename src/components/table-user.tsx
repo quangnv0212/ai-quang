@@ -159,6 +159,8 @@ const TableUser: React.FC = () => {
       onclick: () => {
         const params = new URLSearchParams(searchParams);
         params.delete("isActive");
+        params.delete("Keyword");
+        params.delete("skipCount");
         replace(`${pathname}?${params.toString()}`);
       },
     },
@@ -168,6 +170,8 @@ const TableUser: React.FC = () => {
       onclick: () => {
         const params = new URLSearchParams(searchParams);
         params.set("isActive", "true");
+        params.delete("Keyword");
+        params.delete("skipCount");
         replace(`${pathname}?${params.toString()}`);
       },
     },
@@ -177,6 +181,8 @@ const TableUser: React.FC = () => {
       onclick: () => {
         const params = new URLSearchParams(searchParams);
         params.set("isActive", "false");
+        params.delete("Keyword");
+        params.delete("skipCount");
         replace(`${pathname}?${params.toString()}`);
       },
     },
