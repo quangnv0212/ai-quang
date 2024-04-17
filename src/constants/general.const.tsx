@@ -18,9 +18,14 @@ export const sidebarLinksAdmin: TSidebarLink[] = [
     path: "/",
   },
   {
-    title: "Property admin",
-    icon: <IconBuilding />,
-    path: "/properties",
+    title: "User",
+    icon: <IconProfile />,
+    path: "/user-management",
+  },
+  {
+    title: "Model",
+    icon: <IconProfile />,
+    path: "/user-management",
   },
 ];
 export const sidebarLinksTenant: TSidebarLink[] = [

@@ -19,14 +19,6 @@ export default function TopBar() {
         <a className="btn btn-ghost text-xl text-white">AiBase</a>
       </div>
       <div className="flex-none gap-2">
-        <div className="px-5 rounded-lg bg-grayf4 flex items-center gap-2  h-[38px]">
-          <IconSearch />
-          <input
-            type="text"
-            placeholder="Search"
-            className="w-full font-normal bg-transparent outline-none text-primary placeholder:text-gray80"
-          />
-        </div>
         <div className="dropdown dropdown-end">
           <div
             tabIndex={0}

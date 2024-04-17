@@ -1,3 +1,4 @@
+"use client";
 import userApiRequest from "@/apiRequests/user";
 import {
   CheckCircleOutlined,
@@ -21,6 +22,7 @@ import { useQuery } from "react-query";
 import { useDebouncedCallback } from "use-debounce";
 import { TableCommon } from "./common/table-common";
 import { ModalUser } from "./modal-user";
+import { IconSearch } from "./icons";
 
 interface DataType {
   key: string;
@@ -198,44 +200,49 @@ const TableUser: React.FC = () => {
       <div className="flex flex-col gap-5">
         <p className="text-34-34 font-semibold">Manage Company</p>
         <div className="">
-          <div className="flex justify-end gap-2">
-            {buttons.map((button, index) => {
-              let query: any = {};
-              if (button.title === "Active") {
-                query.isActive = true;
-              } else if (button.title === "Deactive") {
-                query.isActive = false;
-              }
-              let className: string = "";
-              const isActiveSearchParam = searchParams.get("isActive");
-              if (isActiveSearchParam === null && button.title === "All") {
-                className = "btn-primary btn-active";
-              }
-              if (isActiveSearchParam === button.isActveString) {
-                className = "btn-primary btn-active";
-              }
-              return (
-                <Link
-                  href={{
-                    pathname: "/",
-                    query,
-                  }}
-                  key={index}
-                  className={`btn btn-sm ${className}`}
-                >
-                  {button.title}
-                </Link>
-              );
-            })}
-          </div>
-          <div className="">
-            <input
-              className="grow"
-              onChange={(e) => {
-                handleSearch(e.target.value);
-              }}
-              defaultValue={searchParams.get("Keyword")?.toString()}
-            />
+          <div className="flex justify-between gap-2">
+            <div className="px-5 rounded-lg flex items-center gap-2 h-[38px] w-[400px] bg-white border">
+              <IconSearch />
+              <input
+                type="text"
+                placeholder="Search"
+                className="w-full font-normal  outline-none text-primary placeholder:text-gray80"
+                onChange={(e) => {
+                  handleSearch(e.target.value);
+                }}
+                defaultValue={searchParams.get("Keyword")?.toString()}
+              />
+            </div>
+            <div className="flex gap-2">
+              {buttons.map((button, index) => {
+                let query: any = {};
+                if (button.title === "Active") {
+                  query.isActive = true;
+                } else if (button.title === "Deactive") {
+                  query.isActive = false;
+                }
+                let className: string = "";
+                const isActiveSearchParam = searchParams.get("isActive");
+                if (isActiveSearchParam === null && button.title === "All") {
+                  className = "btn-primary btn-active";
+                }
+                if (isActiveSearchParam === button.isActveString) {
+                  className = "btn-primary btn-active";
+                }
+                return (
+                  <Link
+                    href={{
+                      pathname: "/user-management",
+                      query,
+                    }}
+                    key={index}
+                    className={`btn btn-sm ${className}`}
+                  >
+                    {button.title}
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         </div>
         <TableCommon
