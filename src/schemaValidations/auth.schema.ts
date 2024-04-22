@@ -49,7 +49,7 @@ export type RegisterResType = z.TypeOf<typeof LoginRes>;
 
 export const LoginBody = z
   .object({
-    userNameOrEmailAddress: z.string().email(),
+    userNameOrEmailAddress: z.string(),
     password: z.string().min(6).max(100),
     rememberClient: z.boolean().optional(),
   })
