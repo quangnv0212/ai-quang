@@ -98,6 +98,14 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
     })
     .filter((x) => (x = true));
   itemsFiltered = [
+    {
+      key: "/",
+      icon: <BankOutlined width={20} height={20} />,
+      label: "Dashboard",
+      onClick: () => {
+        router.push("/");
+      },
+    },
     ...(itemsFiltered || []),
     {
       // key: "/settings",

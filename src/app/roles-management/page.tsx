@@ -13,7 +13,6 @@ export default function RoleManagementPage() {
   }, []);
 
   const checkPermission = context.user?.permissions.includes("Pages.Roles");
-
   return (
     <div>
       {!isClient || !checkPermission ? <PermissionDenied /> : <ManageRoles />}
