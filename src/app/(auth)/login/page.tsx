@@ -11,12 +11,14 @@ import { KeyOutlined, UserOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "antd";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { use, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function Login() {
   const [isClient, setIsClient] = useState(false);
+  const searchParams = useSearchParams();
+  const tenant = searchParams.get("tenant") || undefined;
 
   useEffect(() => {
     setIsClient(true);
@@ -26,7 +28,6 @@ export default function Login() {
   });
   // get domain
   const router = useRouter();
-  const tenant = getTenant() || "default";
   const [loading, setLoading] = useState(false);
   async function onSubmit(values: LoginBodyType) {
     if (loading) return;
