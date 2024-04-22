@@ -10,6 +10,9 @@ import {
   CheckCircleOutlined,
   ControlOutlined,
   UserOutlined,
+  SettingOutlined,
+  LogoutOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import type { MenuProps } from "antd";
@@ -20,6 +23,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
 import TopBar from "./Topbar";
 import Image from "next/image";
+import IcLogout from "@/assets/images/ic_logout.svg";
 
 export interface IDefaultLayoutProps {
   children: React.ReactNode;
@@ -77,23 +81,45 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
       },
     },
   ];
-  let itemsFiltered =
-    user?.permissions
-      .map((x) => {
-        switch (x) {
-          case "Pages.Tenants":
-            return items[0];
-          case "Pages.Users":
-            return items[1];
-          case "Pages.Roles":
-            return items[2];
-          case "Pages.Users.Activation":
-            return items[3];
-          default:
-            return null;
-        }
-      })
-      .filter((x) => (x = true)) || [];
+  let itemsFiltered = user?.permissions
+    .map((x) => {
+      switch (x) {
+        case "Pages.Tenants":
+          return items[0];
+        case "Pages.Users":
+          return items[1];
+        case "Pages.Roles":
+          return items[2];
+        case "Pages.Users.Activation":
+          return items[3];
+        default:
+          return null;
+      }
+    })
+    .filter((x) => (x = true));
+  itemsFiltered = [
+    ...(itemsFiltered || []),
+    {
+      // key: "/settings",
+      icon: <SettingOutlined />,
+      label: "Settings",
+      children: [
+        {
+          // key: "/logout",
+          label: "Logout",
+          icon: <LogoutOutlined />,
+        },
+        {
+          key: "/change-password",
+          label: "Change Password",
+          icon: <EditOutlined />,
+          onClick: () => {
+            router.push("/change-password");
+          },
+        },
+      ],
+    },
+  ];
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -116,13 +142,12 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
                 </div>
                 <Menu
                   theme="light"
-                  defaultSelectedKeys={[pathName]}
+                  selectedKeys={[pathName]}
                   mode="inline"
                   items={itemsFiltered}
                 />
               </Sider>
               <Layout>
-                <TopBar />
                 <Content style={{ margin: "24px" }}>{children}</Content>
               </Layout>
             </Layout>

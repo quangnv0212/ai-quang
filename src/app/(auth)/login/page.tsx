@@ -13,6 +13,8 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import IcLogout from "@/assets/images/ic_logout.svg";
 
 export default function Login() {
   const [isClient, setIsClient] = useState(false);
@@ -45,6 +47,8 @@ export default function Login() {
       router.push("/");
       router.refresh();
     } catch (error: any) {
+      console.log(error.response.data.error.details);
+      toast.error(error.response.data.error.details || "Error");
     } finally {
       setLoading(false);
     }
