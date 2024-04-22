@@ -2,6 +2,9 @@
 import AppProvider from "@/app-provider";
 import { CurrentUser } from "@/app/layout";
 import { decodeJWT } from "@/lib/utils";
+import Logo from "@/assets/images/logo.png";
+import avatar from "@/assets/images/ic_avatar.svg";
+
 import {
   BankOutlined,
   CheckCircleOutlined,
@@ -16,6 +19,7 @@ import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
 import TopBar from "./Topbar";
+import Image from "next/image";
 
 export interface IDefaultLayoutProps {
   children: React.ReactNode;
@@ -29,6 +33,8 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
   const router = useRouter();
   const pathName = usePathname();
   const [user, setUser] = useState<CurrentUser | null>(null);
+  const [collapsed, setCollapsed] = useState(false);
+
   useEffect(() => {
     if (!accessToken) {
       setUser(null);
@@ -37,7 +43,6 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
     }
   }, [accessToken]);
 
-  const [collapsed, setCollapsed] = useState(false);
   const items: any[] = [
     {
       key: "/tenant-management",
@@ -72,36 +77,56 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
       },
     },
   ];
+  let itemsFiltered =
+    user?.permissions
+      .map((x) => {
+        switch (x) {
+          case "Pages.Tenants":
+            return items[0];
+          case "Pages.Users":
+            return items[1];
+          case "Pages.Roles":
+            return items[2];
+          case "Pages.Users.Activation":
+            return items[3];
+          default:
+            return null;
+        }
+      })
+      .filter((x) => (x = true)) || [];
+
   return (
     <QueryClientProvider client={queryClient}>
       <AntdRegistry>
         <AppProvider user={user} inititalSessionToken={accessToken?.value}>
           <ToastContainer />
-          <Layout style={{ minHeight: "100vh" }}>
-            <Sider
-              collapsible
-              width={240}
-              theme="light"
-              collapsed={collapsed}
-              onCollapse={(value) => setCollapsed(value)}
-            >
-              <div className="demo-logo-vertical" />
-              <div className="h-40 flex items-center justify-center">
-                AiBase
-              </div>
-
-              <Menu
+          {!accessToken ? (
+            <>{children}</>
+          ) : (
+            <Layout style={{ minHeight: "100vh" }}>
+              <Sider
+                collapsible
+                width={240}
                 theme="light"
-                defaultSelectedKeys={[pathName]}
-                mode="inline"
-                items={items}
-              />
-            </Sider>
-            <Layout>
-              <TopBar />
-              <Content style={{ margin: "24px" }}>{children}</Content>
+                collapsed={collapsed}
+                onCollapse={(value) => setCollapsed(value)}
+              >
+                <div className=" flex items-center justify-center">
+                  <Image src={Logo} alt="" width={150} height={150} />
+                </div>
+                <Menu
+                  theme="light"
+                  defaultSelectedKeys={[pathName]}
+                  mode="inline"
+                  items={itemsFiltered}
+                />
+              </Sider>
+              <Layout>
+                <TopBar />
+                <Content style={{ margin: "24px" }}>{children}</Content>
+              </Layout>
             </Layout>
-          </Layout>
+          )}
         </AppProvider>
       </AntdRegistry>
     </QueryClientProvider>

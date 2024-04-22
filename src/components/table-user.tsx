@@ -227,7 +227,7 @@ const TableUser: React.FC = () => {
         <ModalUser modalState={modalState} setModalState={setModalState} />
       )}
       <div className="flex flex-col gap-5">
-        <p className="text-34-34 font-semibold">Manage Company</p>
+        <p className="text-34-34 font-semibold">Manage User</p>
         <div className="">
           <div className="flex justify-between gap-2">
             <div className="px-5 rounded-lg flex items-center gap-2 h-[38px] w-[400px] bg-white border">

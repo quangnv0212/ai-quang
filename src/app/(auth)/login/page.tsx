@@ -73,7 +73,7 @@ export default function Login() {
         </div>
         {isClient ? (
           <p>
-            <span>Tenant: {tenant}</span>
+            <span>Tenant: {tenant || "Default"}</span>
           </p>
         ) : (
           <></>

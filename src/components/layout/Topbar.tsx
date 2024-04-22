@@ -4,6 +4,7 @@ import IcLogout from "@/assets/images/ic_logout.svg";
 import { IconSearch } from "@/components/icons";
 import { SettingOutlined, UserOutlined } from "@ant-design/icons";
 import Image from "next/image";
+import avatar from "@/assets/images/ic_avatar.svg";
 import { redirect, useRouter } from "next/navigation";
 
 export default function TopBar() {
@@ -16,7 +17,7 @@ export default function TopBar() {
   return (
     <div className="navbar bg-primary ">
       <div className="flex-1">
-        <a className="btn btn-ghost text-xl text-white">AiBase</a>
+        {/* <a className="btn btn-ghost text-xl text-white">AiBase</a> */}
       </div>
       <div className="flex-none gap-2">
         <div className="dropdown dropdown-end">
@@ -25,14 +26,14 @@ export default function TopBar() {
             role="button"
             className="btn btn-ghost btn-circle avatar"
           >
-            <div className="w-20 rounded-full">
-              <div className="avatar">
-                <div className="mask mask-hexagon">
+            <div className="w-20 h-20 rounded-full">
+              <div className="avatar w-full">
+                <div className="mask mask-hexagon w-full">
                   <Image
                     width={160}
                     height={160}
                     alt="Tailwind CSS Navbar component"
-                    src="https://vcdn-giaitri.vnecdn.net/2013/12/07/John-Lennon-7519-1386386749.jpg"
+                    src={avatar}
                   />
                 </div>
               </div>
@@ -40,19 +41,19 @@ export default function TopBar() {
           </div>
           <ul
             tabIndex={0}
-            className="mt-3 z-[1] shadow menu menu-sm  dropdown-content bg-base-100 rounded-box w-52 border-[1px] "
+            className="mt-3 z-[1] shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52 border-[1px] "
           >
             <li>
-              <a className="flex items-center text-16-20 hover:text-primary p-3">
+              <div className="flex items-center text-16-20 hover:text-primary p-3">
                 <UserOutlined />
                 Profile
-              </a>
+              </div>
             </li>
             <li>
-              <a className="flex items-center text-16-20 hover:text-primary p-3">
+              <div className="flex items-center text-16-20 hover:text-primary p-3">
                 <SettingOutlined />
                 Settings
-              </a>
+              </div>
             </li>
             <li>
               <button

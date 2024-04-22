@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const privatePaths = ["/user-management"];
+const privatePaths = [
+  "/user-management",
+  "/account-management",
+  "/roles-management",
+  "/tenant-management",
+  "/user-activation",
+];
 const authPaths = [
   "/login",
   "/register",
@@ -34,9 +40,13 @@ export const config = {
     "/",
     "/login",
     "/register",
-    "/user-management",
-    "/forgot-password",
     "/reset-password",
+    "/forgot-password",
     "/activate-account",
+    "/user-management",
+    "/account-management",
+    "/roles-management",
+    "/tenant-management",
+    "/user-activation",
   ],
 };
