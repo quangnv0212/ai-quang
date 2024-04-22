@@ -2,6 +2,7 @@
 import { createContext, useContext, useState } from "react";
 import { clientSessionToken } from "./lib/http";
 import { CurrentUser } from "./app/layout";
+import { decodeJWT } from "./lib/utils";
 
 const AppContext = createContext<{
   user: CurrentUser | null;
@@ -28,6 +29,11 @@ export default function AppProvider({
   useState(() => {
     if (typeof window !== "undefined") {
       clientSessionToken.value = inititalSessionToken;
+      if (!inititalSessionToken) {
+        setUser(null);
+      } else {
+        setUser(decodeJWT(inititalSessionToken));
+      }
     }
   });
 

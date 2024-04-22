@@ -47,7 +47,6 @@ export default function Login() {
       router.push("/");
       router.refresh();
     } catch (error: any) {
-      console.log(error.response.data.error.details);
       toast.error(error.response.data.error.details || "Error");
     } finally {
       setLoading(false);

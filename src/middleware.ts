@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { decodeJWT } from "./lib/utils";
 
 const privatePaths = [
   "/user-management",
@@ -7,6 +8,7 @@ const privatePaths = [
   "/roles-management",
   "/tenant-management",
   "/user-activation",
+  "/change-password",
 ];
 const authPaths = [
   "/login",
@@ -48,5 +50,6 @@ export const config = {
     "/roles-management",
     "/tenant-management",
     "/user-activation",
+    "/change-password",
   ],
 };

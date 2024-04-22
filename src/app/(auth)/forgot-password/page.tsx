@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 export default function ForgetPasswordPage() {
   const { control, handleSubmit } = useForm({});
   const onSubmit = (values: any) => {
-    console.log(values);
+    // console.log(values);
   };
   return (
     <div className="flex justify-center items-center h-screen ">

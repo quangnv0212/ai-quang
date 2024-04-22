@@ -1,29 +1,26 @@
 "use client";
 import AppProvider from "@/app-provider";
 import { CurrentUser } from "@/app/layout";
-import { decodeJWT } from "@/lib/utils";
 import Logo from "@/assets/images/logo.png";
-import avatar from "@/assets/images/ic_avatar.svg";
+import { decodeJWT } from "@/lib/utils";
 
+import authApiRequest from "@/apiRequests/auth";
 import {
   BankOutlined,
   CheckCircleOutlined,
   ControlOutlined,
-  UserOutlined,
-  SettingOutlined,
-  LogoutOutlined,
   EditOutlined,
+  LogoutOutlined,
+  SettingOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import type { MenuProps } from "antd";
-import { Layout, Menu, theme } from "antd";
+import { Layout, Menu } from "antd";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
-import TopBar from "./Topbar";
-import Image from "next/image";
-import IcLogout from "@/assets/images/ic_logout.svg";
 
 export interface IDefaultLayoutProps {
   children: React.ReactNode;
@@ -34,19 +31,22 @@ const { Content, Sider } = Layout;
 export function DefaultLayout(props: IDefaultLayoutProps) {
   const { children, accessToken } = props;
   const queryClient = new QueryClient();
-  const router = useRouter();
   const pathName = usePathname();
   const [user, setUser] = useState<CurrentUser | null>(null);
   const [collapsed, setCollapsed] = useState(false);
-
+  const router = useRouter();
+  const logout = async () => {
+    await authApiRequest.logoutFromNextClientToNextServer();
+    router.push("/");
+    router.refresh();
+  };
   useEffect(() => {
-    if (!accessToken) {
+    if (!accessToken?.value) {
       setUser(null);
     } else {
       setUser(decodeJWT(accessToken.value));
     }
   }, [accessToken]);
-
   const items: any[] = [
     {
       key: "/tenant-management",
@@ -108,6 +108,9 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
           // key: "/logout",
           label: "Logout",
           icon: <LogoutOutlined />,
+          onClick: () => {
+            logout();
+          },
         },
         {
           key: "/change-password",
