@@ -19,8 +19,8 @@ import { Layout, Menu } from "antd";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export interface IDefaultLayoutProps {
   children: React.ReactNode;

@@ -1,5 +1,4 @@
 import { DefaultLayout } from "@/components/layout/default-layout";
-import { decodeJWT } from "@/lib/utils";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import "react-toastify/dist/ReactToastify.css";

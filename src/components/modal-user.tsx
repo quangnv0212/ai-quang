@@ -2,7 +2,6 @@ import userApiRequest from "@/apiRequests/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "antd";
 import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "react-query";
 import { ButtonCommon } from "./common/button-common";
 import { InputPassword } from "./common/input-password";
 import { InputTextCommon } from "./common/input-text";
@@ -12,6 +11,7 @@ import {
   AccountBody,
   AccountBodyType,
 } from "@/schemaValidations/account.schema";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export interface IModalCompanyProps {
   modalState: {
@@ -111,7 +111,7 @@ export function ModalUser(props: IModalCompanyProps) {
               No
             </ButtonCommon>
             <ButtonCommon
-              loading={deleteUserMutate.isLoading}
+              loading={deleteUserMutate.isPending}
               onClick={handleDelete}
               className="btn btn-sm bg-primary text-white hover:bg-primary"
             >
@@ -162,7 +162,7 @@ export function ModalUser(props: IModalCompanyProps) {
             <div className="flex flex-col gap-3 mt-3">
               <ButtonCommon
                 loading={
-                  createUserMutate.isLoading || updateUserMutate.isLoading
+                  createUserMutate.isPending || updateUserMutate.isPending
                 }
                 type="submit"
                 className="btn btn-sm w-full hover:bg-primary-hover bg-primary text-white border-none"

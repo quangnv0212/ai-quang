@@ -12,7 +12,7 @@ const userApiRequest = {
   },
   getListUser: (params: {
     keyword?: string;
-    isActive: boolean;
+    isActive?: boolean;
     SkipCount: number;
     MaxResultCount: number;
   }) => http.get(`/services/app/User/GetAll`, { params }),

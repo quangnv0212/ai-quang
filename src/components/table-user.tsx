@@ -12,10 +12,10 @@ import { Tag } from "antd";
 import type { TablePaginationConfig } from "antd/es/table/interface";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
-import { useQuery } from "react-query";
 import { TableCommon } from "./common/table-common";
 import { IconSearch } from "./icons";
 import { ModalUser } from "./modal-user";
+import { useQuery } from "@tanstack/react-query";
 let timeout: any;
 interface DataType {
   key: string;

@@ -2,6 +2,7 @@
 import authApiRequest from "@/apiRequests/auth";
 import IcMailSuccess from "@/assets/images/mail-success.svg";
 import { ButtonCommon } from "@/components/common/button-common";
+import { getTenant } from "@/lib/utils";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -9,7 +10,6 @@ export default function ActivatePage() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
   const token = searchParams.get("token") || "";
-  console.log(email, token);
   const [loading, setLoading] = useState(false);
   const handleActivateAccount = async () => {
     try {
@@ -21,6 +21,7 @@ export default function ActivatePage() {
       setLoading(false);
     }
   };
+
   return (
     <div className="h-screen flex items-center justify-center px-[200px]">
       <div className="">
