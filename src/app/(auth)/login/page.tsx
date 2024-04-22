@@ -10,11 +10,10 @@ import { KeyOutlined, UserOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "antd";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import IcLogout from "@/assets/images/ic_logout.svg";
 
 export default function Login() {
   const [isClient, setIsClient] = useState(false);
@@ -52,6 +51,7 @@ export default function Login() {
       setLoading(false);
     }
   }
+  const pathName = usePathname();
   return (
     <div className="flex justify-center items-center h-screen ">
       <div
