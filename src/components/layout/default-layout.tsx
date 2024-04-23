@@ -13,6 +13,7 @@ import {
   LogoutOutlined,
   SettingOutlined,
   UserOutlined,
+  DashboardOutlined,
 } from "@ant-design/icons";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { Layout, Menu } from "antd";
@@ -82,7 +83,7 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
     },
   ];
   let itemsFiltered = user?.permissions
-    .map((x) => {
+    ?.map((x) => {
       switch (x) {
         case "Pages.Tenants":
           return items[0];
@@ -100,7 +101,7 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
   itemsFiltered = [
     {
       key: "/",
-      icon: <BankOutlined width={20} height={20} />,
+      icon: <DashboardOutlined width={20} height={20} />,
       label: "Dashboard",
       onClick: () => {
         router.push("/");

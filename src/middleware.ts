@@ -3,7 +3,6 @@ import type { NextRequest } from "next/server";
 import { decodeJWT } from "./lib/utils";
 
 const privatePaths = [
-  "/user-management",
   "/account-management",
   "/roles-management",
   "/tenant-management",
@@ -22,6 +21,33 @@ const authPaths = [
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const accessToken = request.cookies.get("accessToken")?.value;
+  const permissions = decodeJWT(accessToken!)?.permissions || [];
+  console.log(permissions);
+  if (
+    pathname === "/account-management" &&
+    !permissions.includes("Pages.Users")
+  ) {
+    return NextResponse.redirect(new URL("/permission-denied", request.url));
+  }
+  if (
+    pathname === "/roles-management" &&
+    !permissions.includes("Pages.Roles")
+  ) {
+    return NextResponse.redirect(new URL("/permission-denied", request.url));
+  }
+  if (
+    pathname === "/tenant-management" &&
+    !permissions.includes("Pages.Tenants")
+  ) {
+    return NextResponse.redirect(new URL("/permission-denied", request.url));
+  }
+  if (
+    pathname === "/user-activation" &&
+    !permissions.includes("Pages.Users.Activation")
+  ) {
+    return NextResponse.redirect(new URL("/permission-denied", request.url));
+  }
+
   // If user is not logged in, redirect to login page
   if (privatePaths.some((path) => pathname.startsWith(path)) && !accessToken) {
     return NextResponse.redirect(new URL("/login", request.url));
@@ -33,6 +59,8 @@ export function middleware(request: NextRequest) {
   if (authPaths.some((path) => pathname.startsWith(path)) && accessToken) {
     return NextResponse.redirect(new URL("/", request.url));
   }
+  // If user dont have permission, redirect to permission denied page
+
   return NextResponse.next();
 }
 
@@ -45,7 +73,6 @@ export const config = {
     "/reset-password",
     "/forgot-password",
     "/activate-account",
-    "/user-management",
     "/account-management",
     "/roles-management",
     "/tenant-management",
