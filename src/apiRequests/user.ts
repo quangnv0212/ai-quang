@@ -3,23 +3,44 @@ import { AccountBodyType } from "@/schemaValidations/account.schema";
 import axios from "axios";
 
 const userApiRequest = {
-  createUser: (body: AccountBodyType) => {
-    return http.post(`/services/app/User/Create`, {
-      ...body,
-      roleNames: [],
-      isActive: body.isActive === true ? true : false,
-    });
+  createUser: async (body: AccountBodyType) => {
+    try {
+      return http.post(`/services/app/User/Create`, {
+        ...body,
+        roleNames: [],
+        isActive: body.isActive === true ? true : false,
+      });
+    } catch (error) {
+      return Promise.reject(error);
+    }
   },
-  getListUser: (params: {
+
+  getListUser: async (params: {
     keyword?: string;
     isActive?: boolean;
     SkipCount: number;
     MaxResultCount: number;
-  }) => http.get(`/services/app/User/GetAll`, { params }),
-  updateUser: (body: AccountBodyType) =>
-    http.put(`/services/app/User/Update`, body),
-  deleteUser: (id: string) =>
-    http.delete(`/services/app/User/Delete`, { params: { id } }),
+  }) => {
+    try {
+      return http.get(`/services/app/User/GetAll`, { params });
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
+  updateUser: async (body: AccountBodyType) => {
+    try {
+      return http.put(`/services/app/User/Update`, body);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
+  deleteUser: async (id: string) => {
+    try {
+      return http.delete(`/services/app/User/Delete`, { params: { id } });
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
 };
 
 export default userApiRequest;
