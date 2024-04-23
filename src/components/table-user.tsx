@@ -161,6 +161,7 @@ const TableUser: React.FC = () => {
         params.delete("isActive");
         params.delete("Keyword");
         params.delete("skipCount");
+        setKeyword("");
         replace(`${pathname}?${params.toString()}`);
       },
     },
@@ -172,6 +173,8 @@ const TableUser: React.FC = () => {
         params.set("isActive", "true");
         params.delete("Keyword");
         params.delete("skipCount");
+        setKeyword("");
+
         replace(`${pathname}?${params.toString()}`);
       },
     },
@@ -183,6 +186,8 @@ const TableUser: React.FC = () => {
         params.set("isActive", "false");
         params.delete("Keyword");
         params.delete("skipCount");
+        setKeyword("");
+
         replace(`${pathname}?${params.toString()}`);
       },
     },
