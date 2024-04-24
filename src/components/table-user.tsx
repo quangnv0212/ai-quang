@@ -62,28 +62,26 @@ const TableUser: React.FC = () => {
   //table
   const columns: TableColumnsType<DataType> = [
     {
-      title: "User Name",
-      dataIndex: "userName",
-      key: "userName",
-    },
-    {
-      title: "Full Name",
-      dataIndex: "fullName",
-      key: "fullName",
-    },
-    {
       title: "Email",
       dataIndex: "emailAddress",
       key: "email",
     },
     {
-      title: "Created At",
-      dataIndex: "creationTime",
-      key: "creationTime",
-      render: (creationTime) => (
-        <span>{new Date(creationTime).toLocaleString()}</span>
-      ),
+      title: "Name",
+      dataIndex: "fullName",
+      key: "fullName",
     },
+    {
+      title: "Company",
+      dataIndex: "fullName",
+      key: "fullName",
+    },
+    {
+      title: "Role",
+      dataIndex: "fullName",
+      key: "fullName",
+    },
+
     {
       title: "Status",
       dataIndex: "isActive",
@@ -174,7 +172,6 @@ const TableUser: React.FC = () => {
         params.delete("Keyword");
         params.delete("skipCount");
         setKeyword("");
-
         replace(`${pathname}?${params.toString()}`);
       },
     },
@@ -187,7 +184,6 @@ const TableUser: React.FC = () => {
         params.delete("Keyword");
         params.delete("skipCount");
         setKeyword("");
-
         replace(`${pathname}?${params.toString()}`);
       },
     },

@@ -73,14 +73,6 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
         router.push("/roles-management");
       },
     },
-    {
-      key: "/user-activation",
-      icon: <CheckCircleOutlined />,
-      label: "User Activation",
-      onClick: () => {
-        router.push("/user-activation");
-      },
-    },
   ];
   let itemsFiltered = user?.permissions
     ?.map((x) => {
@@ -91,8 +83,6 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
           return items[1];
         case "Pages.Roles":
           return items[2];
-        case "Pages.Users.Activation":
-          return items[3];
         default:
           return null;
       }
