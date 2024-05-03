@@ -52,7 +52,7 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
     {
       key: "/tenant-management",
       icon: <BankOutlined width={20} height={20} />,
-      label: "Tenant",
+      label: "Company",
       onClick: () => {
         router.push("/tenant-management");
       },
@@ -65,7 +65,6 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
         router.push("/account-management");
       },
     },
-
   ];
   let itemsFiltered = user?.permissions
     ?.map((x) => {

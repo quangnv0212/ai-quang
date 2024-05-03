@@ -1,9 +1,9 @@
-"use client";
-import TableUser from "@/components/table-user";
+import TableTAccount from "@/components/table-account";
+
 export default function UserManagementPage() {
   return (
     <div>
-      <TableUser />
+      <TableTAccount />
     </div>
   );
 }

@@ -10,6 +10,7 @@ import { useUpdateTenant } from "@/apiRequests/hooks/tenant/useUpdateTenant.hook
 import { TenantBody, TenantBodyType } from "@/schemaValidations/tenant.schema";
 import { useState } from "react";
 import { useDeleteTenant } from "@/apiRequests/hooks/tenant/useDeleteTenant.hook";
+import { toast } from "react-toastify";
 
 export interface IModalCompanyProps {
   modalState: {
@@ -53,6 +54,7 @@ export function ModalTenant(props: IModalCompanyProps) {
         setLoading,
         () => {
           setModalState({ ...modalState, isOpen: false });
+          toast.success("Create company successfully");
           fetchListTenant();
         },
         () => {}
@@ -70,6 +72,7 @@ export function ModalTenant(props: IModalCompanyProps) {
         setLoading,
         () => {
           setModalState({ ...modalState, isOpen: false });
+          toast.success("Update company successfully");
           fetchListTenant();
         },
         () => {}
