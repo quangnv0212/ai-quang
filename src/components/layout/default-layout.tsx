@@ -65,14 +65,7 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
         router.push("/account-management");
       },
     },
-    {
-      key: "/roles-management",
-      icon: <ControlOutlined />,
-      label: "Role",
-      onClick: () => {
-        router.push("/roles-management");
-      },
-    },
+
   ];
   let itemsFiltered = user?.permissions
     ?.map((x) => {

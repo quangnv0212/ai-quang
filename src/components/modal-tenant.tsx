@@ -1,17 +1,15 @@
-import {
-  AccountBody,
-  AccountBodyType,
-} from "@/schemaValidations/account.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
 import { Form } from "antd";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ButtonCommon } from "./common/button-common";
-import { InputPassword } from "./common/input-password";
 import { InputTextCommon } from "./common/input-text";
 import { ModalCommon } from "./common/modal-common";
 import { ToogleCommon } from "./common/toogle-common";
+import { useCreateTenant } from "@/apiRequests/hooks/tenant/useCreateTenant.hook";
+import { useUpdateTenant } from "@/apiRequests/hooks/tenant/useUpdateTenant.hook";
+import { TenantBody, TenantBodyType } from "@/schemaValidations/tenant.schema";
+import { useState } from "react";
+import { useDeleteTenant } from "@/apiRequests/hooks/tenant/useDeleteTenant.hook";
 
 export interface IModalCompanyProps {
   modalState: {
@@ -20,31 +18,78 @@ export interface IModalCompanyProps {
     type: string;
   };
   setModalState: (value: any) => void;
+  fetchListTenant: () => void;
 }
 
-export function ModalUser(props: IModalCompanyProps) {
-  const { modalState, setModalState } = props;
+export function ModalTenant(props: IModalCompanyProps) {
+  const { modalState, setModalState, fetchListTenant } = props;
+  const [requestCreateTenant] = useCreateTenant();
+  const [requestUpdateTenant] = useUpdateTenant();
+  const [requestDeleteTenant] = useDeleteTenant();
   const [loading, setLoading] = useState(false);
-
   const handleCancel = () => {
     setModalState({ ...modalState, isOpen: false });
   };
-  const { control, handleSubmit } = useForm<AccountBodyType>({
-    resolver: zodResolver(AccountBody),
-    defaultValues: modalState.detailInfo || {
-      isActive: false,
+  const { control, handleSubmit } = useForm<TenantBodyType>({
+    resolver: zodResolver(TenantBody),
+    defaultValues: {
+      tenancyName: modalState.detailInfo?.tenancyName,
+      isActive: modalState.detailInfo?.isActive,
+      country: modalState.detailInfo?.country,
+      state: modalState.detailInfo?.state,
     },
   });
   const isConfirm = modalState.type === "delete";
 
-  const onSubmit = (values: AccountBodyType) => {
+  const onSubmit = (values: TenantBodyType) => {
     if (modalState.type === "create") {
+      requestCreateTenant(
+        {
+          tenancyName: values.tenancyName,
+          isActive: values.isActive,
+          country: values.country,
+          state: values.state,
+        },
+        setLoading,
+        () => {
+          setModalState({ ...modalState, isOpen: false });
+          fetchListTenant();
+        },
+        () => {}
+      );
     }
     if (modalState.type === "update") {
+      requestUpdateTenant(
+        {
+          tenancyName: values.tenancyName,
+          isActive: values.isActive,
+          country: values.country,
+          id: modalState.detailInfo.id,
+          state: values.state,
+        },
+        setLoading,
+        () => {
+          setModalState({ ...modalState, isOpen: false });
+          fetchListTenant();
+        },
+        () => {}
+      );
     }
   };
 
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    requestDeleteTenant(
+      {
+        id: modalState.detailInfo.id,
+      },
+      setLoading,
+      () => {
+        setModalState({ ...modalState, isOpen: false });
+        fetchListTenant();
+      },
+      () => {}
+    );
+  };
 
   return (
     <ModalCommon
@@ -81,41 +126,31 @@ export function ModalUser(props: IModalCompanyProps) {
       ) : (
         <div className="px-6 flex flex-col gap-4">
           <p className="font-bold text-24-28 capitalize text-center font-visby">
-            {modalState.type === "update" ? "Update user" : "Create a new user"}
+            {modalState.type === "update"
+              ? "Update company"
+              : "Create a new company"}
           </p>
           <Form
             onFinish={handleSubmit(onSubmit)}
             className="flex flex-col gap-3"
           >
             <InputTextCommon
-              label="User name"
-              name="userName"
-              placeholder="Enter your userName"
+              label="Company name"
+              name="tenancyName"
+              placeholder="Enter your company name"
               control={control}
             />
             <InputTextCommon
-              label="Name"
-              name="name"
-              placeholder="Enter your name"
+              label="Country"
+              name="country"
+              placeholder="Enter your country"
               control={control}
             />
             <InputTextCommon
-              label="Surname"
-              name="surname"
-              placeholder="Enter your surname"
+              label="State"
+              name="state"
+              placeholder="Enter your state"
               control={control}
-            />
-            <InputTextCommon
-              label="Email address"
-              name="emailAddress"
-              placeholder="Enter your email address"
-              control={control}
-            />
-            <InputPassword
-              control={control}
-              label="Password"
-              name="password"
-              placeholder="Enter your password"
             />
             <ToogleCommon label="Active" control={control} name="isActive" />
             <div className="flex flex-col gap-3 mt-3">
@@ -124,14 +159,16 @@ export function ModalUser(props: IModalCompanyProps) {
                 type="submit"
                 className="btn btn-sm w-full hover:bg-primary-hover bg-primary text-white border-none"
               >
-                {modalState.type === "update" ? "Update user" : "Create user"}
+                {modalState.type === "update"
+                  ? "Update company"
+                  : "Create company"}
               </ButtonCommon>
-              <button
+              <ButtonCommon
                 onClick={handleCancel}
                 className="btn py-2 w-full btn-sm bg-slate-400 text-white border-none hover:bg-slate-500"
               >
                 Cancel
-              </button>
+              </ButtonCommon>
             </div>
           </Form>
         </div>

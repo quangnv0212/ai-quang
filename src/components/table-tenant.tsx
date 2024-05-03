@@ -1,5 +1,6 @@
 "use client";
-import userApiRequest from "@/apiRequests/user";
+import { useGetListTenant } from "@/apiRequests/hooks/tenant/useGetListTenant.hook";
+import { TenantBodyType } from "@/schemaValidations/tenant.schema";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -11,22 +12,13 @@ import type { TableColumnsType } from "antd";
 import { Tag } from "antd";
 import type { TablePaginationConfig } from "antd/es/table/interface";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TableCommon } from "./common/table-common";
 import { IconSearch } from "./icons";
-import { ModalUser } from "./modal-user";
-import { useQuery } from "@tanstack/react-query";
+import { ModalTenant } from "./modal-tenant";
 let timeout: any;
-interface DataType {
-  key: string;
-  userName: string;
-  fullName: string;
-  email: string;
-  isActive: boolean;
-  action?: any;
-}
 
-const TableUser: React.FC = () => {
+const TableTenant: React.FC = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -48,36 +40,50 @@ const TableUser: React.FC = () => {
   const [keyword, setKeyword] = useState<string | undefined>(
     searchParams.get("Keyword")?.toString()
   );
-
-  //react query
-  const { data: dataUser, isLoading } = useQuery({
-    queryKey: ["getListUser", querySearch],
-    queryFn: () =>
-      userApiRequest.getListUser(querySearch).then((res) => {
-        setTotal(res.data.result.totalCount);
-        return res?.data?.result?.items;
-      }),
-  });
+  const [loading, setLoading] = useState(false);
+  const [dataTenant, setDataTenant] = useState<TenantBodyType[]>([]);
+  const [requestGetListTenant] = useGetListTenant();
+  const fetchListTenant = (
+    params = {
+      keyword: querySearch?.Keyword,
+      isActive: querySearch?.isActive,
+      SkipCount: querySearch?.skipCount,
+      MaxResultCount: querySearch?.maxResultCount,
+    }
+  ) => {
+    requestGetListTenant(
+      params,
+      setLoading,
+      (res: any) => {
+        setTotal(res.result.totalCount);
+        setDataTenant(res.result.items);
+      },
+      (err: any) => {
+        console.log(err);
+      }
+    );
+  };
+  useEffect(() => {
+    fetchListTenant();
+  }, []);
 
   //table
-  const columns: TableColumnsType<DataType> = [
-    {
-      title: "Email",
-      dataIndex: "emailAddress",
-      key: "email",
-    },
+  const columns: TableColumnsType<TenantBodyType> = [
     {
       title: "Name",
-      dataIndex: "fullName",
-      key: "fullName",
+      dataIndex: "tenancyName",
+      key: "tenancyName",
     },
     {
-      title: "Company",
-      dataIndex: "fullName",
-      key: "fullName",
+      title: "Country",
+      dataIndex: "country",
+      key: "country",
     },
-
-
+    {
+      title: "State",
+      dataIndex: "state",
+      key: "state",
+    },
     {
       title: "Status",
       dataIndex: "isActive",
@@ -157,6 +163,12 @@ const TableUser: React.FC = () => {
         params.delete("skipCount");
         setKeyword("");
         replace(`${pathname}?${params.toString()}`);
+        fetchListTenant({
+          keyword: undefined,
+          isActive: undefined,
+          SkipCount: 0,
+          MaxResultCount: querySearch?.maxResultCount,
+        });
       },
     },
     {
@@ -169,6 +181,12 @@ const TableUser: React.FC = () => {
         params.delete("skipCount");
         setKeyword("");
         replace(`${pathname}?${params.toString()}`);
+        fetchListTenant({
+          keyword: undefined,
+          isActive: true,
+          SkipCount: 0,
+          MaxResultCount: querySearch?.maxResultCount,
+        });
       },
     },
     {
@@ -181,6 +199,12 @@ const TableUser: React.FC = () => {
         params.delete("skipCount");
         setKeyword("");
         replace(`${pathname}?${params.toString()}`);
+        fetchListTenant({
+          keyword: undefined,
+          isActive: false,
+          SkipCount: 0,
+          MaxResultCount: querySearch?.maxResultCount,
+        });
       },
     },
   ];
@@ -198,6 +222,12 @@ const TableUser: React.FC = () => {
         params.set("skipCount", "0");
       }
       replace(`${pathname}?${params.toString()}`);
+      fetchListTenant({
+        keyword: term,
+        isActive: querySearch?.isActive,
+        SkipCount: 0,
+        MaxResultCount: querySearch?.maxResultCount,
+      });
     }, 500);
   };
 
@@ -209,6 +239,12 @@ const TableUser: React.FC = () => {
     );
     params.set("maxResultCount", maxResultCount.toString());
     replace(`${pathname}?${params.toString()}`);
+    fetchListTenant({
+      keyword: querySearch?.Keyword,
+      isActive: querySearch?.isActive,
+      SkipCount: ((pagination.current || 1) - 1) * maxResultCount,
+      MaxResultCount: querySearch?.maxResultCount,
+    });
   };
 
   let skipCount = Number(searchParams.get("skipCount")) || 1;
@@ -217,14 +253,17 @@ const TableUser: React.FC = () => {
   if (skipCount % maxResultCount === 0) {
     current += 1;
   }
-
   return (
     <>
       {modalState.isOpen && (
-        <ModalUser modalState={modalState} setModalState={setModalState} />
+        <ModalTenant
+          fetchListTenant={fetchListTenant}
+          modalState={modalState}
+          setModalState={setModalState}
+        />
       )}
       <div className="flex flex-col gap-5">
-        <p className="text-34-34 font-semibold">Manage User</p>
+        <p className="text-34-34 font-semibold">Manage Company</p>
         <div className="">
           <div className="flex justify-between gap-2">
             <div className="px-5 rounded-lg flex items-center gap-2 h-[38px] w-[400px] bg-white border">
@@ -270,10 +309,10 @@ const TableUser: React.FC = () => {
             total,
             showQuickJumper: true,
           }}
-          loading={isLoading}
+          loading={loading}
           onChange={handleTableChange}
           columns={columns as any}
-          dataSource={dataUser}
+          dataSource={dataTenant}
           footer={() => (
             <div className="justify-center my-2 ">
               <button
@@ -289,7 +328,7 @@ const TableUser: React.FC = () => {
               >
                 <PlusOutlined style={{ fontSize: "18px", color: "white" }} />
                 <span className="font-bold uppercase text-white ">
-                  Create a new user
+                  Create a new company
                 </span>
               </button>
             </div>
@@ -300,4 +339,4 @@ const TableUser: React.FC = () => {
   );
 };
 
-export default TableUser;
+export default TableTenant;

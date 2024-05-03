@@ -1,10 +1,10 @@
 import http from "@/lib/http";
-import { AccountBodyType } from "@/schemaValidations/account.schema";
+import { TenantBodyType } from "@/schemaValidations/tenant.schema";
 
-const userApiRequest = {
-  createUser: async (body: AccountBodyType) => {
+const tenantApiRequest = {
+  createTenant: async (body: TenantBodyType) => {
     try {
-      return http.post(`/services/app/User/Create`, {
+      return http.post(`/services/app/Tenant/Create`, {
         ...body,
         roleNames: [],
         isActive: body.isActive === true ? true : false,
@@ -13,33 +13,32 @@ const userApiRequest = {
       return Promise.reject(error);
     }
   },
-
-  getListUser: async (params: {
+  getListTenant: async (params: {
     keyword?: string;
     isActive?: boolean;
     SkipCount: number;
     MaxResultCount: number;
   }) => {
     try {
-      return http.get(`/services/app/User/GetAll`, { params });
+      return http.get(`/services/app/Tenant/GetAll`, { params });
     } catch (error) {
       return Promise.reject(error);
     }
   },
-  updateUser: async (body: AccountBodyType) => {
+  updateTenant: async (body: TenantBodyType) => {
     try {
-      return http.put(`/services/app/User/Update`, body);
+      return http.put(`/services/app/Tenant/Update`, body);
     } catch (error) {
       return Promise.reject(error);
     }
   },
-  deleteUser: async (id: string) => {
+  deleteTenant: async (id: string) => {
     try {
-      return http.delete(`/services/app/User/Delete`, { params: { id } });
+      return http.delete(`/services/app/Tenant/Delete`, { params: { id } });
     } catch (error) {
       return Promise.reject(error);
     }
   },
 };
 
-export default userApiRequest;
+export default tenantApiRequest;
