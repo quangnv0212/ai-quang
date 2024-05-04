@@ -93,11 +93,11 @@ const TableTAccount: React.FC = () => {
       dataIndex: "emailAddress",
       key: "email",
     },
-    {
-      title: "Name",
-      dataIndex: "fullName",
-      key: "fullName",
-    },
+    // {
+    //   title: "Name",
+    //   dataIndex: "fullName",
+    //   key: "fullName",
+    // },
     {
       title: "Company",
       dataIndex: "company",
