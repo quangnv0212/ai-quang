@@ -8,7 +8,7 @@ import {
 } from "@/schemaValidations/account.schema";
 import { TenantBodyType } from "@/schemaValidations/tenant.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, Select } from "antd";
+import { Button, Form, Select } from "antd";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -126,7 +126,7 @@ export function ModalUser(props: IModalCompanyProps) {
       () => {}
     );
   };
-
+  const createNewTenant = () => {};
   return (
     <ModalCommon
       open={modalState.isOpen}
@@ -216,7 +216,11 @@ export function ModalUser(props: IModalCompanyProps) {
                     value: x.id,
                   };
                 })}
-                
+                notFoundContent={
+                  <Button type="link" onClick={createNewTenant}>
+                    Not found company. Create a new company
+                  </Button>
+                }
               />
             </div>
 

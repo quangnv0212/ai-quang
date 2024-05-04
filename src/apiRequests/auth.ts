@@ -14,7 +14,7 @@ const authApiRequest = {
       );
     } else {
       return axios.post(
-        `http://10.77.1.116:5000/api/TokenAuth/Authenticate`,
+        `https://aibase.nobisoft.vn/api/v1.0/TokenAuth/Authenticate`,
         body
       );
     }
