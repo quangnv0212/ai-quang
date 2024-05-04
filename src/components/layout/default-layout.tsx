@@ -7,21 +7,20 @@ import { decodeJWT } from "@/lib/utils";
 import authApiRequest from "@/apiRequests/auth";
 import {
   BankOutlined,
-  CheckCircleOutlined,
-  ControlOutlined,
+  DashboardOutlined,
   EditOutlined,
   LogoutOutlined,
   SettingOutlined,
+  ThunderboltOutlined,
   UserOutlined,
-  DashboardOutlined,
 } from "@ant-design/icons";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Layout, Menu } from "antd";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export interface IDefaultLayoutProps {
   children: React.ReactNode;
@@ -63,6 +62,14 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
       label: "Users",
       onClick: () => {
         router.push("/account-management");
+      },
+    },
+    {
+      key: "/model-management",
+      icon: <ThunderboltOutlined />,
+      label: "Models",
+      onClick: () => {
+        router.push("/model-management");
       },
     },
   ];

@@ -3,6 +3,7 @@ import Link from "next/link";
 import ImgRole from "@/assets/images/ic_roles.png";
 import ImgTenant from "@/assets/images/ic_tenant.png";
 import ImgUser from "@/assets/images/ic_user.png";
+import ImgModel from "@/assets/images/ic_ai.png";
 import Image from "next/image";
 export interface IDashboardProps {}
 
@@ -10,6 +11,7 @@ export function Dashboard(props: IDashboardProps) {
   const pageList = [
     { label: "Companies", link: "tenant-management", image: ImgTenant },
     { label: "Users", link: "account-management", image: ImgUser },
+    { label: "Models", link: "model-management", image: ImgModel },
   ];
   const pageListOthers = [
     { label: "Roles", link: "roles-management", image: ImgRole },
@@ -32,8 +34,8 @@ export function Dashboard(props: IDashboardProps) {
                         <Image
                           src={page.image}
                           alt="icon"
-                          width={100}
-                          height={100}
+                          width={120}
+                          height={120}
                         />
                       </div>
                       <div className="flex justify-center items-center h-[60px]">
