@@ -52,7 +52,7 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
     {
       key: "/tenant-management",
       icon: <BankOutlined width={20} height={20} />,
-      label: "Company",
+      label: "Companies",
       onClick: () => {
         router.push("/tenant-management");
       },
@@ -60,7 +60,7 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
     {
       key: "/account-management",
       icon: <UserOutlined />,
-      label: "User",
+      label: "Users",
       onClick: () => {
         router.push("/account-management");
       },
