@@ -227,8 +227,8 @@ export function ModalUser(props: IModalCompanyProps) {
                 className="btn btn-sm w-full hover:bg-primary-hover bg-primary text-white border-none"
               >
                 {modalState.type === "update"
-                  ? "Update company"
-                  : "Create company"}
+                  ? "Update account"
+                  : "Create account"}
               </ButtonCommon>
               <ButtonCommon
                 onClick={handleCancel}

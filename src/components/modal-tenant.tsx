@@ -36,8 +36,8 @@ export function ModalTenant(props: IModalCompanyProps) {
     defaultValues: {
       tenancyName: modalState.detailInfo?.tenancyName,
       isActive: modalState.detailInfo?.isActive,
-      country: modalState.detailInfo?.country,
-      state: modalState.detailInfo?.state,
+      country: modalState.detailInfo?.country || "",
+      state: modalState.detailInfo?.state || "",
     },
   });
   const isConfirm = modalState.type === "delete";
