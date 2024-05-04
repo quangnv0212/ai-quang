@@ -1,16 +1,4 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "antd";
-import { useForm } from "react-hook-form";
-import { ButtonCommon } from "./common/button-common";
-import { InputTextCommon } from "./common/input-text";
-import { ModalCommon } from "./common/modal-common";
-import { ToogleCommon } from "./common/toogle-common";
-import { useCreateTenant } from "@/apiRequests/hooks/tenant/useCreateTenant.hook";
-import { useUpdateTenant } from "@/apiRequests/hooks/tenant/useUpdateTenant.hook";
-import { TenantBody, TenantBodyType } from "@/schemaValidations/tenant.schema";
-import { useState } from "react";
-import { useDeleteTenant } from "@/apiRequests/hooks/tenant/useDeleteTenant.hook";
-import { toast } from "react-toastify";
+import { useGetListTenant } from "@/apiRequests/hooks/tenant/useGetListTenant.hook";
 import { useCreateUser } from "@/apiRequests/hooks/user/useCreateUser.hook";
 import { useDeleteUser } from "@/apiRequests/hooks/user/useDeleteUser.hook";
 import { useUpdateUser } from "@/apiRequests/hooks/user/useUpdateUser.hook";
@@ -18,6 +6,16 @@ import {
   AccountBody,
   AccountBodyType,
 } from "@/schemaValidations/account.schema";
+import { TenantBodyType } from "@/schemaValidations/tenant.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, Select } from "antd";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { ButtonCommon } from "./common/button-common";
+import { InputTextCommon } from "./common/input-text";
+import { ModalCommon } from "./common/modal-common";
+import { ToogleCommon } from "./common/toogle-common";
 
 export interface IModalCompanyProps {
   modalState: {
@@ -38,16 +36,38 @@ export function ModalUser(props: IModalCompanyProps) {
   const handleCancel = () => {
     setModalState({ ...modalState, isOpen: false });
   };
+  const [requestGetListTenant] = useGetListTenant();
+  const [listTenant, setTenantList] = useState<TenantBodyType[]>([]);
+  useEffect(() => {
+    requestGetListTenant(
+      {
+        MaxResultCount: 1000,
+        SkipCount: 0,
+      },
+      () => {},
+      (res: any) => {
+        setTenantList(res?.result?.items);
+      },
+      (err: any) => {
+        console.log(err);
+      }
+    );
+  }, []);
   const { control, handleSubmit } = useForm<AccountBodyType>({
     resolver: zodResolver(AccountBody),
     defaultValues: {
-      emailAddress: modalState.detailInfo.emailAddress,
-      name: modalState.detailInfo.name,
-      isActive: modalState.detailInfo.isActive,
+      emailAddress: modalState?.detailInfo?.emailAddress,
+      name: modalState?.detailInfo?.name,
+      isActive: modalState?.detailInfo?.isActive,
+      surname: modalState?.detailInfo?.surname,
+      password: modalState?.detailInfo?.password,
     },
   });
   const isConfirm = modalState.type === "delete";
-
+  const [company, setSelectedCompany] = useState(0);
+  const handleChange = (value: number) => {
+    setSelectedCompany(value);
+  };
   const onSubmit = (values: AccountBodyType) => {
     if (modalState.type === "create") {
       requestCreateUser(
@@ -59,6 +79,7 @@ export function ModalUser(props: IModalCompanyProps) {
           password: values.password,
           surname: values.surname,
           fullName: values.fullName,
+          company: company,
         },
         setLoading,
         () => {
@@ -79,6 +100,7 @@ export function ModalUser(props: IModalCompanyProps) {
           password: values.password,
           surname: values.surname,
           fullName: values.fullName,
+          company: company,
         },
         setLoading,
         () => {
@@ -160,6 +182,42 @@ export function ModalUser(props: IModalCompanyProps) {
               placeholder="Enter your name"
               control={control}
             />
+            <InputTextCommon
+              label="Surname"
+              name="surname"
+              placeholder="Enter your sur name"
+              control={control}
+            />
+            <InputTextCommon
+              label="Password"
+              name="password"
+              placeholder="Enter password"
+              control={control}
+            />
+            <div className="flex flex-col gap-2 ">
+              <p className="font-medium">Company</p>
+              <Select
+                className="w-full"
+                showSearch
+                onChange={handleChange}
+                placeholder="Search to Select"
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  (option?.label ?? "").includes(input)
+                }
+                filterSort={(optionA, optionB) =>
+                  (optionA?.label ?? "")
+                    .toLowerCase()
+                    .localeCompare((optionB?.label ?? "").toLowerCase())
+                }
+                options={listTenant.map((x) => {
+                  return {
+                    label: x.tenancyName,
+                    value: x.id,
+                  };
+                })}
+              />
+            </div>
 
             <ToogleCommon label="Active" control={control} name="isActive" />
             <div className="flex flex-col gap-3 mt-3">

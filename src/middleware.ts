@@ -22,7 +22,6 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const accessToken = request.cookies.get("accessToken")?.value;
   const permissions = decodeJWT(accessToken!)?.permissions || [];
-  console.log(permissions);
   if (
     pathname === "/account-management" &&
     !permissions.includes("Pages.Users")

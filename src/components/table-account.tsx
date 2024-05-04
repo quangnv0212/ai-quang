@@ -1,5 +1,7 @@
 "use client";
 import { useGetListTenant } from "@/apiRequests/hooks/tenant/useGetListTenant.hook";
+import { useGetListUser } from "@/apiRequests/hooks/user/useGetListUser.hook";
+import { AccountBodyType } from "@/schemaValidations/account.schema";
 import { TenantBodyType } from "@/schemaValidations/tenant.schema";
 import {
   CheckCircleOutlined,
@@ -15,10 +17,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { TableCommon } from "./common/table-common";
 import { IconSearch } from "./icons";
-import { ModalTenant } from "./modal-tenant";
-import { AccountBodyType } from "@/schemaValidations/account.schema";
-import { useGetListUser } from "@/apiRequests/hooks/user/useGetListUser.hook";
-import { set } from "zod";
 import { ModalUser } from "./modal-user";
 let timeout: any;
 

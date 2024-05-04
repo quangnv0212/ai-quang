@@ -38,7 +38,7 @@ export class Http {
     this.instance = axios.create({
       baseURL:
         process.env.NEXT_PUBLIC_API_ENDPOINT ||
-        "http://10.77.1.116:5000/api",
+        "http://localhost:5000/api",
       timeout: 10000,
       headers: {
         "Content-Type": "application/json",
