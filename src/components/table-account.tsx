@@ -278,13 +278,13 @@ const TableTAccount: React.FC = () => {
   }
   return (
     <>
-      {modalState.isOpen && (
+      {/* {modalState.isOpen && (
         <ModalUser
           fetchListUser={fetchListUser}
           modalState={modalState}
           setModalState={setModalState}
         />
-      )}
+      )} */}
       <div className="flex flex-col gap-5">
         <p className="text-34-34 font-semibold">Manage Account</p>
         <div className="">
