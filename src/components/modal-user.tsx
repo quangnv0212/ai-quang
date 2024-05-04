@@ -40,7 +40,11 @@ export function ModalUser(props: IModalCompanyProps) {
   };
   const { control, handleSubmit } = useForm<AccountBodyType>({
     resolver: zodResolver(AccountBody),
-    // defaultValues: {},
+    defaultValues: {
+      emailAddress: modalState.detailInfo.emailAddress,
+      name: modalState.detailInfo.name,
+      isActive: modalState.detailInfo.isActive,
+    },
   });
   const isConfirm = modalState.type === "delete";
 
@@ -137,31 +141,26 @@ export function ModalUser(props: IModalCompanyProps) {
         <div className="px-6 flex flex-col gap-4">
           <p className="font-bold text-24-28 capitalize text-center font-visby">
             {modalState.type === "update"
-              ? "Update company"
-              : "Create a new company"}
+              ? "Update account"
+              : "Create a new account"}
           </p>
           <Form
             onFinish={handleSubmit(onSubmit)}
             className="flex flex-col gap-3"
           >
             <InputTextCommon
-              label="Company name"
-              name="tenancyName"
-              placeholder="Enter your company name"
+              label="Email"
+              name="emailAddress"
+              placeholder="Enter your email"
               control={control}
             />
             <InputTextCommon
-              label="Country"
-              name="country"
-              placeholder="Enter your country"
+              label="Name"
+              name="name"
+              placeholder="Enter your name"
               control={control}
             />
-            <InputTextCommon
-              label="State"
-              name="state"
-              placeholder="Enter your state"
-              control={control}
-            />
+
             <ToogleCommon label="Active" control={control} name="isActive" />
             <div className="flex flex-col gap-3 mt-3">
               <ButtonCommon

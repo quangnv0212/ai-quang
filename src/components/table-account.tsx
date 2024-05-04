@@ -36,7 +36,6 @@ const TableTAccount: React.FC = () => {
       },
       () => {},
       (res: any) => {
-        // setTenantList(res.result.items);
         setTenantList(res?.result?.items);
       },
       (err: any) => {
@@ -44,7 +43,6 @@ const TableTAccount: React.FC = () => {
       }
     );
   }, []);
-  console.log("listTenant", listTenant);
   //get all query params
   let querySearch: any;
   searchParams.forEach((value, key) => {
@@ -108,7 +106,7 @@ const TableTAccount: React.FC = () => {
       key: "company",
       render: (company) => {
         const tenant = listTenant.find((item) => item.id === company);
-        return tenant?.tenancyName;
+        return tenant?.tenancyName || "Nobisoft";
       },
     },
     {
@@ -284,7 +282,7 @@ const TableTAccount: React.FC = () => {
     <>
       {modalState.isOpen && (
         <ModalUser
-          fetchListTenant={fetchListUser}
+          fetchListUser={fetchListUser}
           modalState={modalState}
           setModalState={setModalState}
         />
