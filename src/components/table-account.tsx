@@ -104,7 +104,7 @@ const TableTAccount: React.FC = () => {
       key: "company",
       render: (company) => {
         const tenant = listTenant.find((item) => item.id === company);
-        return tenant?.tenancyName || "Nobisoft";
+        return tenant?.tenancyName;
       },
     },
     {
