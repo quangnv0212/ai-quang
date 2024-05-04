@@ -5,6 +5,7 @@ import { decodeJWT } from "./lib/utils";
 const privatePaths = [
   "/account-management",
   "/roles-management",
+  "/models-management",
   "/tenant-management",
   "/user-activation",
   "/change-password",

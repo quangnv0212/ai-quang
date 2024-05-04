@@ -216,6 +216,7 @@ export function ModalUser(props: IModalCompanyProps) {
                     value: x.id,
                   };
                 })}
+                
               />
             </div>
 
