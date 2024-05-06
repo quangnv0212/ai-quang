@@ -1,7 +1,7 @@
 "use client";
 import AppProvider from "@/app-provider";
 import { CurrentUser } from "@/app/layout";
-import Logo from "@/assets/images/logo.png";
+import Logo from "@/assets/images/Logo.png";
 import { decodeJWT } from "@/lib/utils";
 
 import authApiRequest from "@/apiRequests/auth";
@@ -138,8 +138,10 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
                 collapsed={collapsed}
                 onCollapse={(value) => setCollapsed(value)}
               >
-                <div className=" flex items-center justify-center">
-                  <Image src={Logo} alt="" width={150} height={150} />
+                <div className=" flex items-center justify-center flex-col">
+                  <div className="w-3 h-3"></div>
+                  <Image src={Logo} alt="" width={300} height={300} />
+                  <div className="w-2 h-2"></div>
                 </div>
                 <Menu
                   theme="light"
