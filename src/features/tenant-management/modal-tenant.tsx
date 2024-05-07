@@ -1,10 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "antd";
 import { useForm } from "react-hook-form";
-import { ButtonCommon } from "./common/button-common";
-import { InputTextCommon } from "./common/input-text";
-import { ModalCommon } from "./common/modal-common";
-import { ToogleCommon } from "./common/toogle-common";
+import { ButtonCommon } from "../../components/common/button-common";
+import { InputTextCommon } from "../../components/common/input-text";
+import { ModalCommon } from "../../components/common/modal-common";
+import { ToogleCommon } from "../../components/common/toogle-common";
 import { useCreateTenant } from "@/apiRequests/hooks/tenant/useCreateTenant.hook";
 import { useUpdateTenant } from "@/apiRequests/hooks/tenant/useUpdateTenant.hook";
 import { TenantBody, TenantBodyType } from "@/schemaValidations/tenant.schema";

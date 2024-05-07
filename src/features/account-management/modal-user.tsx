@@ -12,10 +12,10 @@ import { Button, Form, Select } from "antd";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { ButtonCommon } from "./common/button-common";
-import { InputTextCommon } from "./common/input-text";
-import { ModalCommon } from "./common/modal-common";
-import { ToogleCommon } from "./common/toogle-common";
+import { ButtonCommon } from "../../components/common/button-common";
+import { InputTextCommon } from "../../components/common/input-text";
+import { ModalCommon } from "../../components/common/modal-common";
+import { ToogleCommon } from "../../components/common/toogle-common";
 
 export interface IModalCompanyProps {
   modalState: {

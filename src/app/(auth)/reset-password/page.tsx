@@ -1,3 +1,5 @@
+import ResetPassword from "@/features/auth-management/reset-password";
+
 export default function ResetPasswordPage() {
-  return <div className="">ResetPassword Page</div>;
+  return <ResetPassword />;
 }

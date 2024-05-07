@@ -1,6 +1,6 @@
 "use client";
-import { useGetListTenant } from "@/apiRequests/hooks/tenant/useGetListTenant.hook";
-import { TenantBodyType } from "@/schemaValidations/tenant.schema";
+import { useGetListUser } from "@/apiRequests/hooks/user/useGetListUser.hook";
+import { AccountBodyType } from "@/schemaValidations/account.schema";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -13,15 +13,16 @@ import { Tag } from "antd";
 import type { TablePaginationConfig } from "antd/es/table/interface";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { TableCommon } from "./common/table-common";
-import { IconSearch } from "./icons";
-import { ModalTenant } from "./modal-tenant";
+import { TableCommon } from "../../components/common/table-common";
+import { IconSearch } from "../../components/icons";
+import { ModalUser } from "./modal-user";
 let timeout: any;
 
-const TableTenant: React.FC = () => {
+const TableTAccount: React.FC = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+
   //get all query params
   let querySearch: any;
   searchParams.forEach((value, key) => {
@@ -41,9 +42,9 @@ const TableTenant: React.FC = () => {
     searchParams.get("Keyword")?.toString()
   );
   const [loading, setLoading] = useState(false);
-  const [dataTenant, setDataTenant] = useState<TenantBodyType[]>([]);
-  const [requestGetListTenant] = useGetListTenant();
-  const fetchListTenant = (
+  const [dataUser, setDataUser] = useState<AccountBodyType[]>([]);
+  const [requestGetListUser] = useGetListUser();
+  const fetchListUser = (
     params = {
       keyword: querySearch?.Keyword,
       isActive: querySearch?.isActive,
@@ -51,12 +52,12 @@ const TableTenant: React.FC = () => {
       MaxResultCount: querySearch?.maxResultCount,
     }
   ) => {
-    requestGetListTenant(
+    requestGetListUser(
       params,
       setLoading,
       (res: any) => {
-        setTotal(res.result.totalCount);
-        setDataTenant(res.result.items);
+        setTotal(res.result.totalRecords);
+        setDataUser(res.result.users);
       },
       (err: any) => {
         console.log(err);
@@ -64,25 +65,21 @@ const TableTenant: React.FC = () => {
     );
   };
   useEffect(() => {
-    fetchListTenant();
+    fetchListUser();
   }, []);
 
   //table
-  const columns: TableColumnsType<TenantBodyType> = [
+  const columns: TableColumnsType<AccountBodyType> = [
     {
-      title: "Name",
-      dataIndex: "tenancyName",
-      key: "tenancyName",
+      title: "Email",
+      dataIndex: "emailAddress",
+      key: "email",
     },
+
     {
-      title: "Country",
-      dataIndex: "country",
-      key: "country",
-    },
-    {
-      title: "State",
-      dataIndex: "state",
-      key: "state",
+      title: "Company",
+      dataIndex: "companyName",
+      key: "companyName",
     },
     {
       title: "Status",
@@ -163,7 +160,7 @@ const TableTenant: React.FC = () => {
         params.delete("skipCount");
         setKeyword("");
         replace(`${pathname}?${params.toString()}`);
-        fetchListTenant({
+        fetchListUser({
           keyword: undefined,
           isActive: undefined,
           SkipCount: 0,
@@ -181,7 +178,7 @@ const TableTenant: React.FC = () => {
         params.delete("skipCount");
         setKeyword("");
         replace(`${pathname}?${params.toString()}`);
-        fetchListTenant({
+        fetchListUser({
           keyword: undefined,
           isActive: true,
           SkipCount: 0,
@@ -199,7 +196,7 @@ const TableTenant: React.FC = () => {
         params.delete("skipCount");
         setKeyword("");
         replace(`${pathname}?${params.toString()}`);
-        fetchListTenant({
+        fetchListUser({
           keyword: undefined,
           isActive: false,
           SkipCount: 0,
@@ -222,7 +219,7 @@ const TableTenant: React.FC = () => {
         params.set("skipCount", "0");
       }
       replace(`${pathname}?${params.toString()}`);
-      fetchListTenant({
+      fetchListUser({
         keyword: term,
         isActive: querySearch?.isActive,
         SkipCount: 0,
@@ -239,7 +236,7 @@ const TableTenant: React.FC = () => {
     );
     params.set("maxResultCount", maxResultCount.toString());
     replace(`${pathname}?${params.toString()}`);
-    fetchListTenant({
+    fetchListUser({
       keyword: querySearch?.Keyword,
       isActive: querySearch?.isActive,
       SkipCount: ((pagination.current || 1) - 1) * maxResultCount,
@@ -253,17 +250,18 @@ const TableTenant: React.FC = () => {
   if (skipCount % maxResultCount === 0) {
     current += 1;
   }
+
   return (
     <>
       {modalState.isOpen && (
-        <ModalTenant
-          fetchListTenant={fetchListTenant}
+        <ModalUser
+          fetchListUser={fetchListUser}
           modalState={modalState}
           setModalState={setModalState}
         />
       )}
       <div className="flex flex-col gap-5">
-        <p className="text-34-34 font-semibold">Manage Company</p>
+        <p className="text-34-34 font-semibold">Manage Account</p>
         <div className="">
           <div className="flex justify-between gap-2">
             <div className="px-5 rounded-lg flex items-center gap-2 h-[38px] w-[400px] bg-white border">
@@ -312,7 +310,7 @@ const TableTenant: React.FC = () => {
           loading={loading}
           onChange={handleTableChange}
           columns={columns as any}
-          dataSource={dataTenant}
+          dataSource={dataUser}
           footer={() => (
             <div className="justify-center my-2 ">
               <button
@@ -328,7 +326,7 @@ const TableTenant: React.FC = () => {
               >
                 <PlusOutlined style={{ fontSize: "18px", color: "white" }} />
                 <span className="font-bold uppercase text-white ">
-                  Create a new company
+                  Create a new user
                 </span>
               </button>
             </div>
@@ -339,4 +337,4 @@ const TableTenant: React.FC = () => {
   );
 };
 
-export default TableTenant;
+export default TableTAccount;

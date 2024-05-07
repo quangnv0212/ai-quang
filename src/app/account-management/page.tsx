@@ -1,9 +1,5 @@
-import TableTAccount from "@/components/table-account";
+import TableTAccount from "@/features/account-management/table-account";
 
 export default function UserManagementPage() {
-  return (
-    <div>
-      <TableTAccount />
-    </div>
-  );
+  return <TableTAccount />;
 }

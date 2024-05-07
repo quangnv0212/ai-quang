@@ -1,5 +1,5 @@
 "use client";
-import { ManageTenant } from "@/components/manage-tenant";
+import { ManageTenant } from "@/features/tenant-management/manage-tenant";
 
 export default function TenantManagementPage() {
   return (
@@ -8,4 +8,3 @@ export default function TenantManagementPage() {
     </div>
   );
 }
-

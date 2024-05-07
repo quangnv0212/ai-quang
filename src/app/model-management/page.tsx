@@ -1,4 +1,4 @@
-import ModalModel from "@/components/modal-model";
+import ModalModel from "@/features/model-management/modal-model";
 
 export default function ModelManagementPage() {
   return (
