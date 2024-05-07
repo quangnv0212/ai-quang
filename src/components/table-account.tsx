@@ -74,8 +74,8 @@ const TableTAccount: React.FC = () => {
       params,
       setLoading,
       (res: any) => {
-        setTotal(res.result.totalCount);
-        setDataUser(res.result.items);
+        setTotal(res.result.totalRecords);
+        setDataUser(res.result.users);
       },
       (err: any) => {
         console.log(err);
@@ -276,15 +276,16 @@ const TableTAccount: React.FC = () => {
   if (skipCount % maxResultCount === 0) {
     current += 1;
   }
+
   return (
     <>
-      {/* {modalState.isOpen && (
+      {modalState.isOpen && (
         <ModalUser
           fetchListUser={fetchListUser}
           modalState={modalState}
           setModalState={setModalState}
         />
-      )} */}
+      )}
       <div className="flex flex-col gap-5">
         <p className="text-34-34 font-semibold">Manage Account</p>
         <div className="">

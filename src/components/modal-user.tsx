@@ -65,6 +65,9 @@ export function ModalUser(props: IModalCompanyProps) {
   });
   const isConfirm = modalState.type === "delete";
   const [company, setSelectedCompany] = useState(0);
+  useEffect(() => {
+    setSelectedCompany(modalState?.detailInfo?.company);
+  }, [modalState.detailInfo]);
   const handleChange = (value: number) => {
     setSelectedCompany(value);
   };
@@ -93,6 +96,7 @@ export function ModalUser(props: IModalCompanyProps) {
     if (modalState.type === "update") {
       requestUpdateUser(
         {
+          id: modalState.detailInfo.id,
           userName: values.userName,
           name: values.name,
           emailAddress: values.emailAddress,
@@ -199,6 +203,7 @@ export function ModalUser(props: IModalCompanyProps) {
               <Select
                 className="w-full"
                 showSearch
+                value={company}
                 onChange={handleChange}
                 placeholder="Search to Select"
                 optionFilterProp="children"

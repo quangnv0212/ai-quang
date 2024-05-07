@@ -21,7 +21,7 @@ const userApiRequest = {
     MaxResultCount: number;
   }) => {
     try {
-      return http.get(`/services/app/User/GetAll`, { params });
+      return http.get(`/services/app/User/GetUsers`, { params });
     } catch (error) {
       return Promise.reject(error);
     }
