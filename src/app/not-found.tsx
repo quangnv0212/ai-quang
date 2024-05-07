@@ -21,9 +21,9 @@ export default function NotFoundPage() {
         </div>
         <Link
           className="btn bg-primary text-white hover:bg-primary-hover"
-          href="/login"
+          href="/"
         >
-          Back to login
+          Back to dashboard
         </Link>
       </div>
     </div>
