@@ -10,11 +10,13 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "antd";
 import { redirect } from "next/dist/server/api-utils";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import Logo from "@/assets/images/logo.png";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -31,12 +33,19 @@ export default function RegisterPage() {
   return (
     <div className="flex flex-col gap-3 justify-center items-center py-16 ">
       <div className="w-[600px] border-gray-400 rounded-2xl bg-white p-10">
-        <div className={"text-primary text-center text-34-34 font-bold pb-2"}>
-          <span>AiBase</span>
-          <span className={"text-center text-34-34 font-bold text-black"}>
+        <div
+          className={
+            "text-primary text-center text-34-34 font-bold pb-2 flex flex-col gap-4"
+          }
+        >
+          {/* <span>AiBase</span> */}
+          <div className="flex justify-center">
+            <Image alt="" src={Logo} width={200} height={200} />
+          </div>
+          <p className={"text-center text-34-34 font-bold text-black"}>
             {" "}
             Register
-          </span>
+          </p>
         </div>
 
         <div

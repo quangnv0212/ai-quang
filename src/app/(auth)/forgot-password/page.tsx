@@ -3,8 +3,10 @@ import { ButtonCommon } from "@/components/common/button-common";
 import { InputTextCommon } from "@/components/common/input-text";
 import { UserOutlined } from "@ant-design/icons";
 import { Form } from "antd";
+import Image from "next/image";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import Logo from "@/assets/images/logo.png";
 export default function ForgetPasswordPage() {
   const { control, handleSubmit } = useForm({});
   const onSubmit = (values: any) => {
@@ -22,7 +24,10 @@ export default function ForgetPasswordPage() {
             "text-black-1 text-center text-34-34 font-bold pb-3 flex flex-col gap-2"
           }
         >
-          <p className="text-primary">AiBase </p>
+          <div className="flex justify-center">
+            <Image alt="" src={Logo} width={200} height={200} />
+          </div>
+
           <p>Forgot password?</p>
         </div>
         <div

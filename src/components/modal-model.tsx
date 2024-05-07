@@ -26,7 +26,6 @@ export default function ModalModel() {
         }
 
         const blockBlobClient = new BlockBlobClient(
-          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
           `https://aibasedemo.blob.core.windows.net/images/${fileList[0]?.name}?sp=racwdli&st=2024-05-01T10:11:51Z&se=2024-06-06T18:11:51Z&spr=https&sv=2022-11-02&sr=c&sig=e3UVoLRl1Y6SdOkGPvM8%2BxzLpyrPS0ZwaksVNfdySvA%3D`
         );
         return blockBlobClient.uploadData(fileArrayBuffer, {

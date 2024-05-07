@@ -9,11 +9,13 @@ import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { KeyOutlined, UserOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "antd";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import Logo from "@/assets/images/logo.png";
 
 export default function Login() {
   const [isClient, setIsClient] = useState(false);
@@ -64,8 +66,7 @@ export default function Login() {
             "text-black-1 text-center text-34-34 font-bold pb-3 flex flex-col gap-2"
           }
         >
-          <p className="text-primary">AiBase </p>
-          <p>Welcome back</p>
+          <Image alt="" src={Logo} width={200} height={200} />
         </div>
         <div
           className={
@@ -74,13 +75,6 @@ export default function Login() {
         >
           Welcome back! Please enter your details
         </div>
-        {isClient ? (
-          <p>
-            <span>Tenant: {tenant || "Default"}</span>
-          </p>
-        ) : (
-          <></>
-        )}
 
         <Form
           onFinish={handleSubmit(onSubmit)}
