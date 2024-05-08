@@ -51,6 +51,7 @@ export const LoginBody = z
   .object({
     userNameOrEmailAddress: z.string(),
     password: z.string().min(6).max(100),
+    tenancyName:z.string().optional(),
     rememberClient: z.boolean().optional(),
   })
   .strict();

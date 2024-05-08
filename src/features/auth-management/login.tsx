@@ -1,5 +1,6 @@
 "use client";
 import authApiRequest from "@/apiRequests/auth";
+import Logo from "@/assets/images/logo.png";
 import { ButtonCommon } from "@/components/common/button-common";
 import { InputCheckCommon } from "@/components/common/input-check";
 import { InputPassword } from "@/components/common/input-password";
@@ -8,37 +9,48 @@ import { clientSessionToken } from "@/lib/http";
 import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { KeyOutlined, UserOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "antd";
+import { Form, Tabs, TabsProps } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import Logo from "@/assets/images/logo.png";
 
 export default function Login() {
   const [isClient, setIsClient] = useState(false);
-  const searchParams = useSearchParams();
-  const tenant = searchParams.get("tenant") || undefined;
 
   useEffect(() => {
     setIsClient(true);
   }, []);
-  const { control, handleSubmit } = useForm<LoginBodyType>({
+  const { control, handleSubmit, getValues } = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
   });
+
   // get domain
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   async function onSubmit(values: LoginBodyType) {
     if (loading) return;
     setLoading(true);
+    const tenancyName = getValues("tenancyName");
     try {
-      const res = await authApiRequest.login(values, tenant);
-      const accessToken = res.data.result.accessToken || "";
-      const encryptedAccessToken = res.data.result.encryptedAccessToken || "";
-      const expireInSeconds = res.data.result.expireInSeconds || "";
+      if (tenancyName) {
+        const resCheck = await authApiRequest.isTenantAvailable({
+          tenancyName: tenancyName,
+        });
+        const tenantId = resCheck.data.result.tenantId ?? null;
+        if (!tenantId) {
+          toast.error("Not found company");
+          return;
+        }
+      }
+      const res = await authApiRequest.login(values, tenancyName);
+      const {
+        accessToken = "",
+        encryptedAccessToken = "",
+        expireInSeconds = "",
+      } = res.data.result;
       clientSessionToken.value = accessToken;
       await authApiRequest.auth({
         accessToken,
@@ -53,7 +65,10 @@ export default function Login() {
       setLoading(false);
     }
   }
-  const pathName = usePathname();
+  const onChange = (key: string) => {
+    console.log(key);
+  };
+
   return (
     <div className="flex justify-center items-center h-screen ">
       <div
@@ -75,47 +90,112 @@ export default function Login() {
         >
           Welcome back! Please enter your details
         </div>
+        <Tabs
+          defaultActiveKey="1"
+          items={[
+            {
+              key: "1",
+              label: "Global Admin",
+              children: (
+                <Form
+                  onFinish={handleSubmit(onSubmit)}
+                  className="flex flex-col gap-3 w-[300px]"
+                >
+                  <InputTextCommon
+                    label="Email"
+                    name="userNameOrEmailAddress"
+                    placeholder="Enter your email"
+                    prefix={<UserOutlined />}
+                    control={control}
+                  />
+                  <InputPassword
+                    label="Password"
+                    name="password"
+                    placeholder="Enter your password"
+                    prefix={<KeyOutlined />}
+                    control={control}
+                  />
+                  <InputCheckCommon
+                    label="Remember me"
+                    name="rememberClient"
+                    control={control}
+                  />
+                  <div className="flex justify-end mb-2">
+                    <Link
+                      className="text-14-16 font-semibold text-gray-500 hover:text-blue-400"
+                      href={"/forgot-password"}
+                    >
+                      Forgot Password?
+                    </Link>
+                  </div>
 
-        <Form
-          onFinish={handleSubmit(onSubmit)}
-          className="flex flex-col gap-3 w-[300px]"
-        >
-          <InputTextCommon
-            label="Email"
-            name="userNameOrEmailAddress"
-            placeholder="Enter your email"
-            prefix={<UserOutlined />}
-            control={control}
-          />
-          <InputPassword
-            label="Password"
-            name="password"
-            placeholder="Enter your password"
-            prefix={<KeyOutlined />}
-            control={control}
-          />
-          <InputCheckCommon
-            label="Remember me"
-            name="rememberClient"
-            control={control}
-          />
-          <div className="flex justify-end mb-2">
-            <Link
-              className="text-14-16 font-semibold text-gray-500 hover:text-blue-400"
-              href={"/forgot-password"}
-            >
-              Forgot Password?
-            </Link>
-          </div>
+                  <ButtonCommon
+                    loading={loading}
+                    type="submit"
+                    className="btn w-full hover:bg-primary-hover bg-primary text-white border-none"
+                  >
+                    Sign in
+                  </ButtonCommon>
+                </Form>
+              ),
+            },
+            {
+              key: "2",
+              label: "System Admin",
+              children: (
+                <Form
+                  onFinish={handleSubmit(onSubmit)}
+                  className="flex flex-col gap-3 w-[300px]"
+                >
+                  <InputTextCommon
+                    label="Company Name"
+                    name="tenancyName"
+                    placeholder="Enter your company name"
+                    prefix={<UserOutlined />}
+                    control={control}
+                  />
+                  <InputTextCommon
+                    label="Email"
+                    name="userNameOrEmailAddress"
+                    placeholder="Enter your email"
+                    prefix={<UserOutlined />}
+                    control={control}
+                  />
+                  <InputPassword
+                    label="Password"
+                    name="password"
+                    placeholder="Enter your password"
+                    prefix={<KeyOutlined />}
+                    control={control}
+                  />
+                  <InputCheckCommon
+                    label="Remember me"
+                    name="rememberClient"
+                    control={control}
+                  />
+                  <div className="flex justify-end mb-2">
+                    <Link
+                      className="text-14-16 font-semibold text-gray-500 hover:text-blue-400"
+                      href={"/forgot-password"}
+                    >
+                      Forgot Password?
+                    </Link>
+                  </div>
 
-          <ButtonCommon
-            loading={loading}
-            type="submit"
-            className="btn w-full hover:bg-primary-hover bg-primary text-white border-none"
-          >
-            Sign in
-          </ButtonCommon>
-        </Form>
+                  <ButtonCommon
+                    loading={loading}
+                    type="submit"
+                    className="btn w-full hover:bg-primary-hover bg-primary text-white border-none"
+                  >
+                    Sign in
+                  </ButtonCommon>
+                </Form>
+              ),
+            },
+          ]}
+          onChange={onChange}
+        />
+        ;
         <div className={"flex justify-center py-4 font-visby"}>
           Not registered?
           <Link href={"/register"} className="mx-1 hover:text-blue-300 link">
