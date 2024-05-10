@@ -113,10 +113,10 @@ const TableTAccount = ({ role }: any) => {
         return (
           <div className="flex gap-2 ">
             {role === "editor" && (
-              <div className="badge badge-neutral">editor</div>
+              <div className="badge badge-neutral">Editor</div>
             )}
             {role === "viewer" && (
-              <div className="badge badge-primary">viewer</div>
+              <div className="badge badge-primary">Viewer</div>
             )}
             {role === "SystemAdmin" && (
               <div className="badge badge-secondary text-white">
@@ -233,7 +233,7 @@ const TableTAccount = ({ role }: any) => {
               <div className="badge badge-neutral">editor</div>
             )}
             {role === "viewer" && (
-              <div className="badge badge-primary">viewer</div>
+              <div className="badge badge-primary">Viewer</div>
             )}
             {role === "SystemAdmin" && (
               <div className="badge badge-secondary text-white">

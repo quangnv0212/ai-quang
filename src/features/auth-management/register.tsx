@@ -17,7 +17,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function Register() {
-  const router = useRouter();
   const { control, handleSubmit } = useForm<RegisterBodyType>({
     resolver: zodResolver(RegisterBody),
   });
@@ -36,7 +35,6 @@ export default function Register() {
             "text-primary text-center text-34-34 font-bold pb-2 flex flex-col gap-4"
           }
         >
-          {/* <span>AiBase</span> */}
           <div className="flex justify-center">
             <Image alt="" src={Logo} width={200} height={200} />
           </div>

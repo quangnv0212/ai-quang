@@ -31,9 +31,10 @@ export function ModalTenant(props: IModalCompanyProps) {
   const handleCancel = () => {
     setModalState({ ...modalState, isOpen: false });
   };
-  const { control, handleSubmit } = useForm<TenantBodyType>({
-    resolver: zodResolver(TenantBody),
+  const { control, handleSubmit } = useForm<any>({
+    // resolver: zodResolver(TenantBody),
     defaultValues: {
+      ...modalState.detailInfo,
       tenancyName: modalState.detailInfo?.tenancyName,
       isActive: modalState.detailInfo?.isActive,
       country: modalState.detailInfo?.country || "",
@@ -46,10 +47,9 @@ export function ModalTenant(props: IModalCompanyProps) {
     if (modalState.type === "create") {
       requestCreateTenant(
         {
-          tenancyName: values.tenancyName,
-          isActive: values.isActive,
-          country: values.country,
-          state: values.state,
+          ...values,
+          companyName: values.tenancyName,
+          captchaResponse: "",
         },
         setLoading,
         () => {
@@ -63,11 +63,10 @@ export function ModalTenant(props: IModalCompanyProps) {
     if (modalState.type === "update") {
       requestUpdateTenant(
         {
-          tenancyName: values.tenancyName,
-          isActive: values.isActive,
-          country: values.country,
           id: modalState.detailInfo.id,
-          state: values.state,
+          ...values,
+          companyName: values.tenancyName,
+          captchaResponse: "",
         },
         setLoading,
         () => {
@@ -79,7 +78,6 @@ export function ModalTenant(props: IModalCompanyProps) {
       );
     }
   };
-
   const handleDelete = () => {
     requestDeleteTenant(
       {
@@ -93,7 +91,7 @@ export function ModalTenant(props: IModalCompanyProps) {
       () => {}
     );
   };
-
+  const isUpdate = modalState.type === "update";
   return (
     <ModalCommon
       open={modalState.isOpen}
@@ -137,6 +135,35 @@ export function ModalTenant(props: IModalCompanyProps) {
             onFinish={handleSubmit(onSubmit)}
             className="flex flex-col gap-3"
           >
+            {!isUpdate && (
+              <>
+                <InputTextCommon
+                  label="Email address"
+                  name="emailAddress"
+                  placeholder="Enter your email address"
+                  control={control}
+                />
+                <InputTextCommon
+                  label="First name"
+                  name="firstName"
+                  placeholder="Enter your first name"
+                  control={control}
+                />
+                <InputTextCommon
+                  label="Last name"
+                  name="lastName"
+                  placeholder="Enter your last name"
+                  control={control}
+                />
+                <InputTextCommon
+                  label="Password"
+                  name="password"
+                  placeholder="Enter your password"
+                  control={control}
+                />
+              </>
+            )}
+
             <InputTextCommon
               label="Company name"
               name="tenancyName"
