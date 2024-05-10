@@ -8,12 +8,7 @@ export interface IInputTextCommonProps {
   placeholder?: string;
   control?: any;
   size?: "large" | "middle" | "small";
-  options?:
-    | {
-        label: string;
-        value: any | undefined;
-      }[]
-    | undefined;
+  options?: any;
 }
 
 export function SelectCommon(props: IInputTextCommonProps) {
