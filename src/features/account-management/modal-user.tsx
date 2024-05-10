@@ -2,13 +2,14 @@ import { useGetListTenant } from "@/apiRequests/hooks/tenant/useGetListTenant.ho
 import { useCreateUser } from "@/apiRequests/hooks/user/useCreateUser.hook";
 import { useDeleteUser } from "@/apiRequests/hooks/user/useDeleteUser.hook";
 import { useUpdateUser } from "@/apiRequests/hooks/user/useUpdateUser.hook";
+import { SelectCommon } from "@/components/common/select-common";
 import {
   AccountBody,
   AccountBodyType,
 } from "@/schemaValidations/account.schema";
 import { TenantBodyType } from "@/schemaValidations/tenant.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Form, Select } from "antd";
+import { Form } from "antd";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -16,8 +17,6 @@ import { ButtonCommon } from "../../components/common/button-common";
 import { InputTextCommon } from "../../components/common/input-text";
 import { ModalCommon } from "../../components/common/modal-common";
 import { ToogleCommon } from "../../components/common/toogle-common";
-import { FormItem } from "react-hook-form-antd";
-import { SelectCommon } from "@/components/common/select-common";
 
 export interface IModalCompanyProps {
   modalState: {
@@ -27,10 +26,11 @@ export interface IModalCompanyProps {
   };
   setModalState: (value: any) => void;
   fetchListUser: () => void;
+  isSystemAdmin: boolean;
 }
 
 export function ModalUser(props: IModalCompanyProps) {
-  const { modalState, setModalState, fetchListUser } = props;
+  const { modalState, setModalState, fetchListUser, isSystemAdmin } = props;
   const [requestCreateUser] = useCreateUser();
   const [requestUpdateUser] = useUpdateUser();
   const [requestDeleteUser] = useDeleteUser();
@@ -41,6 +41,7 @@ export function ModalUser(props: IModalCompanyProps) {
   const [requestGetListTenant] = useGetListTenant();
   const [listTenant, setTenantList] = useState<TenantBodyType[]>([]);
   useEffect(() => {
+    if (isSystemAdmin) return;
     requestGetListTenant(
       {
         MaxResultCount: 1000,
@@ -55,6 +56,8 @@ export function ModalUser(props: IModalCompanyProps) {
       }
     );
   }, []);
+  console.log(modalState?.detailInfo?.roleNames[0]);
+
   const { control, handleSubmit } = useForm<AccountBodyType>({
     resolver: zodResolver(AccountBody),
     defaultValues: {
@@ -63,18 +66,18 @@ export function ModalUser(props: IModalCompanyProps) {
       isActive: modalState?.detailInfo?.isActive,
       surname: modalState?.detailInfo?.surname,
       password: modalState?.detailInfo?.password,
+      roleNames:
+        modalState?.detailInfo?.roleNames[0] === undefined
+          ? "ViewerUser"
+          : modalState?.detailInfo?.roleNames[0],
       company: modalState?.detailInfo?.company,
     },
   });
   const isConfirm = modalState.type === "delete";
-  const [company, setSelectedCompany] = useState(0);
-  useEffect(() => {
-    setSelectedCompany(modalState?.detailInfo?.company);
-  }, [modalState.detailInfo]);
-  const handleChange = (value: number) => {
-    setSelectedCompany(value);
-  };
+
   const onSubmit = (values: AccountBodyType) => {
+    console.log(values);
+
     if (modalState.type === "create") {
       requestCreateUser(
         {
@@ -85,7 +88,7 @@ export function ModalUser(props: IModalCompanyProps) {
           password: values.password,
           surname: values.surname,
           fullName: values.fullName,
-          company: company,
+          company: values.company,
         },
         setLoading,
         () => {
@@ -96,6 +99,7 @@ export function ModalUser(props: IModalCompanyProps) {
         () => {}
       );
     }
+
     if (modalState.type === "update") {
       requestUpdateUser(
         {
@@ -107,7 +111,8 @@ export function ModalUser(props: IModalCompanyProps) {
           password: values.password,
           surname: values.surname,
           fullName: values.fullName,
-          company: company,
+          roleNames: values.roleNames,
+          company: values.company,
         },
         setLoading,
         () => {
@@ -133,7 +138,6 @@ export function ModalUser(props: IModalCompanyProps) {
       () => {}
     );
   };
-  const createNewTenant = () => {};
   return (
     <ModalCommon
       open={modalState.isOpen}
@@ -201,11 +205,12 @@ export function ModalUser(props: IModalCompanyProps) {
               placeholder="Enter password"
               control={control}
             />
-            {/* <FormItem control={control} name="company">
-              <Select
-                style={{
-                  fontFamily: "Visby",
-                }}
+
+            {!isSystemAdmin && (
+              <SelectCommon
+                name="company"
+                label="Company"
+                control={control}
                 placeholder="Hello"
                 options={listTenant.map((x) => {
                   return {
@@ -213,30 +218,35 @@ export function ModalUser(props: IModalCompanyProps) {
                     value: x.id,
                   };
                 })}
-                notFoundContent={
-                  <Button type="link" onClick={createNewTenant}>
-                    Not found company. company: modalState.detailInfo.company a new company
-                  </Button>
-                }
+                // notFoundContent={
+                //   <Button type="link" onClick={createNewTenant}>
+                //     Not found company. Create a new company
+                //   </Button>
+                // }
               />
-            </FormItem> */}
+            )}
             <SelectCommon
-              name="company"
-              label="Company"
+              name="roleNames"
+              label="Role"
               control={control}
-              placeholder="Hello"
-              options={listTenant.map((x) => {
-                return {
-                  label: x.tenancyName,
-                  value: x.id,
-                };
-              })}
+              placeholder="Role"
+              options={[
+                {
+                  label: "Viewer",
+                  value: "ViewerUser",
+                },
+                {
+                  label: "Editor",
+                  value: "EditerUser",
+                },
+              ]}
               // notFoundContent={
               //   <Button type="link" onClick={createNewTenant}>
               //     Not found company. Create a new company
               //   </Button>
               // }
             />
+
             {/* <div className="flex flex-col gap-2 ">
               <p className="font-medium">Company</p>
               <Select
@@ -267,7 +277,6 @@ export function ModalUser(props: IModalCompanyProps) {
                 }
               />
             </div> */}
-
             <ToogleCommon label="Active" control={control} name="isActive" />
             <div className="flex flex-col gap-3 mt-3">
               <ButtonCommon

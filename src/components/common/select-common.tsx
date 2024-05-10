@@ -11,7 +11,7 @@ export interface IInputTextCommonProps {
   options?:
     | {
         label: string;
-        value: number | undefined;
+        value: any | undefined;
       }[]
     | undefined;
 }

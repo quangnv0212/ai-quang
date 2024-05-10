@@ -1,5 +1,5 @@
 "use client";
-import { useGetListUser } from "@/apiRequests/hooks/user/useGetListUser.hook";
+import { useGetListUserAdmin } from "@/apiRequests/hooks/user/useGetListUserAdmin.hook";
 import { AccountBodyType } from "@/schemaValidations/account.schema";
 import {
   CheckCircleOutlined,
@@ -12,17 +12,17 @@ import type { TableColumnsType } from "antd";
 import { Tag } from "antd";
 import type { TablePaginationConfig } from "antd/es/table/interface";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { TableCommon } from "../../components/common/table-common";
 import { IconSearch } from "../../components/icons";
 import { ModalUser } from "./modal-user";
+import { useGetListUserSystemAdmin } from "@/apiRequests/hooks/user/useGetListUserSystemAdmin.hook";
 let timeout: any;
 
-const TableTAccount: React.FC = () => {
+const TableTAccount = ({ role }: any) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
-
   //get all query params
   let querySearch: any;
   searchParams.forEach((value, key) => {
@@ -35,6 +35,7 @@ const TableTAccount: React.FC = () => {
     isOpen: false,
     type: "create",
   });
+  const isSystemAdmin = role === "SystemAdmin";
 
   //state
   const [total, setTotal] = useState(0);
@@ -43,7 +44,8 @@ const TableTAccount: React.FC = () => {
   );
   const [loading, setLoading] = useState(false);
   const [dataUser, setDataUser] = useState<AccountBodyType[]>([]);
-  const [requestGetListUser] = useGetListUser();
+  const [requestGetListUserAdmin] = useGetListUserAdmin();
+  const [requestGetListUserSystemAdmin] = useGetListUserSystemAdmin();
   const fetchListUser = (
     params = {
       keyword: querySearch?.Keyword,
@@ -52,24 +54,38 @@ const TableTAccount: React.FC = () => {
       MaxResultCount: querySearch?.maxResultCount,
     }
   ) => {
-    requestGetListUser(
-      params,
-      setLoading,
-      (res: any) => {
-        setTotal(res.result.totalRecords);
-        setDataUser(res.result.users);
-      },
-      (err: any) => {
-        console.log(err);
-      }
-    );
+    if (isSystemAdmin) {
+      requestGetListUserSystemAdmin(
+        params,
+        setLoading,
+        (res: any) => {
+          setTotal(res.result.totalRecords);
+          setDataUser(res.result.items);
+        },
+        (err: any) => {
+          console.log(err);
+        }
+      );
+    } else {
+      requestGetListUserAdmin(
+        params,
+        setLoading,
+        (res: any) => {
+          setTotal(res.result.totalRecords);
+          setDataUser(res.result.users);
+        },
+        (err: any) => {
+          console.log(err);
+        }
+      );
+    }
   };
   useEffect(() => {
     fetchListUser();
   }, []);
 
   //table
-  const columns: TableColumnsType<AccountBodyType> = [
+  const columnsAdmin: TableColumnsType<AccountBodyType> = [
     {
       title: "Email",
       dataIndex: "emailAddress",
@@ -83,13 +99,33 @@ const TableTAccount: React.FC = () => {
     },
     {
       title: "Role",
-      dataIndex: "role",
-      key: "role",
+      dataIndex: "roleNames",
+      key: "roleNames",
       render: (value, record, index) => {
+        const role =
+          value && value?.length === 0
+            ? "viewer"
+            : value[0] === "SystemAdmin"
+            ? "SystemAdmin"
+            : value[0] === "Admin"
+            ? "Admin"
+            : "editor";
         return (
-          <div className="flex gap-2">
-            <div className="badge badge-neutral">editor</div>
-            <div className="badge badge-primary">viewer</div>
+          <div className="flex gap-2 ">
+            {role === "editor" && (
+              <div className="badge badge-neutral">editor</div>
+            )}
+            {role === "viewer" && (
+              <div className="badge badge-primary">viewer</div>
+            )}
+            {role === "SystemAdmin" && (
+              <div className="badge badge-secondary text-white">
+                System Admin
+              </div>
+            )}
+            {role === "Admin" && (
+              <div className="badge badge-secondary text-white">Admin</div>
+            )}
           </div>
         );
       },
@@ -130,6 +166,112 @@ const TableTAccount: React.FC = () => {
       dataIndex: "action",
       key: "action",
       render: (_, record, index) => {
+        const isAdmin = record.roleNames?.includes("Admin");
+        if (isAdmin) return null;
+        return (
+          <div className="flex gap-3">
+            <EditOutlined
+              onClick={() =>
+                setModalState({
+                  ...modalState,
+                  isOpen: true,
+                  type: "update",
+                  detailInfo: record,
+                })
+              }
+              style={{ fontSize: 16 }}
+              className="hover:text-primary cursor-pointer"
+            />
+            <DeleteOutlined
+              onClick={() =>
+                setModalState({
+                  ...modalState,
+                  isOpen: true,
+                  type: "delete",
+                  detailInfo: record,
+                })
+              }
+              className="hover:text-primary cursor-pointer"
+              style={{ fontSize: 16 }}
+            />
+          </div>
+        );
+      },
+    },
+  ];
+  const columnsSystemAdmin: TableColumnsType<AccountBodyType> = [
+    {
+      title: "Email",
+      dataIndex: "emailAddress",
+      key: "emailAddress",
+    },
+    {
+      title: "Role",
+      dataIndex: "roleNames",
+      key: "roleNames",
+      render: (value, record, index) => {
+        const role =
+          value && value?.length === 0
+            ? "viewer"
+            : value[0] === "SystemAdmin"
+            ? "SystemAdmin"
+            : "editor";
+        return (
+          <div className="flex gap-2 ">
+            {role === "editor" && (
+              <div className="badge badge-neutral">editor</div>
+            )}
+            {role === "viewer" && (
+              <div className="badge badge-primary">viewer</div>
+            )}
+            {role === "SystemAdmin" && (
+              <div className="badge badge-secondary text-white">
+                System Admin
+              </div>
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      title: "Status",
+      dataIndex: "isActive",
+      key: "isActive",
+      render: (status, record, index) => {
+        return status ? (
+          <Tag
+            icon={<CheckCircleOutlined />}
+            color="success"
+            style={{
+              fontFamily: "Visby",
+              fontWeight: 500,
+              borderRadius: 20,
+            }}
+          >
+            Active
+          </Tag>
+        ) : (
+          <Tag
+            style={{
+              fontFamily: "Visby",
+              fontWeight: 500,
+              borderRadius: 20,
+            }}
+            icon={<CloseCircleOutlined />}
+            color="error"
+          >
+            Deactive
+          </Tag>
+        );
+      },
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
+      render: (_, record, index) => {
+        const isSystemAdmin = record.roleNames?.includes("SystemAdmin");
+        if (isSystemAdmin) return null;
         return (
           <div className="flex gap-3">
             <EditOutlined
@@ -263,6 +405,7 @@ const TableTAccount: React.FC = () => {
   if (skipCount % maxResultCount === 0) {
     current += 1;
   }
+  console.log(dataUser);
 
   return (
     <>
@@ -271,6 +414,7 @@ const TableTAccount: React.FC = () => {
           fetchListUser={fetchListUser}
           modalState={modalState}
           setModalState={setModalState}
+          isSystemAdmin={isSystemAdmin}
         />
       )}
       <div className="flex flex-col gap-5">
@@ -322,7 +466,7 @@ const TableTAccount: React.FC = () => {
           }}
           loading={loading}
           onChange={handleTableChange}
-          columns={columns as any}
+          columns={isSystemAdmin ? columnsSystemAdmin : (columnsAdmin as any)}
           dataSource={dataUser}
           footer={() => (
             <div className="justify-center my-2 ">

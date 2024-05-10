@@ -16,7 +16,7 @@ export const useUpdateUser = () => {
         isActive: params.isActive === true ? true : false,
         fullName: params.name,
         userName: params.name,
-        roleNames: [],
+        roleNames: params.roleNames === "ViewerUser" ? [] : ["EditerUser"],
       });
       if (response.status === 200) {
         onSuccess(response.data);

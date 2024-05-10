@@ -26,6 +26,18 @@ const userApiRequest = {
       return Promise.reject(error);
     }
   },
+  getListUserSystemAdmin: async (params: {
+    keyword?: string;
+    isActive?: boolean;
+    SkipCount: number;
+    MaxResultCount: number;
+  }) => {
+    try {
+      return http.get(`/services/app/User/GetAll`, { params });
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
   updateUser: async (body: AccountBodyType) => {
     try {
       return http.put(`/services/app/User/Update`, body);

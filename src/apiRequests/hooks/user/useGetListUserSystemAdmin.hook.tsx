@@ -1,7 +1,6 @@
-import tenantApiRequest from "@/apiRequests/tenant";
 import userApiRequest from "@/apiRequests/user";
 
-export const useGetListUser = () => {
+export const useGetListUserSystemAdmin = () => {
   async function request(
     params: {
       keyword?: string;
@@ -14,7 +13,7 @@ export const useGetListUser = () => {
     onError: Function
   ) {
     setLoading(true);
-    const response = await userApiRequest.getListUser(params);
+    const response = await userApiRequest.getListUserSystemAdmin(params);
     if (response?.status === 200) {
       onSuccess(response.data);
       setLoading(false);

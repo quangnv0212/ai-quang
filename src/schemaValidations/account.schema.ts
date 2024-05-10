@@ -7,12 +7,13 @@ export const AccountBody = z.object({
   surname: z.string().optional(),
   emailAddress: z.string().email().optional(),
   isActive: z.boolean().optional(),
-  roleNames: z.array(z.string()).optional(),
+  roleNames: z.any().optional(),
   password: z.string().optional(),
   fullName: z.string().optional(),
   lastLoginTime: z.any().optional(),
   creationTime: z.any().optional(),
-  company: z.number().optional(),
+  company: z.any().optional(),
+  
 });
 
 export type AccountBodyType = z.TypeOf<typeof AccountBody>;
