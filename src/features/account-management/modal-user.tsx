@@ -16,6 +16,8 @@ import { ButtonCommon } from "../../components/common/button-common";
 import { InputTextCommon } from "../../components/common/input-text";
 import { ModalCommon } from "../../components/common/modal-common";
 import { ToogleCommon } from "../../components/common/toogle-common";
+import { FormItem } from "react-hook-form-antd";
+import { SelectCommon } from "@/components/common/select-common";
 
 export interface IModalCompanyProps {
   modalState: {
@@ -61,6 +63,7 @@ export function ModalUser(props: IModalCompanyProps) {
       isActive: modalState?.detailInfo?.isActive,
       surname: modalState?.detailInfo?.surname,
       password: modalState?.detailInfo?.password,
+      company: modalState?.detailInfo?.company,
     },
   });
   const isConfirm = modalState.type === "delete";
@@ -198,7 +201,43 @@ export function ModalUser(props: IModalCompanyProps) {
               placeholder="Enter password"
               control={control}
             />
-            <div className="flex flex-col gap-2 ">
+            {/* <FormItem control={control} name="company">
+              <Select
+                style={{
+                  fontFamily: "Visby",
+                }}
+                placeholder="Hello"
+                options={listTenant.map((x) => {
+                  return {
+                    label: x.tenancyName,
+                    value: x.id,
+                  };
+                })}
+                notFoundContent={
+                  <Button type="link" onClick={createNewTenant}>
+                    Not found company. company: modalState.detailInfo.company a new company
+                  </Button>
+                }
+              />
+            </FormItem> */}
+            <SelectCommon
+              name="company"
+              label="Company"
+              control={control}
+              placeholder="Hello"
+              options={listTenant.map((x) => {
+                return {
+                  label: x.tenancyName,
+                  value: x.id,
+                };
+              })}
+              // notFoundContent={
+              //   <Button type="link" onClick={createNewTenant}>
+              //     Not found company. Create a new company
+              //   </Button>
+              // }
+            />
+            {/* <div className="flex flex-col gap-2 ">
               <p className="font-medium">Company</p>
               <Select
                 className="w-full"
@@ -227,7 +266,7 @@ export function ModalUser(props: IModalCompanyProps) {
                   </Button>
                 }
               />
-            </div>
+            </div> */}
 
             <ToogleCommon label="Active" control={control} name="isActive" />
             <div className="flex flex-col gap-3 mt-3">

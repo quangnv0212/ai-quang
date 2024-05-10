@@ -9,7 +9,7 @@ import { clientSessionToken } from "@/lib/http";
 import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { KeyOutlined, UserOutlined } from "@ant-design/icons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, Tabs, TabsProps } from "antd";
+import { Form } from "antd";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -19,11 +19,10 @@ import { toast } from "react-toastify";
 
 export default function Login() {
   const [isClient, setIsClient] = useState(false);
-
   useEffect(() => {
     setIsClient(true);
   }, []);
-  const { control, handleSubmit, getValues } = useForm<LoginBodyType>({
+  const { control, handleSubmit } = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
   });
 
@@ -33,19 +32,12 @@ export default function Login() {
   async function onSubmit(values: LoginBodyType) {
     if (loading) return;
     setLoading(true);
-    const tenancyName = getValues("tenancyName");
     try {
-      if (tenancyName) {
-        const resCheck = await authApiRequest.isTenantAvailable({
-          tenancyName: tenancyName,
-        });
-        const tenantId = resCheck.data.result.tenantId ?? null;
-        if (!tenantId) {
-          toast.error("Not found company");
-          return;
-        }
-      }
-      const res = await authApiRequest.login(values, tenancyName);
+      const tenantIdRes = await authApiRequest.getTenantIdByUserName({
+        userName: values.userNameOrEmailAddress,
+      });
+      const tenantId = tenantIdRes.data.result.tenantId ?? null;
+      const res = await authApiRequest.login(values, tenantId);
       const {
         accessToken = "",
         encryptedAccessToken = "",
@@ -65,10 +57,6 @@ export default function Login() {
       setLoading(false);
     }
   }
-  const onChange = (key: string) => {
-    console.log(key);
-  };
-
   return (
     <div className="flex justify-center items-center h-screen ">
       <div
@@ -90,112 +78,47 @@ export default function Login() {
         >
           Welcome back! Please enter your details
         </div>
-        <Tabs
-          defaultActiveKey="1"
-          items={[
-            {
-              key: "1",
-              label: "Global Admin",
-              children: (
-                <Form
-                  onFinish={handleSubmit(onSubmit)}
-                  className="flex flex-col gap-3 w-[300px]"
-                >
-                  <InputTextCommon
-                    label="Email"
-                    name="userNameOrEmailAddress"
-                    placeholder="Enter your email"
-                    prefix={<UserOutlined />}
-                    control={control}
-                  />
-                  <InputPassword
-                    label="Password"
-                    name="password"
-                    placeholder="Enter your password"
-                    prefix={<KeyOutlined />}
-                    control={control}
-                  />
-                  <InputCheckCommon
-                    label="Remember me"
-                    name="rememberClient"
-                    control={control}
-                  />
-                  <div className="flex justify-end mb-2">
-                    <Link
-                      className="text-14-16 font-semibold text-gray-500 hover:text-blue-400"
-                      href={"/forgot-password"}
-                    >
-                      Forgot Password?
-                    </Link>
-                  </div>
+        <Form
+          onFinish={handleSubmit(onSubmit)}
+          className="flex flex-col gap-3 w-[300px]"
+        >
+          <InputTextCommon
+            label="Email"
+            name="userNameOrEmailAddress"
+            placeholder="Enter your email"
+            prefix={<UserOutlined />}
+            control={control}
+          />
+          <InputPassword
+            label="Password"
+            name="password"
+            placeholder="Enter your password"
+            prefix={<KeyOutlined />}
+            control={control}
+          />
+          <InputCheckCommon
+            label="Remember me"
+            name="rememberClient"
+            control={control}
+          />
+          <div className="flex justify-end mb-2">
+            <Link
+              className="text-14-16 font-semibold text-gray-500 hover:text-blue-400"
+              href={"/forgot-password"}
+            >
+              Forgot Password?
+            </Link>
+          </div>
 
-                  <ButtonCommon
-                    loading={loading}
-                    type="submit"
-                    className="btn w-full hover:bg-primary-hover bg-primary text-white border-none"
-                  >
-                    Sign in
-                  </ButtonCommon>
-                </Form>
-              ),
-            },
-            {
-              key: "2",
-              label: "System Admin",
-              children: (
-                <Form
-                  onFinish={handleSubmit(onSubmit)}
-                  className="flex flex-col gap-3 w-[300px]"
-                >
-                  <InputTextCommon
-                    label="Company Name"
-                    name="tenancyName"
-                    placeholder="Enter your company name"
-                    prefix={<UserOutlined />}
-                    control={control}
-                  />
-                  <InputTextCommon
-                    label="Email"
-                    name="userNameOrEmailAddress"
-                    placeholder="Enter your email"
-                    prefix={<UserOutlined />}
-                    control={control}
-                  />
-                  <InputPassword
-                    label="Password"
-                    name="password"
-                    placeholder="Enter your password"
-                    prefix={<KeyOutlined />}
-                    control={control}
-                  />
-                  <InputCheckCommon
-                    label="Remember me"
-                    name="rememberClient"
-                    control={control}
-                  />
-                  <div className="flex justify-end mb-2">
-                    <Link
-                      className="text-14-16 font-semibold text-gray-500 hover:text-blue-400"
-                      href={"/forgot-password"}
-                    >
-                      Forgot Password?
-                    </Link>
-                  </div>
+          <ButtonCommon
+            loading={loading}
+            type="submit"
+            className="btn w-full hover:bg-primary-hover bg-primary text-white border-none"
+          >
+            Sign in
+          </ButtonCommon>
+        </Form>
 
-                  <ButtonCommon
-                    loading={loading}
-                    type="submit"
-                    className="btn w-full hover:bg-primary-hover bg-primary text-white border-none"
-                  >
-                    Sign in
-                  </ButtonCommon>
-                </Form>
-              ),
-            },
-          ]}
-          onChange={onChange}
-        />
-        ;
         <div className={"flex justify-center py-4 font-visby"}>
           Not registered?
           <Link href={"/register"} className="mx-1 hover:text-blue-300 link">

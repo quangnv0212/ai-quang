@@ -6,27 +6,17 @@ import {
 import axios from "axios";
 
 const authApiRequest = {
-  login: (body: LoginBodyType, tenant?: string, tenantId?:number) => {
-    if (tenant) {
-      return axios.post(
-        `https://aibase.nobisoft.vn/api/v1.0/TokenAuth/Authenticate`,
-        body,
-        {
-          headers: {
-            "Abp.TenantId": 1
-          }
+  login: (body: LoginBodyType, tenantId?: number) => {
+    return axios.post(
+      `https://aibase.nobisoft.vn/api/v1.0/TokenAuth/Authenticate`,
+      body,
+      tenantId ? {
+        headers: {
+          "Abp.TenantId": tenantId
         }
-
-        
-      );
-    } else {
-      return axios.post(
-        `https://aibase.nobisoft.vn/api/v1.0/TokenAuth/Authenticate`,
-        body
-      );
-    }
+      } : undefined
+    );
   },
-
   auth: (body: {
     accessToken: string;
     expireInSeconds: string;
@@ -37,7 +27,9 @@ const authApiRequest = {
   activateByEmail: (body: { email: string; token: string }) =>
     http.post("/services/app/Account/ActivateByEmail", body),
   logoutFromNextClientToNextServer: () => axios.post("/api/auth/logout"),
-  isTenantAvailable:(body:{tenancyName:string}) => http.post("/services/app/Account/IsTenantAvailable",body)
+  getTenantIdByUserName:(params:{userName:string}) => http.get("/services/app/Account/getTenantIdByUserName", {
+    params,
+  }),
 };
 
 export default authApiRequest;

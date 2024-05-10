@@ -82,6 +82,19 @@ const TableTAccount: React.FC = () => {
       key: "companyName",
     },
     {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
+      render: (value, record, index) => {
+        return (
+          <div className="flex gap-2">
+            <div className="badge badge-neutral">editor</div>
+            <div className="badge badge-primary">viewer</div>
+          </div>
+        );
+      },
+    },
+    {
       title: "Status",
       dataIndex: "isActive",
       key: "isActive",

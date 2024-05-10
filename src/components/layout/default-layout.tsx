@@ -46,7 +46,20 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
       setUser(decodeJWT(accessToken.value));
     }
   }, [accessToken]);
-  const items: any[] = [
+  const userRole =
+    user &&
+    user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+  console.log(userRole);
+
+  const itemsAdmin: any[] = [
+    {
+      key: "/",
+      icon: <DashboardOutlined width={20} height={20} />,
+      label: "Dashboard",
+      onClick: () => {
+        router.push("/");
+      },
+    },
     {
       key: "/tenant-management",
       icon: <BankOutlined width={20} height={20} />,
@@ -71,22 +84,31 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
         router.push("/model-management");
       },
     },
+    {
+      // key: "/settings",
+      icon: <SettingOutlined />,
+      label: "Settings",
+      children: [
+        {
+          // key: "/logout",
+          label: "Logout",
+          icon: <LogoutOutlined />,
+          onClick: () => {
+            logout();
+          },
+        },
+        {
+          key: "/change-password",
+          label: "Change Password",
+          icon: <EditOutlined />,
+          onClick: () => {
+            router.push("/change-password");
+          },
+        },
+      ],
+    },
   ];
-  let itemsFiltered = user?.permissions
-    ?.map((x) => {
-      switch (x) {
-        case "Pages.Tenants":
-          return items[0];
-        case "Pages.Users":
-          return items[1];
-        case "Pages.Roles":
-          return items[2];
-        default:
-          return null;
-      }
-    })
-    .filter((x) => (x = true));
-  itemsFiltered = [
+  const itemsSystemAdmin: any[] = [
     {
       key: "/",
       icon: <DashboardOutlined width={20} height={20} />,
@@ -95,7 +117,63 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
         router.push("/");
       },
     },
-    ...(itemsFiltered || []),
+    {
+      key: "/account-management",
+      icon: <UserOutlined />,
+      label: "Users",
+      onClick: () => {
+        router.push("/account-management");
+      },
+    },
+    {
+      key: "/model-management",
+      icon: <ThunderboltOutlined />,
+      label: "Models",
+      onClick: () => {
+        router.push("/model-management");
+      },
+    },
+    {
+      // key: "/settings",
+      icon: <SettingOutlined />,
+      label: "Settings",
+      children: [
+        {
+          // key: "/logout",
+          label: "Logout",
+          icon: <LogoutOutlined />,
+          onClick: () => {
+            logout();
+          },
+        },
+        {
+          key: "/change-password",
+          label: "Change Password",
+          icon: <EditOutlined />,
+          onClick: () => {
+            router.push("/change-password");
+          },
+        },
+      ],
+    },
+  ];
+  const itemsUser: any[] = [
+    {
+      key: "/",
+      icon: <DashboardOutlined width={20} height={20} />,
+      label: "Dashboard",
+      onClick: () => {
+        router.push("/");
+      },
+    },
+    {
+      key: "/model-management",
+      icon: <ThunderboltOutlined />,
+      label: "Models",
+      onClick: () => {
+        router.push("/model-management");
+      },
+    },
     {
       // key: "/settings",
       icon: <SettingOutlined />,
@@ -146,7 +224,13 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
                   theme="light"
                   selectedKeys={[pathName]}
                   mode="inline"
-                  items={itemsFiltered}
+                  items={
+                    userRole === "Admin"
+                      ? itemsAdmin
+                      : userRole === "SystemAdmin"
+                      ? itemsSystemAdmin
+                      : itemsUser
+                  }
                 />
               </Sider>
               <Layout>

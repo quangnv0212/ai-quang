@@ -23,12 +23,12 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const accessToken = request.cookies.get("accessToken")?.value;
   const permissions = decodeJWT(accessToken!)?.permissions || [];
-  if (
-    pathname === "/account-management" &&
-    !permissions.includes("Pages.Users")
-  ) {
-    return NextResponse.redirect(new URL("/permission-denied", request.url));
-  }
+  // if (
+  //   pathname === "/account-management" &&
+  //   !permissions.includes("Pages.Users")
+  // ) {
+  //   return NextResponse.redirect(new URL("/permission-denied", request.url));
+  // }
   if (
     pathname === "/roles-management" &&
     !permissions.includes("Pages.Roles")
