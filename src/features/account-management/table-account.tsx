@@ -168,6 +168,15 @@ const TableTAccount = ({ role }: any) => {
       render: (_, record, index) => {
         const isAdmin = record.roleNames?.includes("Admin");
         if (isAdmin) return null;
+        const role =
+          record && record?.roleNames?.length === 0
+            ? "viewer"
+            : record.roleNames[0] === "SystemAdmin"
+            ? "SystemAdmin"
+            : record.roleNames[0] === "Admin"
+            ? "Admin"
+            : "editor";
+        console.log(role);
         return (
           <div className="flex gap-3">
             <EditOutlined
@@ -182,18 +191,20 @@ const TableTAccount = ({ role }: any) => {
               style={{ fontSize: 16 }}
               className="hover:text-primary cursor-pointer"
             />
-            <DeleteOutlined
-              onClick={() =>
-                setModalState({
-                  ...modalState,
-                  isOpen: true,
-                  type: "delete",
-                  detailInfo: record,
-                })
-              }
-              className="hover:text-primary cursor-pointer"
-              style={{ fontSize: 16 }}
-            />
+            {role !== "SystemAdmin" && (
+              <DeleteOutlined
+                onClick={() =>
+                  setModalState({
+                    ...modalState,
+                    isOpen: true,
+                    type: "delete",
+                    detailInfo: record,
+                  })
+                }
+                className="hover:text-primary cursor-pointer"
+                style={{ fontSize: 16 }}
+              />
+            )}
           </div>
         );
       },

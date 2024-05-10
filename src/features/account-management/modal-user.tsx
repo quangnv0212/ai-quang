@@ -211,7 +211,7 @@ export function ModalUser(props: IModalCompanyProps) {
                 name="company"
                 label="Company"
                 control={control}
-                placeholder="Hello"
+                placeholder="Select company"
                 options={listTenant.map((x) => {
                   return {
                     label: x.tenancyName,
