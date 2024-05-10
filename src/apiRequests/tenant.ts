@@ -6,7 +6,6 @@ const tenantApiRequest = {
     try {
       return http.post(`/services/app/Tenant/Create`, {
         ...body,
-        roleNames: [],
         isActive: body.isActive === true ? true : false,
       });
     } catch (error) {

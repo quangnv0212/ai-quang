@@ -49,7 +49,6 @@ export function ModalTenant(props: IModalCompanyProps) {
         {
           ...values,
           companyName: values.tenancyName,
-          captchaResponse: "",
         },
         setLoading,
         () => {
@@ -66,7 +65,6 @@ export function ModalTenant(props: IModalCompanyProps) {
           id: modalState.detailInfo.id,
           ...values,
           companyName: values.tenancyName,
-          captchaResponse: "",
         },
         setLoading,
         () => {

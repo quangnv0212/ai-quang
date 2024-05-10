@@ -6,7 +6,6 @@ const userApiRequest = {
     try {
       return http.post(`/services/app/User/Create`, {
         ...body,
-        roleNames: [],
         isActive: body.isActive === true ? true : false,
       });
     } catch (error) {

@@ -80,11 +80,8 @@ export function ModalUser(props: IModalCompanyProps) {
     if (modalState.type === "create") {
       requestCreateUser(
         {
-          userName: values.userName,
-          emailAddress: values.emailAddress,
-          isActive: values.isActive,
-          password: values.password,
-          company: values.company,
+          ...values,
+          roleNames: values.roleNames === "ViewerUser" ? [] : ["EditerUser"],
         },
         setLoading,
         () => {
@@ -104,7 +101,11 @@ export function ModalUser(props: IModalCompanyProps) {
           isActive: values.isActive,
           password: values.password,
           company: values.company,
-          roleNames: !isSystemAdminRole ? ["SystemAdmin"] : [values.roleNames],
+          roleNames: isSystemAdminRole
+            ? ["SystemAdmin"]
+            : values.roleNames === "ViewerUser"
+            ? []
+            : [values.roleNames],
         },
         setLoading,
         () => {
