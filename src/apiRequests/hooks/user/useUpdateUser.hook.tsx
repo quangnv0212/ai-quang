@@ -14,9 +14,6 @@ export const useUpdateUser = () => {
       const response = await userApiRequest.updateUser({
         ...params,
         isActive: params.isActive === true ? true : false,
-        fullName: params.name,
-        userName: params.name,
-        roleNames: params.roleNames === "ViewerUser" ? [] : ["EditerUser"],
       });
       if (response.status === 200) {
         onSuccess(response.data);

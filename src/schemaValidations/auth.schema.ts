@@ -2,8 +2,6 @@ import z from "zod";
 
 export const RegisterBody = z
   .object({
-    lastName: z.string().min(1).max(50),
-    firstName: z.string().min(1).max(50),
     emailAddress: z.string().email(),
     password: z.string().min(6).max(100),
     companyName: z.string().min(1).max(100),
@@ -13,7 +11,6 @@ export const RegisterBody = z
     suburb: z.string().optional(),
     firstAddress: z.string().optional(),
     secondAddress: z.string().optional(),
-    captchaResponse: z.string(),
     confirmPassword: z.string().min(6).max(100),
   })
   .strict()

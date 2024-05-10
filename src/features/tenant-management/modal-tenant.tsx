@@ -143,18 +143,7 @@ export function ModalTenant(props: IModalCompanyProps) {
                   placeholder="Enter your email address"
                   control={control}
                 />
-                <InputTextCommon
-                  label="First name"
-                  name="firstName"
-                  placeholder="Enter your first name"
-                  control={control}
-                />
-                <InputTextCommon
-                  label="Last name"
-                  name="lastName"
-                  placeholder="Enter your last name"
-                  control={control}
-                />
+
                 <InputTextCommon
                   label="Password"
                   name="password"

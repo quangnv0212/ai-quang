@@ -13,7 +13,6 @@ export const useCreateTenant = () => {
       const response = await tenantApiRequest.createTenant({
         ...params,
         isActive: params.isActive === true ? true : false,
-        
       });
       if (response.status === 200) {
         onSuccess(response.data);

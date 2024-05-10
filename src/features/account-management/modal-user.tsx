@@ -56,15 +56,15 @@ export function ModalUser(props: IModalCompanyProps) {
       }
     );
   }, []);
-  console.log(modalState?.detailInfo?.roleNames[0]);
-
+  console.log(modalState?.detailInfo);
+  const isSystemAdminRole =
+    modalState.detailInfo?.roleNames[0] === "SystemAdmin";
   const { control, handleSubmit } = useForm<AccountBodyType>({
     resolver: zodResolver(AccountBody),
     defaultValues: {
       emailAddress: modalState?.detailInfo?.emailAddress,
-      name: modalState?.detailInfo?.name,
+      userName: modalState?.detailInfo?.userName,
       isActive: modalState?.detailInfo?.isActive,
-      surname: modalState?.detailInfo?.surname,
       password: modalState?.detailInfo?.password,
       roleNames:
         modalState?.detailInfo?.roleNames[0] === undefined
@@ -74,20 +74,16 @@ export function ModalUser(props: IModalCompanyProps) {
     },
   });
   const isConfirm = modalState.type === "delete";
+  console.log(isSystemAdminRole);
 
   const onSubmit = (values: AccountBodyType) => {
-    console.log(values);
-
     if (modalState.type === "create") {
       requestCreateUser(
         {
           userName: values.userName,
-          name: values.name,
           emailAddress: values.emailAddress,
           isActive: values.isActive,
           password: values.password,
-          surname: values.surname,
-          fullName: values.fullName,
           company: values.company,
         },
         setLoading,
@@ -99,20 +95,16 @@ export function ModalUser(props: IModalCompanyProps) {
         () => {}
       );
     }
-
     if (modalState.type === "update") {
       requestUpdateUser(
         {
           id: modalState.detailInfo.id,
           userName: values.userName,
-          name: values.name,
           emailAddress: values.emailAddress,
           isActive: values.isActive,
           password: values.password,
-          surname: values.surname,
-          fullName: values.fullName,
-          roleNames: values.roleNames,
           company: values.company,
+          roleNames: !isSystemAdminRole ? ["SystemAdmin"] : [values.roleNames],
         },
         setLoading,
         () => {
@@ -188,15 +180,9 @@ export function ModalUser(props: IModalCompanyProps) {
               control={control}
             />
             <InputTextCommon
-              label="Name"
-              name="name"
-              placeholder="Enter your name"
-              control={control}
-            />
-            <InputTextCommon
-              label="Surname"
-              name="surname"
-              placeholder="Enter your sur name"
+              label="Username"
+              name="userName"
+              placeholder="Enter username"
               control={control}
             />
             <InputTextCommon
@@ -218,34 +204,26 @@ export function ModalUser(props: IModalCompanyProps) {
                     value: x.id,
                   };
                 })}
-                // notFoundContent={
-                //   <Button type="link" onClick={createNewTenant}>
-                //     Not found company. Create a new company
-                //   </Button>
-                // }
               />
             )}
-            <SelectCommon
-              name="roleNames"
-              label="Role"
-              control={control}
-              placeholder="Role"
-              options={[
-                {
-                  label: "Viewer",
-                  value: "ViewerUser",
-                },
-                {
-                  label: "Editor",
-                  value: "EditerUser",
-                },
-              ]}
-              // notFoundContent={
-              //   <Button type="link" onClick={createNewTenant}>
-              //     Not found company. Create a new company
-              //   </Button>
-              // }
-            />
+            {!isSystemAdminRole && (
+              <SelectCommon
+                name="roleNames"
+                label="Role"
+                control={control}
+                placeholder="Role"
+                options={[
+                  {
+                    label: "Viewer",
+                    value: "ViewerUser",
+                  },
+                  {
+                    label: "Editor",
+                    value: "EditerUser",
+                  },
+                ]}
+              />
+            )}
 
             {/* <div className="flex flex-col gap-2 ">
               <p className="font-medium">Company</p>

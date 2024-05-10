@@ -4,21 +4,16 @@ import Logo from "@/assets/images/logo.png";
 import { ButtonCommon } from "@/components/common/button-common";
 import { InputPassword } from "@/components/common/input-password";
 import { InputTextCommon } from "@/components/common/input-text";
-import {
-  RegisterBody,
-  RegisterBodyType,
-} from "@/schemaValidations/auth.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { RegisterBodyType } from "@/schemaValidations/auth.schema";
 import { Form } from "antd";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function Register() {
   const { control, handleSubmit } = useForm<RegisterBodyType>({
-    resolver: zodResolver(RegisterBody),
+    // resolver: zodResolver(RegisterBody),
   });
   const [loading, setLoading] = useState(false);
   const onSubmit = async (values: RegisterBodyType) => {
@@ -59,15 +54,9 @@ export default function Register() {
             >
               <div className="grid grid-cols-2 gap-4 w-full">
                 <InputTextCommon
-                  label="First Name"
-                  name="firstName"
-                  placeholder=""
-                  control={control}
-                />
-                <InputTextCommon
-                  label="Last Name"
-                  name="lastName"
-                  placeholder="Quang"
+                  label="Email Address"
+                  name="emailAddress"
+                  placeholder="Enter your email"
                   control={control}
                 />
                 <InputPassword
@@ -82,12 +71,7 @@ export default function Register() {
                   placeholder="Confirm your password"
                   control={control}
                 />
-                <InputTextCommon
-                  label="Email Address"
-                  name="emailAddress"
-                  placeholder="Enter your email"
-                  control={control}
-                />
+
                 <InputTextCommon
                   label="Company Name"
                   name="companyName"
@@ -129,12 +113,6 @@ export default function Register() {
                 <InputTextCommon
                   label="Second Address"
                   name="secondAddress"
-                  placeholder=""
-                  control={control}
-                />
-                <InputTextCommon
-                  label="Captcha Response"
-                  name="captchaResponse"
                   placeholder=""
                   control={control}
                 />
