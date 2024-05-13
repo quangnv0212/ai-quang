@@ -61,7 +61,7 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
     {
       key: "/tenant-management",
       icon: <BankOutlined width={20} height={20} />,
-      label: "Companies",
+      label: "Accounts",
       onClick: () => {
         router.push("/tenant-management");
       },
@@ -225,7 +225,7 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
                   items={
                     userRole === "Admin"
                       ? itemsAdmin
-                      : userRole === "Company"
+                      : userRole === "SystemAdmin"
                       ? itemsSystemAdmin
                       : itemsUser
                   }

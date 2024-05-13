@@ -9,7 +9,7 @@ export interface IDashboardProps {}
 
 export function Dashboard(props: IDashboardProps) {
   const pageList = [
-    { label: "Companies", link: "tenant-management", image: ImgTenant },
+    { label: "Accounts", link: "tenant-management", image: ImgTenant },
     { label: "Users", link: "account-management", image: ImgUser },
     { label: "Models", link: "model-management", image: ImgModel },
   ];
