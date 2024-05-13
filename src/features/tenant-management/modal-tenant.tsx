@@ -133,23 +133,22 @@ export function ModalTenant(props: IModalCompanyProps) {
             onFinish={handleSubmit(onSubmit)}
             className="flex flex-col gap-3"
           >
-            {!isUpdate && (
-              <>
-                <InputTextCommon
-                  label="Email address"
-                  name="emailAddress"
-                  placeholder="Enter your email address"
-                  control={control}
-                />
-
-                <InputTextCommon
-                  label="Password"
-                  name="password"
-                  placeholder="Enter your password"
-                  control={control}
-                />
-              </>
-            )}
+            <>
+              <InputTextCommon
+                label="Email address"
+                name="emailAddress"
+                placeholder="Enter your email address"
+                control={control}
+                disabled={isUpdate}
+              />
+              <InputTextCommon
+                label="Password"
+                name="password"
+                placeholder="Enter your password"
+                control={control}
+                disabled={isUpdate}
+              />
+            </>
 
             <InputTextCommon
               label="Company name"

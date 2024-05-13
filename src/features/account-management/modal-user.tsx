@@ -81,7 +81,7 @@ export function ModalUser(props: IModalCompanyProps) {
       requestCreateUser(
         {
           ...values,
-          roleNames: values.roleNames === "ViewerUser" ? [] : ["EditerUser"],
+          roleNames: values.roleNames === "ViewerUser" ? [] : ["EditorUser"],
         },
         setLoading,
         () => {
@@ -102,7 +102,7 @@ export function ModalUser(props: IModalCompanyProps) {
           password: values.password,
           company: values.company,
           roleNames: isSystemAdminRole
-            ? ["SystemAdmin"]
+            ? ["Company"]
             : values.roleNames === "ViewerUser"
             ? []
             : [values.roleNames],
@@ -219,7 +219,7 @@ export function ModalUser(props: IModalCompanyProps) {
                   },
                   {
                     label: "Editor",
-                    value: "EditerUser",
+                    value: "EditorUser",
                   },
                 ]}
               />

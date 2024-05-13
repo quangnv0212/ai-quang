@@ -35,7 +35,7 @@ const TableTAccount = ({ role }: any) => {
     isOpen: false,
     type: "create",
   });
-  const isSystemAdmin = role === "SystemAdmin";
+  const isSystemAdmin = role === "Company";
 
   //state
   const [total, setTotal] = useState(0);
@@ -105,8 +105,8 @@ const TableTAccount = ({ role }: any) => {
         const role =
           value && value?.length === 0
             ? "viewer"
-            : value[0] === "SystemAdmin"
-            ? "SystemAdmin"
+            : value[0] === "Company"
+            ? "Company"
             : value[0] === "Admin"
             ? "Admin"
             : "editor";
@@ -118,7 +118,7 @@ const TableTAccount = ({ role }: any) => {
             {role === "viewer" && (
               <div className="badge badge-primary">Viewer</div>
             )}
-            {role === "SystemAdmin" && (
+            {role === "Company" && (
               <div className="badge badge-secondary text-white">
                 System Admin
               </div>
@@ -171,8 +171,8 @@ const TableTAccount = ({ role }: any) => {
         const role =
           record && record?.roleNames?.length === 0
             ? "viewer"
-            : record.roleNames[0] === "SystemAdmin"
-            ? "SystemAdmin"
+            : record.roleNames[0] === "Company"
+            ? "Company"
             : record.roleNames[0] === "Admin"
             ? "Admin"
             : "editor";
@@ -190,7 +190,7 @@ const TableTAccount = ({ role }: any) => {
               style={{ fontSize: 16 }}
               className="hover:text-primary cursor-pointer"
             />
-            {role !== "SystemAdmin" && (
+            {role !== "Company" && (
               <DeleteOutlined
                 onClick={() =>
                   setModalState({
@@ -223,8 +223,8 @@ const TableTAccount = ({ role }: any) => {
         const role =
           value && value?.length === 0
             ? "viewer"
-            : value[0] === "SystemAdmin"
-            ? "SystemAdmin"
+            : value[0] === "Company"
+            ? "Company"
             : "editor";
         return (
           <div className="flex gap-2 ">
@@ -234,7 +234,7 @@ const TableTAccount = ({ role }: any) => {
             {role === "viewer" && (
               <div className="badge badge-primary">Viewer</div>
             )}
-            {role === "SystemAdmin" && (
+            {role === "Company" && (
               <div className="badge badge-secondary text-white">
                 System Admin
               </div>
@@ -280,7 +280,7 @@ const TableTAccount = ({ role }: any) => {
       dataIndex: "action",
       key: "action",
       render: (_, record, index) => {
-        const isSystemAdmin = record.roleNames?.includes("SystemAdmin");
+        const isSystemAdmin = record.roleNames?.includes("Company");
         if (isSystemAdmin) return null;
         return (
           <div className="flex gap-3">

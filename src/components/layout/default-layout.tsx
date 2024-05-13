@@ -225,7 +225,7 @@ export function DefaultLayout(props: IDefaultLayoutProps) {
                   items={
                     userRole === "Admin"
                       ? itemsAdmin
-                      : userRole === "SystemAdmin"
+                      : userRole === "Company"
                       ? itemsSystemAdmin
                       : itemsUser
                   }
