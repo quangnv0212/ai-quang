@@ -328,7 +328,7 @@ const TableTenant: React.FC = () => {
               >
                 <PlusOutlined style={{ fontSize: "18px", color: "white" }} />
                 <span className="font-bold uppercase text-white ">
-                  Create a new company
+                  Create a new account
                 </span>
               </button>
             </div>
