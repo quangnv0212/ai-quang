@@ -9,7 +9,6 @@ export const TableCommon = styled(Table)`
   & .ant-table {
     background-color: #f5f5f5;
     border-top: 1px solid white;
-    border-radius: 20px;
     font-family: "Visby";
   }
   & .ant-table .ant-table-container .ant-table-content table .ant-table-row {
@@ -26,11 +25,9 @@ export const TableCommon = styled(Table)`
     font-weight: bold;
   }
   & .ant-table .ant-table-container {
-    border-radius: 20px;
   }
 
   & .ant-table .ant-table-container .ant-table-content {
-    border-radius: 20px;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
   }
 
@@ -42,8 +39,6 @@ export const TableCommon = styled(Table)`
     thead.ant-table-thead
     .ant-table-cell {
     background-color: white;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
   }
 
   &
@@ -64,7 +59,6 @@ export const TableCommon = styled(Table)`
     table
     .ant-table-row.ant-table-row-level-0:last-child
     td:first-child {
-    border-bottom-left-radius: 20px;
   }
 
   &
@@ -74,7 +68,6 @@ export const TableCommon = styled(Table)`
     table
     .ant-table-row.ant-table-row-level-0:last-child
     td:last-child {
-    border-bottom-right-radius: 20px;
   }
 
   &
@@ -116,7 +109,6 @@ export const TableCommon = styled(Table)`
     table
     thead.ant-table-thead
     .ant-table-cell:first-child {
-    border-top-left-radius: 20px;
   }
   &
     .ant-table
@@ -125,7 +117,6 @@ export const TableCommon = styled(Table)`
     table
     thead.ant-table-thead
     .ant-table-cell:last-child {
-    border-top-right-radius: 20px;
   }
   & .ant-table-pagination.ant-pagination {
     margin-top: 8px;

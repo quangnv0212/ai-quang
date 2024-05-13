@@ -61,3 +61,11 @@ body {
 .ant-menu-light .ant-menu-submenu-selected >.ant-menu-submenu-title {
   color: black !important;
 }
+.ant-table-row.ant-table-row-level-0 {
+  /* background-color: aqua !important; */
+  border: 4px solid #2d669b !important;
+}
+.ant-table-cell {
+  border-bottom: 1px solid gray !important;
+  
+}
