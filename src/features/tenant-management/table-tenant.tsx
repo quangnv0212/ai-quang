@@ -75,6 +75,11 @@ const TableTenant: React.FC = () => {
       key: "tenancyName",
     },
     {
+      title: "Email",
+      dataIndex: "emailAddress",
+      key: "emailAddress",
+    },
+    {
       title: "Country",
       dataIndex: "country",
       key: "country",
