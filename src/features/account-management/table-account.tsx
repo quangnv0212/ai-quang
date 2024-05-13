@@ -96,6 +96,13 @@ const TableTAccount = ({ role }: any) => {
       title: "Account",
       dataIndex: "companyName",
       key: "companyName",
+      render: (value, record, index) => {
+        return (
+          <div className="flex gap-2 ">
+            <span className="capitalize">{value}</span>
+          </div>
+        );
+      },
     },
     {
       title: "Role",
