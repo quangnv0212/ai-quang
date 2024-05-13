@@ -4,7 +4,11 @@ import Logo from "@/assets/images/logo.png";
 import { ButtonCommon } from "@/components/common/button-common";
 import { InputPassword } from "@/components/common/input-password";
 import { InputTextCommon } from "@/components/common/input-text";
-import { RegisterBodyType } from "@/schemaValidations/auth.schema";
+import {
+  RegisterBody,
+  RegisterBodyType,
+} from "@/schemaValidations/auth.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "antd";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,14 +17,18 @@ import { useForm } from "react-hook-form";
 
 export default function Register() {
   const { control, handleSubmit } = useForm<RegisterBodyType>({
-    // resolver: zodResolver(RegisterBody),
+    resolver: zodResolver(RegisterBody),
   });
   const [loading, setLoading] = useState(false);
   const onSubmit = async (values: RegisterBodyType) => {
-    if (loading) return;
-    setLoading(true);
-    await authApiRequest.register(values);
-    setLoading(false);
+    try {
+      if (loading) return;
+      setLoading(true);
+      await authApiRequest.register(values);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="flex flex-col gap-3 justify-center items-center py-16 ">
@@ -52,32 +60,13 @@ export default function Register() {
               onFinish={handleSubmit(onSubmit)}
               className="w-full flex flex-col gap-4"
             >
-              <div className="grid grid-cols-2 gap-4 w-full">
-                <InputTextCommon
-                  label="Email Address"
-                  name="emailAddress"
-                  placeholder="Enter your email"
-                  control={control}
-                />
-                <InputPassword
-                  label="Password"
-                  name="password"
-                  placeholder="Choose a strong password"
-                  control={control}
-                />
-                <InputPassword
-                  label="Confirm Password"
-                  name="confirmPassword"
-                  placeholder="Confirm your password"
-                  control={control}
-                />
-
-                <InputTextCommon
-                  label="Company Name"
-                  name="companyName"
-                  placeholder=""
-                  control={control}
-                />
+              <InputTextCommon
+                label="Company Name"
+                name="companyName"
+                placeholder=""
+                control={control}
+              />
+              <div className="grid grid-cols-2 gap-4">
                 <InputTextCommon
                   label="Country"
                   name="country"
@@ -91,32 +80,51 @@ export default function Register() {
                   control={control}
                 />
                 <InputTextCommon
-                  label="Post Code"
-                  name="postCode"
-                  placeholder=""
-                  control={control}
-                />
-                <InputTextCommon
                   label="Suburb"
                   name="suburb"
                   placeholder=""
                   control={control}
                 />
-              </div>
-              <div className="flex flex-col gap-4">
                 <InputTextCommon
-                  label="First Address"
-                  name="firstAddress"
-                  placeholder=""
-                  control={control}
-                />
-                <InputTextCommon
-                  label="Second Address"
-                  name="secondAddress"
+                  label="Post Code"
+                  name="postCode"
                   placeholder=""
                   control={control}
                 />
               </div>
+              <InputTextCommon
+                label="First Address"
+                name="firstAddress"
+                placeholder=""
+                control={control}
+              />
+              <InputTextCommon
+                label="Second Address"
+                name="secondAddress"
+                placeholder=""
+                control={control}
+              />
+              <InputTextCommon
+                label="Username - Email"
+                name="emailAddress"
+                placeholder="Enter your email"
+                control={control}
+              />
+              <div className="grid grid-cols-2 gap-4 w-full">
+                <InputPassword
+                  label="Password"
+                  name="password"
+                  placeholder="Choose a strong password"
+                  control={control}
+                />
+                <InputPassword
+                  label="Confirm Password"
+                  name="confirmPassword"
+                  placeholder="Confirm your password"
+                  control={control}
+                />
+              </div>
+              <div className="flex flex-col gap-4"></div>
               <ButtonCommon
                 type="submit"
                 loading={loading}

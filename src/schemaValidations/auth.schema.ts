@@ -9,7 +9,7 @@ export const RegisterBody = z
     state: z.string().min(1).max(100).optional(),
     postCode: z.any().optional(),
     suburb: z.string().optional(),
-    firstAddress: z.string().optional(),
+    firstAddress: z.string(),
     secondAddress: z.string().optional(),
     confirmPassword: z.string().min(6).max(100),
   })
@@ -48,7 +48,7 @@ export const LoginBody = z
   .object({
     userNameOrEmailAddress: z.string(),
     password: z.string().min(6).max(100),
-    tenancyName:z.string().optional(),
+    tenancyName: z.string().optional(),
     rememberClient: z.boolean().optional(),
   })
   .strict();

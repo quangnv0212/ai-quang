@@ -111,7 +111,7 @@ const TableTenant: React.FC = () => {
             icon={<CloseCircleOutlined />}
             color="error"
           >
-            Deactive
+            Inactive
           </Tag>
         ),
     },
@@ -190,7 +190,7 @@ const TableTenant: React.FC = () => {
       },
     },
     {
-      title: "Deactive",
+      title: "Inactive",
       isActveString: "false",
       onclick: () => {
         const params = new URLSearchParams(searchParams);
@@ -263,7 +263,7 @@ const TableTenant: React.FC = () => {
         />
       )}
       <div className="flex flex-col gap-5">
-        <p className="text-34-34 font-semibold">Manage Company</p>
+        <p className="text-34-34 font-semibold">Accounts</p>
         <div className="">
           <div className="flex justify-between gap-2">
             <div className="px-5 rounded-lg flex items-center gap-2 h-[38px] w-[400px] bg-white border">

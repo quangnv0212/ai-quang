@@ -86,7 +86,7 @@ export function ModalUser(props: IModalCompanyProps) {
         setLoading,
         () => {
           setModalState({ ...modalState, isOpen: false });
-          toast.success("Create account successfully");
+          toast.success("Create user successfully");
           fetchListUser();
         },
         () => {}
@@ -110,7 +110,7 @@ export function ModalUser(props: IModalCompanyProps) {
         setLoading,
         () => {
           setModalState({ ...modalState, isOpen: false });
-          toast.success("Update account successfully");
+          toast.success("Update user successfully");
           fetchListUser();
         },
         () => {}
@@ -166,9 +166,7 @@ export function ModalUser(props: IModalCompanyProps) {
       ) : (
         <div className="px-6 flex flex-col gap-4">
           <p className="font-bold text-24-28 capitalize text-center font-visby">
-            {modalState.type === "update"
-              ? "Update account"
-              : "Create a new account"}
+            {modalState.type === "update" ? "Update User" : "Create a new user"}
           </p>
           <Form
             onFinish={handleSubmit(onSubmit)}
@@ -199,6 +197,7 @@ export function ModalUser(props: IModalCompanyProps) {
                 label="Company"
                 control={control}
                 placeholder="Select company"
+                disabled={Boolean(modalState.detailInfo)}
                 options={listTenant.map((x) => {
                   return {
                     label: x.tenancyName,
@@ -226,36 +225,6 @@ export function ModalUser(props: IModalCompanyProps) {
               />
             )}
 
-            {/* <div className="flex flex-col gap-2 ">
-              <p className="font-medium">Company</p>
-              <Select
-                className="w-full"
-                showSearch
-                value={company}
-                onChange={handleChange}
-                placeholder="Search to Select"
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  (option?.label ?? "").includes(input)
-                }
-                filterSort={(optionA, optionB) =>
-                  (optionA?.label ?? "")
-                    .toLowerCase()
-                    .localeCompare((optionB?.label ?? "").toLowerCase())
-                }
-                options={listTenant.map((x) => {
-                  return {
-                    label: x.tenancyName,
-                    value: x.id,
-                  };
-                })}
-                notFoundContent={
-                  <Button type="link" onClick={createNewTenant}>
-                    Not found company. Create a new company
-                  </Button>
-                }
-              />
-            </div> */}
             <ToogleCommon label="Active" control={control} name="isActive" />
             <div className="flex flex-col gap-3 mt-3">
               <ButtonCommon
@@ -263,9 +232,7 @@ export function ModalUser(props: IModalCompanyProps) {
                 type="submit"
                 className="btn btn-sm w-full hover:bg-primary-hover bg-primary text-white border-none"
               >
-                {modalState.type === "update"
-                  ? "Update account"
-                  : "Create account"}
+                {modalState.type === "update" ? "Update User" : "Create user"}
               </ButtonCommon>
               <ButtonCommon
                 onClick={handleCancel}

@@ -93,7 +93,7 @@ const TableTAccount = ({ role }: any) => {
     },
 
     {
-      title: "Company",
+      title: "Account",
       dataIndex: "companyName",
       key: "companyName",
     },
@@ -157,7 +157,7 @@ const TableTAccount = ({ role }: any) => {
             icon={<CloseCircleOutlined />}
             color="error"
           >
-            Deactive
+            Inactive
           </Tag>
         ),
     },
@@ -176,7 +176,6 @@ const TableTAccount = ({ role }: any) => {
             : record.roleNames[0] === "Admin"
             ? "Admin"
             : "editor";
-        console.log(role);
         return (
           <div className="flex gap-3">
             <EditOutlined
@@ -271,7 +270,7 @@ const TableTAccount = ({ role }: any) => {
             icon={<CloseCircleOutlined />}
             color="error"
           >
-            Deactive
+            Inactive
           </Tag>
         );
       },
@@ -353,7 +352,7 @@ const TableTAccount = ({ role }: any) => {
       },
     },
     {
-      title: "Deactive",
+      title: "Inactive",
       isActveString: "false",
       onclick: () => {
         const params = new URLSearchParams(searchParams);
@@ -416,7 +415,6 @@ const TableTAccount = ({ role }: any) => {
   if (skipCount % maxResultCount === 0) {
     current += 1;
   }
-  console.log(dataUser);
 
   return (
     <>
@@ -429,7 +427,7 @@ const TableTAccount = ({ role }: any) => {
         />
       )}
       <div className="flex flex-col gap-5">
-        <p className="text-34-34 font-semibold">Manage Account</p>
+        <p className="text-34-34 font-semibold">Manage Users</p>
         <div className="">
           <div className="flex justify-between gap-2">
             <div className="px-5 rounded-lg flex items-center gap-2 h-[38px] w-[400px] bg-white border">

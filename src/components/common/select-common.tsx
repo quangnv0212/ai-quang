@@ -9,10 +9,19 @@ export interface IInputTextCommonProps {
   control?: any;
   size?: "large" | "middle" | "small";
   options?: any;
+  disabled?: boolean;
 }
 
 export function SelectCommon(props: IInputTextCommonProps) {
-  const { label, name, placeholder, control, size = "middle", options } = props;
+  const {
+    label,
+    name,
+    placeholder,
+    control,
+    size = "middle",
+    options,
+    disabled,
+  } = props;
   return (
     <div className={"flex flex-col gap-2"}>
       <p className="font-medium">{label}</p>
@@ -24,6 +33,7 @@ export function SelectCommon(props: IInputTextCommonProps) {
           placeholder={placeholder}
           size={size}
           options={options}
+          disabled={disabled}
         />
       </FormItem>
     </div>

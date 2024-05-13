@@ -69,7 +69,7 @@ export function ModalTenant(props: IModalCompanyProps) {
         setLoading,
         () => {
           setModalState({ ...modalState, isOpen: false });
-          toast.success("Update company successfully");
+          toast.success("Update account successfully");
           fetchListTenant();
         },
         () => {}
@@ -126,8 +126,8 @@ export function ModalTenant(props: IModalCompanyProps) {
         <div className="px-6 flex flex-col gap-4">
           <p className="font-bold text-24-28 capitalize text-center font-visby">
             {modalState.type === "update"
-              ? "Update company"
-              : "Create a new company"}
+              ? "Update account"
+              : "Create a new account"}
           </p>
           <Form
             onFinish={handleSubmit(onSubmit)}
@@ -177,8 +177,8 @@ export function ModalTenant(props: IModalCompanyProps) {
                 className="btn btn-sm w-full hover:bg-primary-hover bg-primary text-white border-none"
               >
                 {modalState.type === "update"
-                  ? "Update company"
-                  : "Create company"}
+                  ? "Update account"
+                  : "Create account"}
               </ButtonCommon>
               <ButtonCommon
                 onClick={handleCancel}
