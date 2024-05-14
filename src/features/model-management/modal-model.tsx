@@ -9,6 +9,7 @@ import type { GetProp, TableColumnsType, UploadFile, UploadProps } from "antd";
 import { Button, Select, Table, Tabs, Upload, message } from "antd";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { ThunderboltOutlined } from "@ant-design/icons";
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 export default function ModalModel() {
@@ -153,6 +154,7 @@ export default function ModalModel() {
                     className="btn text-white btn-sm bg-primary border-none hover:bg-primary-hover"
                     onClick={handleTraning}
                   >
+                    <ThunderboltOutlined />
                     Traning
                   </ButtonCommon>
                 </div>
