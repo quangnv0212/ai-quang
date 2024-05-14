@@ -1,11 +1,11 @@
 "use client";
 import { convertFileToArrayBuffer } from "@/lib/convert-file-to-arraybuffer";
 import UploadOutlined from "@ant-design/icons/UploadOutlined";
-import { BlockBlobClient } from "@azure/storage-blob";
+import { BlobServiceClient, BlockBlobClient } from "@azure/storage-blob";
 import type { GetProp, UploadFile, UploadProps } from "antd";
 import { Button, message, Select, Table, Tabs, Upload } from "antd";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cat from "@/assets/images/cat.png";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
@@ -13,6 +13,11 @@ type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 export default function ModalModel() {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [model, setModel] = useState<any[]>([]);
+
+  useEffect(() => {
+    getList();
+  }, []);
 
   const handleUpload = () => {
     const formData = new FormData();
@@ -89,19 +94,59 @@ export default function ModalModel() {
   const onChange = (key: string) => {
     console.log(key);
   };
+
+  const getList = async () => {
+    const blobServiceClient = new BlobServiceClient(
+      `https://aibasedemo.blob.core.windows.net/?sv=2022-11-02&ss=bfqt&srt=c&sp=rwdlacupiytfx&se=2025-03-12T00:41:10Z&st=2024-05-13T16:41:10Z&spr=https&sig=I8CyYVd19xG7a3r6cI84EzC1hdJcLDAKBTAs686%2BI60%3D`
+    );
+
+    const containerName = "images";
+
+    const containerClient = blobServiceClient.getContainerClient(containerName);
+
+    const blobs = containerClient.listBlobsFlat();
+
+    const list = [];
+    for await (const blob of blobs) {
+      list.push(blob);
+    }
+
+    setModel(list);
+  };
+
+  const handleTraning = () => {
+    // call api training
+  };
+
+  const checkStatusTraningModel = () => {
+    // call api check status tranning model
+  };
+
   return (
     <>
       <Tabs
         defaultActiveKey="1"
         items={[
           {
-            key: "2",
-            label: "Predict Model",
-            children: "Content of Tab Pane 2",
-          },
-          {
             key: "1",
             label: "Training Model",
+            children: (
+              <div className="flex gap-4">
+                <div>
+                  <Button onClick={handleTraning}>Traning</Button>
+                </div>
+                <div>
+                  {/* Sửa lại thành radio select */}
+                  {model.map((item) => (
+                    <div>{item.name}</div>
+                  ))}
+                </div>
+              </div>
+            ),
+          },
+          {
+            key: "2",
+            label: "Predict Model",
             children: (
               <>
                 <div className="flex justify-between gap-4">
