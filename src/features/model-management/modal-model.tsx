@@ -1,15 +1,16 @@
 "use client";
 import Cat from "@/assets/images/cat.png";
 import { ButtonCommon } from "@/components/common/button-common";
+import { ModalCommon } from "@/components/common/modal-common";
 import { TableCommon } from "@/components/common/table-common";
 import { convertFileToArrayBuffer } from "@/lib/convert-file-to-arraybuffer";
+import { DownloadOutlined, EyeOutlined } from "@ant-design/icons";
 import UploadOutlined from "@ant-design/icons/UploadOutlined";
 import { BlobServiceClient, BlockBlobClient } from "@azure/storage-blob";
 import type { GetProp, TableColumnsType, UploadFile, UploadProps } from "antd";
-import { Button, Select, Table, Tabs, Upload, message } from "antd";
+import { Button, Select, Table, Upload, message } from "antd";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { ThunderboltOutlined } from "@ant-design/icons";
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 export default function ModalModel() {
@@ -69,11 +70,24 @@ export default function ModalModel() {
       },
     },
     {
-      title: "Active",
-      dataIndex: "active",
-      key: "active",
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
       render(value, record, index) {
-        return <button onClick={() => onDownload(record)}>Download</button>;
+        return (
+          <div className="flex gap-3">
+            <ButtonCommon onClick={() => onDownload(record)}>
+              <DownloadOutlined />
+            </ButtonCommon>
+            <ButtonCommon
+              onClick={() => {
+                setModalOpen(true);
+              }}
+            >
+              <EyeOutlined />
+            </ButtonCommon>
+          </div>
+        );
       },
     },
   ];
@@ -179,107 +193,103 @@ export default function ModalModel() {
   const checkStatusTraningModel = () => {
     // call api check status tranning model
   };
-
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleCancel = () => {
+    setModalOpen(false);
+  };
   return (
     <>
-      <Tabs
-        defaultActiveKey="1"
-        items={[
-          {
-            key: "1",
-            label: "Training Model",
-            children: (
-              <div className="flex flex-col gap-4">
-                <div className="flex justify-between">
-                  <p className="text-2xl font-semibold">Model List</p>
-                  <ButtonCommon
-                    className="btn text-white btn-sm bg-primary border-none hover:bg-primary-hover"
-                    onClick={handleTraning}
-                  >
-                    <ThunderboltOutlined />
-                    Traning
-                  </ButtonCommon>
-                </div>
-                <Upload {...props} multiple={false}>
-                  <Button icon={<UploadOutlined />}>Select File</Button>
-                </Upload>
-                <Button
-                  type="primary"
-                  onClick={handleUpload}
-                  disabled={fileList.length === 0}
-                  loading={uploading}
-                  style={{ marginTop: 16 }}
-                >
-                  {uploading ? "Uploading" : "Start Upload"}
-                </Button>
-                <TableCommon
-                  rowSelection={{
-                    type: "radio",
-                    ...rowSelection,
-                  }}
-                  columns={columns}
-                  dataSource={modelList}
-                  rowKey={(record) => record.name}
+      <ModalCommon
+        open={modalOpen}
+        centered
+        padding={0}
+        footer={null}
+        onCancel={handleCancel}
+        style={{ borderRadius: 8 }}
+        width={600}
+        closable={false}
+      >
+        <>
+          <div className="flex justify-between gap-4 flex-col">
+            <div className="flex-1">
+              <p className="pb-5 text-2xl font-semibold">Quick test</p>
+              <div className="bg-gray-300 flex items-center justify-center py-10">
+                <Image
+                  className="border rounded-xl"
+                  src={Cat}
+                  alt=""
+                  width={300}
+                  height={300}
                 />
               </div>
-            ),
-          },
-          {
-            key: "2",
-            label: "Predict Model",
-            children: (
-              <>
-                <div className="flex justify-between gap-4">
-                  <div className="flex-1">
-                    <p className="pb-5 text-2xl font-semibold">Quick test</p>
-                    <div className="bg-gray-300 flex items-center justify-center py-10">
-                      <Image
-                        className="border rounded-xl"
-                        src={Cat}
-                        alt=""
-                        width={300}
-                        height={300}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <Select
-                      placeholder="Select a category"
-                      options={[
-                        { value: "animals", label: <span>Animals</span> },
-                        { value: "plants", label: <span>Plants</span> },
-                        { value: "vehicles", label: <span>Vehicles</span> },
-                      ]}
-                    />
-                    <Upload {...props} multiple={false}>
-                      <Button icon={<UploadOutlined />}>Select File</Button>
-                    </Upload>
-                    <Button
-                      type="primary"
-                      onClick={handleUpload}
-                      disabled={fileList.length === 0}
-                      loading={uploading}
-                      style={{ marginTop: 16 }}
-                    >
-                      {uploading ? "Uploading" : "Start Upload"}
-                    </Button>
-                    <Button>Training</Button>
-                    <div className="">
-                      <p>Predictions</p>
-                      <Table
-                        dataSource={dataSource}
-                        columns={columns}
-                        pagination={false}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </>
-            ),
-          },
-        ]}
-        onChange={onChange}
-      />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Select
+                placeholder="Select a category"
+                options={[
+                  { value: "animals", label: <span>Animals</span> },
+                  { value: "plants", label: <span>Plants</span> },
+                  { value: "vehicles", label: <span>Vehicles</span> },
+                ]}
+              />
+              <Upload {...props} multiple={false}>
+                <Button icon={<UploadOutlined />}>Select File</Button>
+              </Upload>
+              <Button
+                type="primary"
+                onClick={handleUpload}
+                disabled={fileList.length === 0}
+                loading={uploading}
+                style={{ marginTop: 16 }}
+              >
+                {uploading ? "Uploading" : "Start Upload"}
+              </Button>
+              <ButtonCommon
+                className="btn text-white btn-sm bg-primary border-none hover:bg-primary-hover"
+                onClick={handleTraning}
+              >
+                Predict
+              </ButtonCommon>
+              <div className="">
+                <p>Predictions</p>
+                <Table
+                  dataSource={dataSource}
+                  columns={columns}
+                  pagination={false}
+                />
+              </div>
+            </div>
+          </div>
+        </>
+      </ModalCommon>
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-between">
+          <p className="text-2xl font-semibold">Model List</p>
+        </div>
+
+        <TableCommon
+          rowSelection={{
+            type: "radio",
+            ...rowSelection,
+          }}
+          columns={columns}
+          dataSource={modelList}
+          rowKey={(record) => record.name}
+          footer={() => (
+            <div className="justify-center my-2 ">
+              <button
+                onClick={() => setModalOpen(true)}
+                className="btn w-full bg-primary border-none hover:bg-primary-hover"
+              >
+                {/* <PlusOutlined style={{ fontSize: "18px", color: "white" }} /> */}
+                <span className="font-bold uppercase text-white ">
+                  Create a new model
+                </span>
+              </button>
+            </div>
+          )}
+        />
+      </div>
     </>
   );
 }

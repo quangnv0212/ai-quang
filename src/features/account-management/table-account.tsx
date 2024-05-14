@@ -104,6 +104,7 @@ const TableTAccount = ({ role }: any) => {
         );
       },
     },
+
     {
       title: "Role",
       dataIndex: "roleNames",
@@ -221,6 +222,11 @@ const TableTAccount = ({ role }: any) => {
       title: "Email",
       dataIndex: "emailAddress",
       key: "emailAddress",
+    },
+    {
+      title: "Username",
+      dataIndex: "userName",
+      key: "userName",
     },
     {
       title: "Role",
