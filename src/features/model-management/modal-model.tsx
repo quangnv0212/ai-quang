@@ -1,19 +1,48 @@
 "use client";
+import Cat from "@/assets/images/cat.png";
+import { TableCommon } from "@/components/common/table-common";
 import { convertFileToArrayBuffer } from "@/lib/convert-file-to-arraybuffer";
 import UploadOutlined from "@ant-design/icons/UploadOutlined";
 import { BlobServiceClient, BlockBlobClient } from "@azure/storage-blob";
-import type { GetProp, UploadFile, UploadProps } from "antd";
-import { Button, message, Select, Table, Tabs, Upload } from "antd";
+import type { GetProp, TableColumnsType, UploadFile, UploadProps } from "antd";
+import { Button, Select, Table, Tabs, Upload, message } from "antd";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import Cat from "@/assets/images/cat.png";
-
+const { Column, ColumnGroup } = Table;
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 export default function ModalModel() {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [uploading, setUploading] = useState(false);
-  const [model, setModel] = useState<any[]>([]);
+  const [modelList, setModelList] = useState<any[]>([]);
+  const columns: TableColumnsType<any> = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Last Modified",
+      dataIndex: "lastModified",
+      key: "lastModified",
+      render(value, record, index) {
+        if (!record?.properties?.lastModified) return <></>;
+        let date = new Date(record?.properties?.lastModified);
+        let output = new Intl.DateTimeFormat("en-US", {
+          month: "short",
+          day: "2-digit",
+          year: "numeric",
+        }).format(date);
+        return output;
+      },
+    },
+  ];
+
+  const rowSelection = {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: any[]) => {
+      console.log(selectedRowKeys);
+    },
+  };
 
   useEffect(() => {
     getList();
@@ -77,20 +106,6 @@ export default function ModalModel() {
     },
   ];
 
-  const columns = [
-    {
-      title: "Tag",
-      dataIndex: "tag",
-      key: "tag",
-      render: (text: any) => <p className="capitalize">{text}</p>,
-    },
-    {
-      title: "Probability",
-      dataIndex: "probability",
-      key: "probability",
-      render: (text: any) => <p>{text * 100}%</p>,
-    },
-  ];
   const onChange = (key: string) => {
     console.log(key);
   };
@@ -111,7 +126,7 @@ export default function ModalModel() {
       list.push(blob);
     }
 
-    setModel(list);
+    setModelList(list);
   };
 
   const handleTraning = () => {
@@ -121,6 +136,7 @@ export default function ModalModel() {
   const checkStatusTraningModel = () => {
     // call api check status tranning model
   };
+  console.log(modelList);
 
   return (
     <>
@@ -136,10 +152,15 @@ export default function ModalModel() {
                   <Button onClick={handleTraning}>Traning</Button>
                 </div>
                 <div>
-                  {/* Sửa lại thành radio select */}
-                  {model.map((item) => (
-                    <div>{item.name}</div>
-                  ))}
+                  <TableCommon
+                    rowSelection={{
+                      type: "radio",
+                      ...rowSelection,
+                    }}
+                    columns={columns}
+                    dataSource={modelList}
+                    rowKey={(record) => record.name}
+                  />
                 </div>
               </div>
             ),
