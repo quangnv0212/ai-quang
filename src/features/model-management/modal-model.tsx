@@ -16,6 +16,37 @@ export default function ModalModel() {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [uploading, setUploading] = useState(false);
   const [modelList, setModelList] = useState<any[]>([]);
+
+  const onDownload = async (record: any) => {
+    console.log(record);
+    const blobServiceClient = new BlobServiceClient(
+      `https://aibasedemo.blob.core.windows.net/?sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-04-10T10:57:42Z&st=2024-05-14T02:57:42Z&spr=https&sig=BUBBV2D09qvAi4WUnFppNdaepdEeBMKXHennRL5jX%2Bc%3D`
+    );
+
+    const containerName = "images";
+    const blobName = record.name;
+
+    const containerClient = blobServiceClient.getContainerClient(containerName);
+    const blobClient = containerClient.getBlobClient(blobName);
+
+    const downloadBlockBlobResponse = await blobClient.download();
+    const downloaded = await blobToString(
+      await downloadBlockBlobResponse.blobBody
+    );
+    console.log("Downloaded blob content", downloaded);
+  };
+
+  async function blobToString(blob: any) {
+    const fileReader = new FileReader();
+    return new Promise((resolve, reject) => {
+      fileReader.onloadend = (ev: any) => {
+        resolve(ev.target.result);
+      };
+      fileReader.onerror = reject;
+      fileReader.readAsText(blob);
+    });
+  }
+
   const columns: TableColumnsType<any> = [
     {
       title: "Name",
@@ -35,6 +66,14 @@ export default function ModalModel() {
           year: "numeric",
         }).format(date);
         return output;
+      },
+    },
+    {
+      title: "Active",
+      dataIndex: "active",
+      key: "active",
+      render(value, record, index) {
+        return <button onClick={() => onDownload(record)}>Download</button>;
       },
     },
   ];
@@ -71,6 +110,9 @@ export default function ModalModel() {
       .then(() => {
         setFileList([]);
         message.success("upload successfully.");
+      })
+      .then(() => {
+        getList();
       })
       .catch(() => {
         message.error("upload failed.");
@@ -158,6 +200,18 @@ export default function ModalModel() {
                     Traning
                   </ButtonCommon>
                 </div>
+                <Upload {...props} multiple={false}>
+                  <Button icon={<UploadOutlined />}>Select File</Button>
+                </Upload>
+                <Button
+                  type="primary"
+                  onClick={handleUpload}
+                  disabled={fileList.length === 0}
+                  loading={uploading}
+                  style={{ marginTop: 16 }}
+                >
+                  {uploading ? "Uploading" : "Start Upload"}
+                </Button>
                 <TableCommon
                   rowSelection={{
                     type: "radio",
