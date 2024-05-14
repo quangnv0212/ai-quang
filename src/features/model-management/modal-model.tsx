@@ -8,7 +8,6 @@ import type { GetProp, TableColumnsType, UploadFile, UploadProps } from "antd";
 import { Button, Select, Table, Tabs, Upload, message } from "antd";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-const { Column, ColumnGroup } = Table;
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 export default function ModalModel() {
@@ -136,7 +135,6 @@ export default function ModalModel() {
   const checkStatusTraningModel = () => {
     // call api check status tranning model
   };
-  console.log(modelList);
 
   return (
     <>
