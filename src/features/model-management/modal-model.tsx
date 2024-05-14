@@ -1,5 +1,6 @@
 "use client";
 import Cat from "@/assets/images/cat.png";
+import { ButtonCommon } from "@/components/common/button-common";
 import { TableCommon } from "@/components/common/table-common";
 import { convertFileToArrayBuffer } from "@/lib/convert-file-to-arraybuffer";
 import UploadOutlined from "@ant-design/icons/UploadOutlined";
@@ -145,21 +146,25 @@ export default function ModalModel() {
             key: "1",
             label: "Training Model",
             children: (
-              <div className="flex gap-4">
-                <div>
-                  <Button onClick={handleTraning}>Traning</Button>
+              <div className="flex flex-col gap-4">
+                <div className="flex justify-between">
+                  <p className="text-2xl font-semibold">Model List</p>
+                  <ButtonCommon
+                    className="btn text-white btn-sm bg-primary border-none hover:bg-primary-hover"
+                    onClick={handleTraning}
+                  >
+                    Traning
+                  </ButtonCommon>
                 </div>
-                <div>
-                  <TableCommon
-                    rowSelection={{
-                      type: "radio",
-                      ...rowSelection,
-                    }}
-                    columns={columns}
-                    dataSource={modelList}
-                    rowKey={(record) => record.name}
-                  />
-                </div>
+                <TableCommon
+                  rowSelection={{
+                    type: "radio",
+                    ...rowSelection,
+                  }}
+                  columns={columns}
+                  dataSource={modelList}
+                  rowKey={(record) => record.name}
+                />
               </div>
             ),
           },
