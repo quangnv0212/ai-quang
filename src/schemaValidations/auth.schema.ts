@@ -23,6 +23,30 @@ export const RegisterBody = z
       });
     }
   });
+export const ChangePasswordBody = z
+  .object({
+    currentPassword: z.string().min(6).max(100),
+    newPassword: z.string().min(6).max(100),
+    confirmNewPassword: z.string().min(6).max(100),
+  })
+  .strict()
+  .superRefine(({ currentPassword, newPassword, confirmNewPassword }, ctx) => {
+    if (currentPassword === newPassword) {
+      ctx.addIssue({
+        code: "custom",
+        message: "New password must be different from the current password",
+        path: ["newPassword"],
+      });
+    }
+    if (newPassword !== confirmNewPassword) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Passwords do not match",
+        path: ["confirmNewPassword"],
+      });
+    }
+  });
+export type ChangePasswordBodyType = z.TypeOf<typeof ChangePasswordBody>;
 
 export type RegisterBodyType = z.TypeOf<typeof RegisterBody>;
 

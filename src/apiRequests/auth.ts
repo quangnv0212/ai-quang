@@ -10,11 +10,13 @@ const authApiRequest = {
     return axios.post(
       `https://aibase.nobisoft.vn/api/v1.0/TokenAuth/Authenticate`,
       body,
-      tenantId ? {
-        headers: {
-          "Abp.TenantId": tenantId
-        }
-      } : undefined
+      tenantId
+        ? {
+            headers: {
+              "Abp.TenantId": tenantId,
+            },
+          }
+        : undefined
     );
   },
   auth: (body: {
@@ -27,9 +29,14 @@ const authApiRequest = {
   activateByEmail: (body: { email: string; token: string }) =>
     http.post("/services/app/Account/ActivateByEmail", body),
   logoutFromNextClientToNextServer: () => axios.post("/api/auth/logout"),
-  getTenantIdByUserName:(params:{userName:string}) => http.get("/services/app/Account/getTenantIdByUserName", {
-    params,
-  }),
+  getTenantIdByUserName: (params: { userName: string }) =>
+    http.get("/services/app/Account/getTenantIdByUserName", {
+      params,
+    }),
+  changePasswordUser: (body: {
+    currentPassword: string;
+    newPassword: string;
+  }) => http.post("/services/app/User/ChangePassword", body),
 };
 
 export default authApiRequest;

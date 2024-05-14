@@ -264,7 +264,7 @@ export default function ModalModel() {
       </ModalCommon>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between">
-          <p className="text-2xl font-semibold">Model List</p>
+          <p className="text-34-34 font-semibold">Model List</p>
         </div>
 
         <TableCommon

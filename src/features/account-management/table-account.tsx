@@ -440,7 +440,7 @@ const TableTAccount = ({ role }: any) => {
         />
       )}
       <div className="flex flex-col gap-5">
-        <p className="text-34-34 font-semibold">Manage Users</p>
+        <p className="text-34-34 font-semibold">Users</p>
         <div className="">
           <div className="flex justify-between gap-2">
             <div className="px-5 rounded-lg flex items-center gap-2 h-[38px] w-[400px] bg-white border">
