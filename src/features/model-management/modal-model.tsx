@@ -3,7 +3,7 @@ import { convertFileToArrayBuffer } from "@/lib/convert-file-to-arraybuffer";
 import UploadOutlined from "@ant-design/icons/UploadOutlined";
 import { BlockBlobClient } from "@azure/storage-blob";
 import type { GetProp, UploadFile, UploadProps } from "antd";
-import { Button, message, Table, Upload } from "antd";
+import { Button, message, Select, Table, Tabs, Upload } from "antd";
 import Image from "next/image";
 import { useState } from "react";
 import Cat from "@/assets/images/cat.png";
@@ -86,45 +86,75 @@ export default function ModalModel() {
       render: (text: any) => <p>{text * 100}%</p>,
     },
   ];
+  const onChange = (key: string) => {
+    console.log(key);
+  };
   return (
     <>
-      <div className="flex justify-between gap-4">
-        <div className="flex-1">
-          <p className="pb-5 text-2xl font-semibold">Quick test</p>
-          <div className="bg-gray-300 flex items-center justify-center py-10">
-            <Image
-              className="border rounded-xl"
-              src={Cat}
-              alt=""
-              width={300}
-              height={300}
-            />
-          </div>
-        </div>
-        <div className="flex flex-col gap-2">
-          <Upload {...props} multiple={false}>
-            <Button icon={<UploadOutlined />}>Select File</Button>
-          </Upload>
-          <Button
-            type="primary"
-            onClick={handleUpload}
-            disabled={fileList.length === 0}
-            loading={uploading}
-            style={{ marginTop: 16 }}
-          >
-            {uploading ? "Uploading" : "Start Upload"}
-          </Button>
-          <Button>Training</Button>
-          <div className="">
-            <p>Predictions</p>
-            <Table
-              dataSource={dataSource}
-              columns={columns}
-              pagination={false}
-            />
-          </div>
-        </div>
-      </div>
+      <Tabs
+        defaultActiveKey="1"
+        items={[
+          {
+            key: "2",
+            label: "Predict Model",
+            children: "Content of Tab Pane 2",
+          },
+          {
+            key: "1",
+            label: "Training Model",
+            children: (
+              <>
+                <div className="flex justify-between gap-4">
+                  <div className="flex-1">
+                    <p className="pb-5 text-2xl font-semibold">Quick test</p>
+                    <div className="bg-gray-300 flex items-center justify-center py-10">
+                      <Image
+                        className="border rounded-xl"
+                        src={Cat}
+                        alt=""
+                        width={300}
+                        height={300}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <Select
+                      placeholder="Select a category"
+                      options={[
+                        { value: "animals", label: <span>Animals</span> },
+                        { value: "plants", label: <span>Plants</span> },
+                        { value: "vehicles", label: <span>Vehicles</span> },
+                      ]}
+                    />
+                    <Upload {...props} multiple={false}>
+                      <Button icon={<UploadOutlined />}>Select File</Button>
+                    </Upload>
+                    <Button
+                      type="primary"
+                      onClick={handleUpload}
+                      disabled={fileList.length === 0}
+                      loading={uploading}
+                      style={{ marginTop: 16 }}
+                    >
+                      {uploading ? "Uploading" : "Start Upload"}
+                    </Button>
+                    <Button>Training</Button>
+                    <div className="">
+                      <p>Predictions</p>
+                      <Table
+                        dataSource={dataSource}
+                        columns={columns}
+                        pagination={false}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </>
+            ),
+          },
+        ]}
+        onChange={onChange}
+      />
     </>
   );
 }
