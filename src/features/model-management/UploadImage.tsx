@@ -1,16 +1,22 @@
 "use client";
-import { Button, Image } from "antd";
+import { Button, Image, TableColumnsType } from "antd";
 import { useRef, useState } from "react";
 import UploadOutlined from "@ant-design/icons/UploadOutlined";
 import axios from "axios";
 import ThunderboltOutlined from "@ant-design/icons/ThunderboltOutlined";
 import { ButtonCommon } from "@/components/common/button-common";
+import { TableCommon } from "@/components/common/table-common";
+import { AccountBodyType } from "@/schemaValidations/account.schema";
+import { toast } from "react-toastify";
 export interface IUploadImageProps {}
 
 export function UploadImage(props: IUploadImageProps) {
   const [file, setFile] = useState<any>();
+  const [dataList, setDataList] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const handlePredict = () => {
+    setLoading(true);
     let data = new FormData();
     data.append("project_id", "d5b57441-c2b8-4bfe-a3dc-beb029c93857");
     data.append("iteration_id", "classify");
@@ -18,7 +24,7 @@ export function UploadImage(props: IUploadImageProps) {
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "https://localhost:44311/api/services/app/User/Predict",
+      url: "https://aibase.nobisoft.vn/api/v1.0/services/app/User/Predict",
       headers: {
         accept: "*/*",
         "accept-language": "vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7",
@@ -46,12 +52,31 @@ export function UploadImage(props: IUploadImageProps) {
     axios
       .request(config)
       .then((response) => {
-        console.log(JSON.stringify(response.data));
+        setLoading(false);
+        setDataList(response.data.result);
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false);
+        toast.error("Error");
       });
   };
+  const columns: TableColumnsType<AccountBodyType> = [
+    {
+      title: "Tag name",
+      dataIndex: "tagName",
+      key: "tagName",
+    },
+    {
+      title: "Probability",
+      dataIndex: "probability",
+      key: "probability",
+      render(value, record, index) {
+        return `${(value * 100).toFixed(2)}%`;
+      },
+    },
+  ];
+
   return (
     <div className="flex flex-col gap-4 justify-center items-center">
       <input
@@ -59,35 +84,56 @@ export function UploadImage(props: IUploadImageProps) {
         onChange={(e) => {
           if (e.target.files && e.target.files[0]) {
             setFile(e.target.files[0]);
+            setDataList([]);
           }
         }}
         className="hidden"
         ref={inputRef}
       />
-      <Button
-        onClick={() => {
-          inputRef.current?.click();
-        }}
-        icon={<UploadOutlined />}
-      >
-        Upload File
-      </Button>
+      <div className="flex flex-col gap-1">
+        <ButtonCommon
+          className="btn btn-sm bg-primary text-white hover:bg-primary"
+          onClick={() => {
+            inputRef.current?.click();
+          }}
+        >
+          <UploadOutlined />
+          Upload File
+        </ButtonCommon>
+        <p>File formats accepted: jpg, png, bmp</p>
+        <p>File size should not exceed: 4mb</p>
+      </div>
+
       {file && (
-        <Image
-          src={URL.createObjectURL(file)}
-          alt=""
-          width={300}
-          height={300}
-          className="rounded-xl w-full h-full"
-        />
+        <>
+          <div className="flex justify-between gap-3 items-center">
+            <Image
+              src={URL.createObjectURL(file)}
+              alt=""
+              width={300}
+              height={300}
+              className="rounded-xl w-full h-full"
+            />
+            <div className="flex flex-col gap-2">
+              <p className="text-xl font-semibold">Predictions</p>
+              <TableCommon
+                pagination={false}
+                dataSource={dataList}
+                columns={columns}
+              />
+              <Button
+                loading={loading}
+                className="btn btn-sm bg-primary text-white hover:bg-primary"
+                onClick={handlePredict}
+                disabled={Boolean(dataList.length)}
+              >
+                <ThunderboltOutlined />
+                Predict
+              </Button>
+            </div>
+          </div>
+        </>
       )}
-      <ButtonCommon
-        className="btn btn-sm bg-primary text-white hover:bg-primary"
-        onClick={handlePredict}
-      >
-        <ThunderboltOutlined />
-        Predict
-      </ButtonCommon>
     </div>
   );
 }

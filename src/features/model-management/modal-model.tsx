@@ -151,22 +151,6 @@ export default function ModalModel() {
     },
     fileList,
   };
-  const dataSource = [
-    {
-      key: "1",
-      tag: "dog",
-      probability: 0.9,
-    },
-    {
-      key: "2",
-      tag: "cat",
-      probability: 0.8,
-    },
-  ];
-
-  const onChange = (key: string) => {
-    console.log(key);
-  };
 
   const getList = async () => {
     const blobServiceClient = new BlobServiceClient(
