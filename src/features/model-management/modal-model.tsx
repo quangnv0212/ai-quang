@@ -213,7 +213,7 @@ export default function ModalModel() {
           <div className="flex justify-between gap-4 flex-col">
             <div className="flex-1">
               <p className="pb-5 text-2xl font-semibold">Quick test</p>
-              <div className="bg-gray-300 flex items-center justify-center py-10">
+              {/* <div className="bg-gray-300 flex items-center justify-center py-10">
                 <Image
                   className="border rounded-xl"
                   src={Cat}
@@ -221,21 +221,21 @@ export default function ModalModel() {
                   width={300}
                   height={300}
                 />
-              </div>
+              </div> */}
             </div>
             <div className="flex flex-col gap-2">
-              <Select
+              {/* <Select
                 placeholder="Select a category"
                 options={[
                   { value: "animals", label: <span>Animals</span> },
                   { value: "plants", label: <span>Plants</span> },
                   { value: "vehicles", label: <span>Vehicles</span> },
                 ]}
-              />
+              /> */}
               <Upload {...props} multiple={false}>
                 <Button icon={<UploadOutlined />}>Select File</Button>
               </Upload>
-              <Button
+              {/* <Button
                 type="primary"
                 onClick={handleUpload}
                 disabled={fileList.length === 0}
@@ -243,21 +243,21 @@ export default function ModalModel() {
                 style={{ marginTop: 16 }}
               >
                 {uploading ? "Uploading" : "Start Upload"}
-              </Button>
+              </Button> */}
               <ButtonCommon
                 className="btn text-white btn-sm bg-primary border-none hover:bg-primary-hover"
                 onClick={handleTraning}
               >
                 Predict
               </ButtonCommon>
-              <div className="">
+              {/* <div className="">
                 <p>Predictions</p>
                 <Table
                   dataSource={dataSource}
                   columns={columns}
                   pagination={false}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         </>
