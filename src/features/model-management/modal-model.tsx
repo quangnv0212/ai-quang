@@ -11,6 +11,7 @@ import type { GetProp, TableColumnsType, UploadFile, UploadProps } from "antd";
 import { Button, Select, Table, Upload, message } from "antd";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { UploadImage } from "./UploadImage";
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 export default function ModalModel() {
@@ -197,6 +198,8 @@ export default function ModalModel() {
   const handleCancel = () => {
     setModalOpen(false);
   };
+  console.log(fileList);
+
   return (
     <>
       <ModalCommon
@@ -210,7 +213,7 @@ export default function ModalModel() {
         closable={false}
       >
         <>
-          <div className="flex justify-between gap-4 flex-col">
+          <div className="flex justify-between flex-col">
             <div className="flex-1">
               <p className="pb-5 text-2xl font-semibold">Quick test</p>
               {/* <div className="bg-gray-300 flex items-center justify-center py-10">
@@ -232,9 +235,11 @@ export default function ModalModel() {
                   { value: "vehicles", label: <span>Vehicles</span> },
                 ]}
               /> */}
-              <Upload {...props} multiple={false}>
+              {/* <Upload {...props} multiple={false}>
                 <Button icon={<UploadOutlined />}>Select File</Button>
-              </Upload>
+              </Upload> */}
+
+              <UploadImage />
               {/* <Button
                 type="primary"
                 onClick={handleUpload}
@@ -244,12 +249,7 @@ export default function ModalModel() {
               >
                 {uploading ? "Uploading" : "Start Upload"}
               </Button> */}
-              <ButtonCommon
-                className="btn text-white btn-sm bg-primary border-none hover:bg-primary-hover"
-                onClick={handleTraning}
-              >
-                Predict
-              </ButtonCommon>
+
               {/* <div className="">
                 <p>Predictions</p>
                 <Table
