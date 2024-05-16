@@ -1,15 +1,12 @@
 "use client";
-import Cat from "@/assets/images/cat.png";
+import { useGetListModel } from "@/apiRequests/hooks/model/useGetListModel";
 import { ButtonCommon } from "@/components/common/button-common";
 import { ModalCommon } from "@/components/common/modal-common";
 import { TableCommon } from "@/components/common/table-common";
-import { convertFileToArrayBuffer } from "@/lib/convert-file-to-arraybuffer";
 import { DownloadOutlined, EyeOutlined } from "@ant-design/icons";
 import UploadOutlined from "@ant-design/icons/UploadOutlined";
-import { BlobServiceClient, BlockBlobClient } from "@azure/storage-blob";
 import type { GetProp, TableColumnsType, UploadFile, UploadProps } from "antd";
-import { Button, Select, Table, Upload, message } from "antd";
-import Image from "next/image";
+import { Button, Upload } from "antd";
 import { useEffect, useState } from "react";
 import { UploadImage } from "./UploadImage";
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
@@ -18,36 +15,24 @@ export default function ModalModel() {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [uploading, setUploading] = useState(false);
   const [modelList, setModelList] = useState<any[]>([]);
-
-  const onDownload = async (record: any) => {
-    console.log(record);
-    const blobServiceClient = new BlobServiceClient(
-      `https://aibasedemo.blob.core.windows.net/?sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2025-04-10T10:57:42Z&st=2024-05-14T02:57:42Z&spr=https&sig=BUBBV2D09qvAi4WUnFppNdaepdEeBMKXHennRL5jX%2Bc%3D`
+  const [loading, setLoading] = useState(false);
+  const [requestGetListModel] = useGetListModel();
+  const fetchListTenant = () => {
+    requestGetListModel(
+      setLoading,
+      (res: any) => {
+        setModelList(res.result);
+      },
+      (err: any) => {
+        console.log(err);
+      }
     );
-
-    const containerName = "images";
-    const blobName = record.name;
-
-    const containerClient = blobServiceClient.getContainerClient(containerName);
-    const blobClient = containerClient.getBlobClient(blobName);
-
-    const downloadBlockBlobResponse = await blobClient.download();
-    const downloaded = await blobToString(
-      await downloadBlockBlobResponse.blobBody
-    );
-    console.log("Downloaded blob content", downloaded);
   };
+  useEffect(() => {
+    fetchListTenant();
+  }, []);
 
-  async function blobToString(blob: any) {
-    const fileReader = new FileReader();
-    return new Promise((resolve, reject) => {
-      fileReader.onloadend = (ev: any) => {
-        resolve(ev.target.result);
-      };
-      fileReader.onerror = reject;
-      fileReader.readAsText(blob);
-    });
-  }
+  const onDownload = async (record: any) => {};
 
   const columns: TableColumnsType<any> = [
     {
@@ -56,19 +41,9 @@ export default function ModalModel() {
       key: "name",
     },
     {
-      title: "Last Modified",
-      dataIndex: "lastModified",
-      key: "lastModified",
-      render(value, record, index) {
-        if (!record?.properties?.lastModified) return <></>;
-        let date = new Date(record?.properties?.lastModified);
-        let output = new Intl.DateTimeFormat("en-US", {
-          month: "short",
-          day: "2-digit",
-          year: "numeric",
-        }).format(date);
-        return output;
-      },
+      title: "Image Count",
+      dataIndex: "imageCount",
+      key: "imageCount",
     },
     {
       title: "Action",
@@ -99,43 +74,7 @@ export default function ModalModel() {
     },
   };
 
-  useEffect(() => {
-    getList();
-  }, []);
-
-  const handleUpload = () => {
-    const formData = new FormData();
-    fileList.forEach((file) => {
-      formData.append("files[]", file as FileType);
-    });
-    setUploading(true);
-    convertFileToArrayBuffer(fileList[0] as any)
-      .then((fileArrayBuffer) => {
-        if (!fileArrayBuffer) {
-          return;
-        }
-
-        const blockBlobClient = new BlockBlobClient(
-          `https://aibasedemo.blob.core.windows.net/images/${fileList[0]?.name}?sp=racwdli&st=2024-05-01T10:11:51Z&se=2024-06-06T18:11:51Z&spr=https&sv=2022-11-02&sr=c&sig=e3UVoLRl1Y6SdOkGPvM8%2BxzLpyrPS0ZwaksVNfdySvA%3D`
-        );
-        return blockBlobClient.uploadData(fileArrayBuffer, {
-          blobHTTPHeaders: { blobContentType: "text/plain" },
-        });
-      })
-      .then(() => {
-        setFileList([]);
-        message.success("upload successfully.");
-      })
-      .then(() => {
-        getList();
-      })
-      .catch(() => {
-        message.error("upload failed.");
-      })
-      .finally(() => {
-        setUploading(false);
-      });
-  };
+  const handleUpload = () => {};
 
   const props: UploadProps = {
     onRemove: (file: any) => {
@@ -152,24 +91,11 @@ export default function ModalModel() {
     fileList,
   };
 
-  const getList = async () => {
-    const blobServiceClient = new BlobServiceClient(
-      `https://aibasedemo.blob.core.windows.net/?sv=2022-11-02&ss=bfqt&srt=c&sp=rwdlacupiytfx&se=2025-03-12T00:41:10Z&st=2024-05-13T16:41:10Z&spr=https&sig=I8CyYVd19xG7a3r6cI84EzC1hdJcLDAKBTAs686%2BI60%3D`
-    );
-
-    const containerName = "images";
-
-    const containerClient = blobServiceClient.getContainerClient(containerName);
-
-    const blobs = containerClient.listBlobsFlat();
-
-    const list = [];
-    for await (const blob of blobs) {
-      list.push(blob);
-    }
-
-    setModelList(list);
-  };
+  const getList = async (
+    modelId: number,
+    pageIndex: number,
+    pageSize: number
+  ) => {};
 
   const handleTraning = () => {
     // call api training
