@@ -3,21 +3,52 @@ import { useGetListModel } from "@/apiRequests/hooks/model/useGetListModel";
 import { ButtonCommon } from "@/components/common/button-common";
 import { ModalCommon } from "@/components/common/modal-common";
 import { TableCommon } from "@/components/common/table-common";
-import { DownloadOutlined, EyeOutlined } from "@ant-design/icons";
-import UploadOutlined from "@ant-design/icons/UploadOutlined";
+import { UploadOutlined, EyeOutlined } from "@ant-design/icons";
 import type { GetProp, TableColumnsType, UploadFile, UploadProps } from "antd";
 import { Button, Upload } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { UploadImage } from "./UploadImage";
+import { InputTextCommon } from "@/components/common/input-text";
+import { Form } from "antd";
+import { ModelBody, ModelBodyType } from "@/schemaValidations/model.schema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useCreateModel } from "@/apiRequests/hooks/model/useCreateModel.hook";
+import { toast } from "react-toastify";
+import { useUploadImageModel } from "@/apiRequests/hooks/model/useUploadImageModel.hook";
+import { useCheckStatusModel } from "@/apiRequests/hooks/model/useCheckStatusModel";
+import modelApiRequest from "@/apiRequests/model";
+
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 export default function ModalModel() {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [uploading, setUploading] = useState(false);
   const [modelList, setModelList] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [statusModel, setStatusModel] = useState("");
   const [requestGetListModel] = useGetListModel();
-  const fetchListTenant = () => {
+  const [requestCreateModel] = useCreateModel();
+  const [requestUploadImageModel] = useUploadImageModel();
+  const [requestCheckStatusModel] = useCheckStatusModel();
+  const [modelId, setModelId] = useState();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    fetchListModel();
+    checkStatusTraningModel();
+  }, []);
+
+  useEffect(() => {
+    if (statusModel === "Unpushish") {
+      pushlishProject();
+    }
+  }, [statusModel]);
+
+  const pushlishProject = async () => {
+    await modelApiRequest.pushlishProject();
+  };
+
+  const fetchListModel = () => {
     requestGetListModel(
       setLoading,
       (res: any) => {
@@ -28,11 +59,18 @@ export default function ModalModel() {
       }
     );
   };
-  useEffect(() => {
-    fetchListTenant();
-  }, []);
 
-  const onDownload = async (record: any) => {};
+  const checkStatusTraningModel = () => {
+    requestCheckStatusModel(
+      setLoading,
+      (res: any) => {
+        setStatusModel(res.result);
+      },
+      (err: any) => {
+        console.log(err);
+      }
+    );
+  };
 
   const columns: TableColumnsType<any> = [
     {
@@ -52,9 +90,6 @@ export default function ModalModel() {
       render(value, record, index) {
         return (
           <div className="flex gap-3">
-            <ButtonCommon onClick={() => onDownload(record)}>
-              <DownloadOutlined />
-            </ButtonCommon>
             <ButtonCommon
               onClick={() => {
                 setModalOpen(true);
@@ -70,11 +105,9 @@ export default function ModalModel() {
 
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: any[]) => {
-      console.log(selectedRowKeys);
+      setModelId(selectedRows[0].id);
     },
   };
-
-  const handleUpload = () => {};
 
   const props: UploadProps = {
     onRemove: (file: any) => {
@@ -91,24 +124,41 @@ export default function ModalModel() {
     fileList,
   };
 
-  const getList = async (
-    modelId: number,
-    pageIndex: number,
-    pageSize: number
-  ) => {};
-
   const handleTraning = () => {
-    // call api training
+    modelApiRequest.useTrainingModel();
   };
 
-  const checkStatusTraningModel = () => {
-    // call api check status tranning model
-  };
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpenCreateModel, setModalOpenCreateModel] = useState(false);
+
   const handleCancel = () => {
     setModalOpen(false);
   };
-  console.log(fileList);
+  const handleCancelCreateModel = () => {
+    setModalOpenCreateModel(false);
+  };
+
+  const { control, handleSubmit } = useForm<ModelBodyType>({
+    resolver: zodResolver(ModelBody),
+    defaultValues: {
+      name: "",
+    },
+  });
+
+  const onSubmit = (values: ModelBodyType) => {
+    requestCreateModel(
+      {
+        ...values,
+      },
+      setLoading,
+      () => {
+        handleCancelCreateModel();
+        toast.success("Create model successfully");
+        fetchListModel();
+      },
+      () => {}
+    );
+  };
 
   return (
     <>
@@ -126,55 +176,78 @@ export default function ModalModel() {
           <div className="flex justify-between flex-col">
             <div className="flex-1">
               <p className="pb-5 text-2xl font-semibold">Quick test</p>
-              {/* <div className="bg-gray-300 flex items-center justify-center py-10">
-                <Image
-                  className="border rounded-xl"
-                  src={Cat}
-                  alt=""
-                  width={300}
-                  height={300}
-                />
-              </div> */}
             </div>
             <div className="flex flex-col gap-2">
-              {/* <Select
-                placeholder="Select a category"
-                options={[
-                  { value: "animals", label: <span>Animals</span> },
-                  { value: "plants", label: <span>Plants</span> },
-                  { value: "vehicles", label: <span>Vehicles</span> },
-                ]}
-              /> */}
-              {/* <Upload {...props} multiple={false}>
-                <Button icon={<UploadOutlined />}>Select File</Button>
-              </Upload> */}
-
               <UploadImage />
-              {/* <Button
-                type="primary"
-                onClick={handleUpload}
-                disabled={fileList.length === 0}
-                loading={uploading}
-                style={{ marginTop: 16 }}
-              >
-                {uploading ? "Uploading" : "Start Upload"}
-              </Button> */}
-
-              {/* <div className="">
-                <p>Predictions</p>
-                <Table
-                  dataSource={dataSource}
-                  columns={columns}
-                  pagination={false}
-                />
-              </div> */}
             </div>
           </div>
         </>
       </ModalCommon>
+
+      <ModalCommon
+        open={modalOpenCreateModel}
+        centered
+        padding={0}
+        footer={null}
+        onCancel={handleCancelCreateModel}
+        style={{ borderRadius: 8 }}
+        width={600}
+        closable={false}
+      >
+        <div className="px-6 flex flex-col gap-4">
+          <p className="font-bold text-24-28 capitalize text-center font-visby">
+            Create a new model
+          </p>
+          <Form
+            onFinish={handleSubmit(onSubmit)}
+            className="flex flex-col gap-3"
+          >
+            <InputTextCommon
+              label="Name"
+              name="name"
+              placeholder="Enter your model name"
+              control={control}
+            />
+
+            <div className="flex flex-col gap-3 mt-3">
+              <ButtonCommon
+                loading={loading}
+                type="submit"
+                className="btn btn-sm w-full hover:bg-primary-hover bg-primary text-white border-none"
+              >
+                Create model
+              </ButtonCommon>
+              <ButtonCommon
+                onClick={handleCancel}
+                className="btn py-2 w-full btn-sm bg-slate-400 text-white border-none hover:bg-slate-500"
+              >
+                Cancel
+              </ButtonCommon>
+            </div>
+          </Form>
+        </div>
+      </ModalCommon>
+
       <div className="flex flex-col gap-4">
         <div className="flex justify-between">
-          <p className="text-34-34 font-semibold">Model List</p>
+          <div className="text-34-34 font-semibold">Model List</div>
+          <div>
+            <Button
+              disabled={!modelId}
+              onClick={() => {
+                inputRef.current?.click();
+              }}
+            >
+              Upload
+            </Button>
+            <Button
+              loading={statusModel === "Training"}
+              onClick={handleTraning}
+            >
+              Training
+            </Button>
+            <Button onClick={() => setModalOpen(true)}>Quick Test</Button>
+          </div>
         </div>
 
         <TableCommon
@@ -184,11 +257,11 @@ export default function ModalModel() {
           }}
           columns={columns}
           dataSource={modelList}
-          rowKey={(record) => record.name}
+          rowKey={(record) => record.id}
           footer={() => (
             <div className="justify-center my-2 ">
               <button
-                onClick={() => setModalOpen(true)}
+                onClick={() => setModalOpenCreateModel(true)}
                 className="btn w-full bg-primary border-none hover:bg-primary-hover"
               >
                 {/* <PlusOutlined style={{ fontSize: "18px", color: "white" }} /> */}
@@ -200,6 +273,29 @@ export default function ModalModel() {
           )}
         />
       </div>
+
+      <input
+        type="file"
+        onChange={(e) => {
+          if (e.target.files && e.target.files[0]) {
+            const data: any = new FormData();
+            data.append("ModelId", modelId);
+            data.append("Images", e.target.files[0]);
+
+            requestUploadImageModel(
+              data,
+              setLoading,
+              () => {
+                toast.success("Upload image successfully");
+                fetchListModel();
+              },
+              () => {}
+            );
+          }
+        }}
+        className="hidden"
+        ref={inputRef}
+      />
     </>
   );
 }
