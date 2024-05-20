@@ -25,6 +25,8 @@ import { toast } from "react-toastify";
 import { useUploadImageModel } from "@/apiRequests/hooks/model/useUploadImageModel.hook";
 import { useCheckStatusModel } from "@/apiRequests/hooks/model/useCheckStatusModel";
 import modelApiRequest from "@/apiRequests/model";
+import { IconSearch } from "@/components/icons";
+import { useSearchParams } from "next/navigation";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -190,7 +192,21 @@ export default function ModalModel() {
       () => {}
     );
   };
+  const searchParams = useSearchParams();
 
+  const [keyword, setKeyword] = useState<string | undefined>(
+    searchParams.get("Keyword")?.toString()
+  );
+  const buttons = [
+    {
+      title: "Tagged",
+      onclick: () => {},
+    },
+    {
+      title: "Untagged",
+      onclick: () => {},
+    },
+  ];
   return (
     <>
       <ModalCommon
@@ -262,6 +278,7 @@ export default function ModalModel() {
       <div className="flex flex-col gap-4">
         <div className="flex justify-between">
           <div className="text-34-34 font-semibold">Model List</div>
+
           <div className="flex gap-3">
             {/* <Button
               disabled={!modelId}
@@ -284,6 +301,44 @@ export default function ModalModel() {
             >
               Quick Test
             </Button>
+          </div>
+        </div>
+        <div className="flex justify-between gap-2">
+          <div className="px-5 rounded-lg flex items-center gap-2 h-[38px] w-[400px] bg-white border">
+            <IconSearch />
+            <input
+              type="text"
+              placeholder="Search"
+              className="w-full font-normal  outline-none text-primary placeholder:text-gray80"
+              onChange={(e) => {
+                // handleSearch(e.target.value);
+              }}
+              value={keyword}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <div className="flex gap-2">
+              {buttons.map((button, index) => {
+                let className: string = "";
+                const isActiveSearchParam = searchParams.get("isActive");
+                if (isActiveSearchParam === null && button.title === "All") {
+                  className = "btn-primary btn-active";
+                }
+                // if (isActiveSearchParam === button.isActveString) {
+                //   className = "btn-primary btn-active";
+                // }
+                return (
+                  <button
+                    key={index}
+                    className={`btn btn-sm ${className}`}
+                    onClick={button.onclick}
+                  >
+                    {button.title}
+                  </button>
+                );
+              })}
+            </div>
+            <p>Showing: all tagged images</p>
           </div>
         </div>
 

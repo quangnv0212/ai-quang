@@ -1,7 +1,9 @@
 "use client";
 import { Button, Image, TableColumnsType } from "antd";
 import { useRef, useState } from "react";
+import CloudUploadOutlined from "@ant-design/icons/CloudUploadOutlined";
 import UploadOutlined from "@ant-design/icons/UploadOutlined";
+import IcUpload from "@/assets/images/ic_uploadCloud.png";
 import axios from "axios";
 import ThunderboltOutlined from "@ant-design/icons/ThunderboltOutlined";
 import { ButtonCommon } from "@/components/common/button-common";
@@ -62,23 +64,19 @@ export function UploadImage(props: IUploadImageProps) {
         className="hidden"
         ref={inputRef}
       />
-      <div className="flex flex-col gap-1">
-        <ButtonCommon
-          className="btn btn-sm bg-primary text-white hover:bg-primary"
-          onClick={() => {
-            inputRef.current?.click();
-          }}
-        >
-          <UploadOutlined />
-          Upload File
-        </ButtonCommon>
-        <p>File formats accepted: jpg, png, bmp</p>
-        <p>File size should not exceed: 4mb</p>
-      </div>
+      <ButtonCommon
+        className="btn btn-sm hidden bg-primary text-white hover:bg-primary"
+        onClick={() => {
+          inputRef.current?.click();
+        }}
+      >
+        <UploadOutlined />
+        Upload File
+      </ButtonCommon>
 
-      {file && (
-        <>
-          <div className="flex justify-between gap-3 items-center">
+      <>
+        <div className="flex justify-between gap-3 items-center">
+          {file ? (
             <Image
               src={URL.createObjectURL(file)}
               alt=""
@@ -86,26 +84,49 @@ export function UploadImage(props: IUploadImageProps) {
               height={300}
               className="rounded-xl w-full h-full"
             />
-            <div className="flex flex-col gap-2">
-              <p className="text-xl font-semibold">Predictions</p>
-              <TableCommon
-                pagination={false}
-                dataSource={dataList}
-                columns={columns}
-              />
-              <Button
-                loading={loading}
-                className="btn btn-sm bg-primary text-white hover:bg-primary"
-                onClick={handlePredict}
-                disabled={Boolean(dataList.length)}
-              >
-                <ThunderboltOutlined />
-                Predict
-              </Button>
+          ) : (
+            <div
+              onClick={() => {
+                inputRef.current?.click();
+              }}
+              onDrag={(e) => {
+                e.preventDefault();
+                const files = e.dataTransfer.files;
+                console.log(files);
+              }}
+              className="w-[300px] cursor-pointer border-black h-[300px] rounded-xl border-dashed border-2 flex gap-4 items-center justify-center flex-col"
+            >
+              <p className="text-xl font-semibold uppercase">Upload an image</p>
+              <img src={IcUpload.src} alt="" className="w-20 h-20" />
+              <p className="text-center font-semibold">
+                Drag and drop files here, or browse your computer{" "}
+              </p>
+              <div className="text-xs">
+                <p>File formats accepted: jpg, png, bmp</p>
+                <p>File size should not exceed: 4mb</p>
+              </div>
             </div>
+          )}
+
+          <div className="flex flex-col gap-2">
+            <p className="text-xl font-semibold">Predictions</p>
+            <TableCommon
+              pagination={false}
+              dataSource={dataList}
+              columns={columns}
+            />
+            <Button
+              loading={loading}
+              className="btn btn-sm bg-primary text-white hover:bg-primary"
+              onClick={handlePredict}
+              disabled={Boolean(dataList.length)}
+            >
+              <ThunderboltOutlined />
+              Predict
+            </Button>
           </div>
-        </>
-      )}
+        </div>
+      </>
     </div>
   );
 }
