@@ -31,6 +31,7 @@ import { useSearchParams } from "next/navigation";
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 export default function ModalModel() {
+  const [mode, setMode] = useState("Tagged");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [modelList, setModelList] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
@@ -101,10 +102,15 @@ export default function ModalModel() {
           <div className="flex gap-3">
             <ButtonCommon
               onClick={() => {
+                // setIsShowImageModel(true);
                 // setModalOpen(true);
               }}
             >
-              <EyeOutlined />
+              <EyeOutlined
+                style={{
+                  fontSize: 16,
+                }}
+              />
             </ButtonCommon>
             <ButtonCommon
               onClick={() => {
@@ -114,7 +120,11 @@ export default function ModalModel() {
                 // inputRef.current?.click();
               }}
             >
-              <EditOutlined />
+              <EditOutlined
+                style={{
+                  fontSize: 16,
+                }}
+              />
             </ButtonCommon>
             <ButtonCommon
               onClick={() => {
@@ -124,7 +134,11 @@ export default function ModalModel() {
                 // inputRef.current?.click();
               }}
             >
-              <DeleteOutlined />
+              <DeleteOutlined
+                style={{
+                  fontSize: 16,
+                }}
+              />
             </ButtonCommon>
             <ButtonCommon
               onClick={() => {
@@ -134,7 +148,11 @@ export default function ModalModel() {
                 inputRef.current?.click();
               }}
             >
-              <UploadOutlined />
+              <UploadOutlined
+                style={{
+                  fontSize: 16,
+                }}
+              />
             </ButtonCommon>
           </div>
         );
@@ -200,15 +218,34 @@ export default function ModalModel() {
   const buttons = [
     {
       title: "Tagged",
-      onclick: () => {},
+      onclick: () => {
+        setMode("Tagged");
+      },
     },
     {
       title: "Untagged",
-      onclick: () => {},
+      onclick: () => {
+        setMode("Untagged");
+      },
     },
   ];
+  const [isShowImageModel, setIsShowImageModel] = useState(false);
   return (
     <>
+      <ModalCommon
+        open={isShowImageModel}
+        centered
+        padding={0}
+        footer={null}
+        onCancel={() => {
+          setIsShowImageModel(false);
+        }}
+        style={{ borderRadius: 8 }}
+        width={600}
+        closable={false}
+      >
+        f
+      </ModalCommon>
       <ModalCommon
         open={modalOpen}
         centered
@@ -280,14 +317,6 @@ export default function ModalModel() {
           <div className="text-34-34 font-semibold">Model List</div>
 
           <div className="flex gap-3">
-            {/* <Button
-              disabled={!modelId}
-              onClick={() => {
-                inputRef.current?.click();
-              }}
-            >
-              Upload
-            </Button> */}
             <Button
               loading={statusModel === "Training"}
               onClick={handleTraning}
@@ -324,9 +353,9 @@ export default function ModalModel() {
                 if (isActiveSearchParam === null && button.title === "All") {
                   className = "btn-primary btn-active";
                 }
-                // if (isActiveSearchParam === button.isActveString) {
-                //   className = "btn-primary btn-active";
-                // }
+                if (mode === button.title) {
+                  className = "btn-primary btn-active";
+                }
                 return (
                   <button
                     key={index}
@@ -338,7 +367,7 @@ export default function ModalModel() {
                 );
               })}
             </div>
-            <p>Showing: all tagged images</p>
+            <p className="uppercase text-xs">Showing: all {mode} images</p>
           </div>
         </div>
 
