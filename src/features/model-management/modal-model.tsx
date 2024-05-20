@@ -3,7 +3,14 @@ import { useGetListModel } from "@/apiRequests/hooks/model/useGetListModel";
 import { ButtonCommon } from "@/components/common/button-common";
 import { ModalCommon } from "@/components/common/modal-common";
 import { TableCommon } from "@/components/common/table-common";
-import { UploadOutlined, EyeOutlined } from "@ant-design/icons";
+import {
+  UploadOutlined,
+  EyeOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  BulbOutlined,
+  FieldTimeOutlined,
+} from "@ant-design/icons";
 import type { GetProp, TableColumnsType, UploadFile, UploadProps } from "antd";
 import { Button, Upload } from "antd";
 import { useEffect, useRef, useState } from "react";
@@ -92,22 +99,46 @@ export default function ModalModel() {
           <div className="flex gap-3">
             <ButtonCommon
               onClick={() => {
-                setModalOpen(true);
+                // setModalOpen(true);
               }}
             >
               <EyeOutlined />
+            </ButtonCommon>
+            <ButtonCommon
+              onClick={() => {
+                // setModalOpen(true);
+                setModelId(record?.id);
+                //set Selected row
+                // inputRef.current?.click();
+              }}
+            >
+              <EditOutlined />
+            </ButtonCommon>
+            <ButtonCommon
+              onClick={() => {
+                // setModalOpen(true);
+                setModelId(record?.id);
+                //set Selected row
+                // inputRef.current?.click();
+              }}
+            >
+              <DeleteOutlined />
+            </ButtonCommon>
+            <ButtonCommon
+              onClick={() => {
+                // setModalOpen(true);
+                setModelId(record?.id);
+                //set Selected row
+                inputRef.current?.click();
+              }}
+            >
+              <UploadOutlined />
             </ButtonCommon>
           </div>
         );
       },
     },
   ];
-
-  const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: any[]) => {
-      setModelId(selectedRows[0].id);
-    },
-  };
 
   const props: UploadProps = {
     onRemove: (file: any) => {
@@ -231,30 +262,36 @@ export default function ModalModel() {
       <div className="flex flex-col gap-4">
         <div className="flex justify-between">
           <div className="text-34-34 font-semibold">Model List</div>
-          <div>
-            <Button
+          <div className="flex gap-3">
+            {/* <Button
               disabled={!modelId}
               onClick={() => {
                 inputRef.current?.click();
               }}
             >
               Upload
-            </Button>
+            </Button> */}
             <Button
               loading={statusModel === "Training"}
               onClick={handleTraning}
+              icon={<BulbOutlined />}
             >
               Training
             </Button>
-            <Button onClick={() => setModalOpen(true)}>Quick Test</Button>
+            <Button
+              icon={<FieldTimeOutlined />}
+              onClick={() => setModalOpen(true)}
+            >
+              Quick Test
+            </Button>
           </div>
         </div>
 
         <TableCommon
-          rowSelection={{
-            type: "radio",
-            ...rowSelection,
-          }}
+          // rowSelection={{
+          //   type: "radio",
+          //   ...rowSelection,
+          // }}
           columns={columns}
           dataSource={modelList}
           rowKey={(record) => record.id}
